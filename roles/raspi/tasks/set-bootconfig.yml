@@ -1,0 +1,25 @@
+---
+- name: Set boot config
+  block:
+    - name: Configure options gpu memory
+      ansible.builtin.lineinfile:
+        dest: /boot/config.txt
+        regexp: "^#?gpu_mem"
+        line: "gpu_mem={{ system_gpu_memory }}"
+        insertafter: EOF
+        state: present
+
+    - name: Disable VNC server
+      ansible.builtin.command: "raspi-config nonint do_vnc 1"
+      changed_when: false
+
+    - name: Set wifi
+      ansible.builtin.lineinfile:
+        dest: /boot/config.txt
+        regexp: "dtoverlay=disable-wifi'"
+        line: "dtoverlay=disable-wifi"
+        insertafter: EOF
+        state: present
+      when: system_disable_wifi == true
+
+  notify: reboot

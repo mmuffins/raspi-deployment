@@ -1,0 +1,36 @@
+---
+- import_tasks: set-hostname.yml
+  tags:
+    - baseconfig
+    - hostname
+
+- import_tasks: set-locale.yml
+  tags:
+    - baseconfig
+    - locale
+
+- import_tasks: set-bootconfig.yml
+  tags:
+    - baseconfig
+    - bootconfig
+
+- import_tasks: create-user.yml
+  tags:
+    - baseconfig
+    - user
+
+- import_tasks: secure-ssh.yml
+  tags:
+    - baseconfig
+    - securessh
+
+- import_tasks: update-software.yml
+  tags:
+    - baseconfig
+    - software
+
+# TODO
+# configure smb
+# configure docker
+# install stuff
+# backup solution sudo su pibackup; crontab -l

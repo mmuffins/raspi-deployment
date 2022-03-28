@@ -1,0 +1,27 @@
+---
+ansible_connection: ssh
+ansible_user: ansideploy
+ansible_ssh_private_key_file: ~/.ssh/ansible_rsa
+
+system_locale: "en_GB.UTF-8"
+system_timezone: "Europe/Vienna"
+system_gpu_memory: 16
+system_disable_wifi: true
+
+create_users:
+  - name: ansitest11
+    comment: Ansible test11
+    group: users
+    groups: users,dialout
+    create_home: true
+    generate_ssh_key: true
+    local_ssh_key_location: /.ssh/id_ed25519.pub
+    enable_sudo: true
+
+  - name: ansitest12
+    comment: Ansible test12
+    group: users
+    groups: users,plugdev
+    create_home: false
+    generate_ssh_key: false
+    enable_sudo: false

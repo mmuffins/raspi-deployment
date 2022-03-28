@@ -1,0 +1,50 @@
+---
+- name: Ensure primary groups exist
+  ansible.builtin.group:
+    name: "{{ item.group }}"
+    state: present
+  with_items: "{{ create_users }}"
+
+- name: Create users 
+  ansible.builtin.user:
+        name: "{{ item.name }}"
+        comment: "{{ item.comment }}"
+        group: "{{ item.group }}"
+        groups: "{{ item.groups }}"
+        state: present
+        create_home: "{{ item.create_home }}"
+        shell: /bin/bash
+        generate_ssh_key: "{{ item.generate_ssh_key }}"
+        ssh_key_type: "ed25519"
+        append: yes
+  with_items: "{{ create_users }}"
+
+- name: Upload ssh-key
+  ansible.posix.authorized_key:
+    user: "{{ item.name }}"
+    state: present
+    key: "{{ lookup('file', lookup('env','HOME') + item.local_ssh_key_location) }}"
+  with_items: "{{ create_users }}"
+  when: item.local_ssh_key_location is defined
+
+- name: Ensure usersudo group exists
+  ansible.builtin.group:
+    name: usersudo
+    state: present
+
+- name: Give usersudo group sudo permissions
+  ansible.builtin.lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%usersudo'
+    line: '%usersudo ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Assign sudo permission to users
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    groups: usersudo
+    append: yes
+    state: present
+  with_items: "{{ create_users }}"
+  when: item.enable_sudo == true

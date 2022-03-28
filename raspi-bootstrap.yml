@@ -1,0 +1,7 @@
+- name: Raspberry Pi Bootstrap
+  hosts: '{{ target }}'
+  become: yes
+  become_user: root
+  roles:
+    - common
+    - raspibootstrap

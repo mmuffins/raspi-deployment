@@ -1,0 +1,41 @@
+---
+- name: Create ansible group
+  group:
+    name: "ansible"
+    state: present
+
+- name: Allow ansible group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%ansible'
+    line: '%ansible ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: create users
+  user: name="ansideploy"
+        comment="Ansible user"
+        group="users"
+        groups="adm,ansible,dialout,sudo,audio,video,plugdev,games,input,netdev,spi,i2c,gpio"
+        state=present
+        shell=/bin/bash
+        createhome=yes
+
+- name: Install ssh-key
+  authorized_key:
+    user: ansideploy
+    state: present
+    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/ansible_rsa.pub') }}"
+
+- name: Set up static IP
+  template:
+    src: "templates/dhcpcd.conf.j2"
+    dest: "/etc/dhcpcd.conf"
+    mode: 0644
+    owner: root
+    group: root
+
+# In some cases the new dhcpcd.conf is not immediately applied. Restart to force the update.
+# Note that if dhcpcd.conf is reloaded automatically this step will fail, which is ugly but not critical.
+- name: Reboot
+  shell: shutdown -r now

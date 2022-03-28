@@ -1,0 +1,23 @@
+---
+- name: Secure SSH
+  block:
+    - name: Disallow password authentication
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^PasswordAuthentication"
+        line: "PasswordAuthentication no"
+        state: present
+
+    - name: Disable root login
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+        state: present
+
+    - name: Remove pi user
+      ansible.builtin.user:
+        name: pi
+        state: absent
+
+  notify: reboot
