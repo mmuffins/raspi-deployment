@@ -19,5 +19,6 @@
       ansible.builtin.user:
         name: pi
         state: absent
+        remove: true
 
   notify: reboot
