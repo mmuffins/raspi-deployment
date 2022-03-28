@@ -24,13 +24,20 @@
     - baseconfig
     - securessh
 
-- import_tasks: update-software.yml
-  tags:
+- name: Run apt upgrade
+  include_role:
+    name: common
+    tasks_from: apt-upgrade
+  tags: 
     - baseconfig
     - software
 
+
+- import_tasks: config-backup.yml
+  tags:
+    - baseconfig
+    - backup
+
 # TODO
 # configure smb
-# configure docker
-# install stuff
 # backup solution sudo su pibackup; crontab -l

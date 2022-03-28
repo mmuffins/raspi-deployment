@@ -20,7 +20,7 @@ sudo mount -t drvfs [Deployment scripts folder] /mnt/ansible -o metadata
 - Run the raspi-bootstrap runbook to create a user for ansible.
 ```
 cd /mnt/ansible
-ansible-playbook raspi-bootstrap.yml --ask-pass --extra-vars 'ansible_user=pi target=[ansible host name] ansible_host=[current IP] target_ip=[target IP]'
+ansible-playbook raspi-bootstrap.yml --inventory ./inventories/production --ask-pass --extra-vars 'ansible_user=pi target=[ansible host name] ansible_host=[current IP] target_ip=[target IP]'
 ```
 - Verify that the setup succeeded by running `ansible [ansible host name] -m setup`
 
@@ -31,5 +31,5 @@ ansible-playbook raspi-bootstrap.yml --ask-pass --extra-vars 'ansible_user=pi ta
 sudo mkdir /mnt/ansible
 sudo mount -t drvfs [Deployment scripts folder] /mnt/ansible -o metadata
 cd /mnt/ansible
-ansible-playbook raspi.yml
+ansible-playbook --inventory ./inventories/production raspi.yml
 ```

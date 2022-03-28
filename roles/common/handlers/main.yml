@@ -10,3 +10,8 @@
 
 - name: update-locale
   command: "update-locale LANG={{ system_locale }}"
+  
+- name: restart-docker
+  service: 
+    name: docker 
+    state: restarted

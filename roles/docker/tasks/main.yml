@@ -1,0 +1,66 @@
+---
+#https://github.com/geerlingguy/ansible-role-docker_arm
+
+- name: Install dependencies
+  ansible.builtin.apt:
+    state: present
+    name: 
+    - apt-transport-https
+    - ca-certificates
+    - software-properties-common
+
+- name: Add Docker GPG apt key
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  when: docker_command_result.rc == 1
+
+- name: Add docker repository
+  ansible.builtin.apt_repository:
+    repo: "deb https://download.docker.com/linux/raspbian/ {{ ansible_distribution_release }} stable"
+    state: present
+
+- name: Run apt upgrade
+  include_role:
+    name: common
+    tasks_from: apt-upgrade
+
+- name: Check if Docker is already present
+  ansible.builtin.command: which docker
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  register: docker_command_result
+
+- name: Download Docker install convenience script
+  ansible.builtin.get_url:
+    url: https://get.docker.com/
+    dest: /tmp/get-docker.sh
+    mode: 0775
+  when: docker_command_result.rc == 1
+
+- name: Run Docker install convenience script.
+  ansible.builtin.command: /tmp/get-docker.sh
+  environment:
+    CHANNEL: stable
+  when: docker_command_result.rc == 1
+  notify:
+    - reboot
+
+- name: Install docker compose
+  ansible.builtin.apt:
+    state: present
+    name: docker-compose
+
+- name: Ensure docker users are added to the docker group
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups: docker
+    append: true
+  with_items: "{{ docker_users }}"
+
+- name: Enable docker service autostart
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true

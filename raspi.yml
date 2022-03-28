@@ -3,5 +3,11 @@
   become: yes
   become_user: root
   roles:
-    - common
-    - raspi
+    - role: common
+    - role: raspi
+    - role: smb
+      tags: 
+        - smb
+    - role: docker
+      tags: 
+        - docker

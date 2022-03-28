@@ -25,3 +25,12 @@ create_users:
     create_home: false
     generate_ssh_key: false
     enable_sudo: false
+
+# samba
+smb_credentials: testuser;badPass123
+smb_user_name: ansitest11
+
+# docker
+docker_users: 
+  - ansitest11
+  - ansitest12
