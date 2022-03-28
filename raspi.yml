@@ -5,6 +5,9 @@
   roles:
     - role: common
     - role: raspi
+    - role: backup
+      tags: 
+        - backup
     - role: smb
       tags: 
         - smb

@@ -32,12 +32,5 @@
     - baseconfig
     - software
 
-
-- import_tasks: config-backup.yml
-  tags:
-    - baseconfig
-    - backup
-
 # TODO
 # configure smb
-# backup solution sudo su pibackup; crontab -l

@@ -1,0 +1,5 @@
+backup_user_name: pibackup
+backup_dir: /home/pibackup/backup
+backup_script_dir: /home/pibackup/backupscript
+backup_log_directory: /home/pibackup/backupscript/logs
+backup_list: /home/pibackup/backupscript/backup-list

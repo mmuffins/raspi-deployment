@@ -26,6 +26,12 @@ create_users:
     generate_ssh_key: false
     enable_sudo: false
 
+# backup
+backup_remote_share: "//smbserver/backup"
+backup_remote_share_user: "pibackup"
+backup_remote_share_password: "badPass"
+backup_retention_days: 7
+
 # samba
 smb_credentials: testuser;badPass123
 smb_user_name: ansitest11
