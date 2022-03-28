@@ -1,0 +1,25 @@
+---
+- name: Get smb user id
+  ansible.builtin.shell: "id -u {{ smb_user_name }}"
+  register: smb_user_id
+  changed_when: False
+  check_mode: no
+
+- name: Get smb user group id
+  ansible.builtin.shell: "id -g {{ smb_user_name }}"
+  register: smb_group_id
+  changed_when: False
+  check_mode: no
+
+- name: Get smb user group name
+  ansible.builtin.shell: "getent group {{ smb_group_id.stdout }} | cut -d: -f1"
+  register: smb_group_name
+  changed_when: False
+  check_mode: no
+
+- name: Set smb facts
+  ansible.builtin.set_fact:
+    smb_user_id: "{{ smb_user_id.stdout }}"
+    smb_group_id: "{{ smb_group_id.stdout }}"
+    smb_group_name: "{{ smb_group_name.stdout }}"
+  check_mode: no

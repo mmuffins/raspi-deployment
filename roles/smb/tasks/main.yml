@@ -1,0 +1,32 @@
+---
+- import_tasks: facts.yml
+
+- name: Create docker folder
+  ansible.builtin.file:
+    state: directory
+    path: "/home/{{ smb_user_name }}/docker/samba"
+    owner: "{{ smb_user_name }}"
+    group: "{{ smb_group_name }}"
+    mode: 0770
+
+- name: Create docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "/home/{{ smb_user_name }}/docker/samba/docker-compose.yml"
+    mode: 0644
+    owner: "{{ smb_user_id }}"
+    group: "{{ smb_group_id }}"
+
+- name: Setup backup
+  ansible.builtin.lineinfile:
+    dest: "{{ backup_list }}"
+    state: present
+    line: "/home/{{ smb_user_name }}/docker/samba/*"
+
+- name: Start container
+  community.docker.docker_compose:
+    state: present
+    project_src: "/home/{{ smb_user_name }}/docker/samba"
+  become: yes
+  become_user: "{{ smb_user_name }}"
+  register: smb_docker_output

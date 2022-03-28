@@ -8,9 +8,9 @@
     - role: backup
       tags: 
         - backup
-    - role: smb
-      tags: 
-        - smb
     - role: docker
       tags: 
         - docker
+    - role: smb
+      tags:
+        - smb
