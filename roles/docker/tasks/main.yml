@@ -13,7 +13,6 @@
   ansible.builtin.apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
-  when: docker_command_result.rc == 1
 
 - name: Add docker repository
   ansible.builtin.apt_repository:
