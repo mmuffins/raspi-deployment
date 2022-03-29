@@ -1,0 +1,10 @@
+---
+- name: Set up backup
+  ansible.builtin.lineinfile:
+    dest: "{{ backup_list }}"
+    state: present
+    line: "{{ item.line }}"
+  loop:
+    - { line: "/home/{{ docker_user_name }}/docker/rutorrent/*" }
+    - { line: "/home/{{ rutorrent_user_name }}/data/*" }
+    - { line: "/home/{{ rutorrent_user_name }}/passwd/*" }

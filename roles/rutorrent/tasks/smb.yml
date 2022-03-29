@@ -1,0 +1,21 @@
+---
+- name: Set smb file permissions
+  ansible.builtin.file:
+    path: "/home/{{ rutorrent_user_name }}/torrents"
+    recurse: true
+    owner: "{{ rutorrent_user_name }}"
+    group: "{{ rutorrent_user_name }}"
+    mode: 0777
+
+- name: Get smb share count
+  ansible.builtin.shell: "wc -l < /home/{{ smb_user_name }}/docker/samba/samba.env"
+  register: smb_share_count
+  changed_when: False
+  check_mode: no
+
+- name: Setup smb share
+  ansible.builtin.lineinfile:
+    dest: "/home/{{ smb_user_name }}/docker/samba/samba.env"
+    state: present
+    regexp: '^SHARE\d+=torrents;/home/{{ rutorrent_user_name }}/torrents.*'
+    line: "SHARE{{ smb_share_count.stdout|int }}=torrents;/home/{{ rutorrent_user_name }}/torrents;yes;no;no;all;"

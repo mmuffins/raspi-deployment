@@ -42,37 +42,43 @@
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
 
-- name: Setup backup
-  ansible.builtin.lineinfile:
-    dest: "{{ backup_list }}"
-    state: present
-    line: "{{ item.line }}"
-  loop:
-    - { line: "/home/{{ docker_user_name }}/docker/rutorrent/*" }
-    - { line: "/home/{{ docker_user_name }}/config/*" }
-  when: backup_list is defined
+- name: Create env file
+  ansible.builtin.template:
+    src: .env.j2
+    dest: "/home/{{ docker_user_name }}/docker/rutorrent/.env"
+    mode: 0644
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
 
-- name: Set smb file permissions
+- name: Create rtorrent-rutorrent.env file
+  ansible.builtin.template:
+    src: rtorrent-rutorrent.env.j2
+    dest: "/home/{{ docker_user_name }}/docker/rutorrent/rtorrent-rutorrent.env"
+    mode: 0644
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+
+- name: Create app file structure
   ansible.builtin.file:
-    path: "/home/{{ rutorrent_user_name }}/torrents"
-    recurse: true
+    state: directory
     owner: "{{ rutorrent_user_name }}"
     group: "{{ rutorrent_user_name }}"
-    mode: 0777
+    mode: 0774
+    path: "{{ item.path }}"
+  loop:
+    - { path: "/home/{{ rutorrent_user_name }}/data" }
+    - { path: "/home/{{ rutorrent_user_name }}/torrents" }
+    - { path: "/home/{{ rutorrent_user_name }}/passwd" }
 
-- name: Get smb share count
-  ansible.builtin.shell: "wc -l < /home/{{ smb_user_name }}/docker/samba/samba.env"
-  register: smb_share_count
-  changed_when: False
-  check_mode: no
+- import_tasks: backup.yml
+  when: backup_list is defined
+  tags:
+    - backup
 
-- name: Setup smb share
-  ansible.builtin.lineinfile:
-    dest: "/home/{{ smb_user_name }}/docker/samba/samba.env"
-    state: present
-    regexp: '^SHARE\d+=torrents;/home/{{ rutorrent_user_name }}/torrents.*'
-    line: "SHARE{{ smb_share_count.stdout|int }}=torrents;/home/{{ rutorrent_user_name }}/torrents;yes;no;no;all;"
+- import_tasks: smb.yml
   when: smb_user_name is defined
+  tags:
+    - smb
 
 - name: Create cleanup cron job
   ansible.builtin.cron:

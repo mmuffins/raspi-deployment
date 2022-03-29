@@ -1,21 +1,44 @@
-version: "2.1"
-
+version: "3.7"
 services:
-  rutorrent:
-    image: linuxserver/rutorrent
+  rtorrent-rutorrent:
+    image: crazymax/rtorrent-rutorrent:latest
     container_name: rutorrent
-    environment:
-      - PUID={{ rutorrent_create_user.uid }}
-      - PGID={{ rutorrent_create_user.group }}
-    volumes:
-      - /home/{{ rutorrent_user_name }}/config:/config
-      - /home/{{ rutorrent_user_name }}/torrents:/downloads
+    expose:
+      - "${RT_DHT_PORT}/udp"
+      - "${XMLRPC_PORT}"
+      - "${RUTORRENT_PORT}"
+      - "${WEBDAV_PORT}"
+      - "${RT_INC_PORT}"
     ports:
-      - 80:80
-      - 5000:5000
-      - 51413:51413
-      - 6881:6881/udp
-    restart: unless-stopped
-    cpu_shares: 512
+      - target: ${RT_DHT_PORT}
+        published: ${RT_DHT_PORT}
+        protocol: udp
+        mode: host
+      - target: ${RUTORRENT_PORT}
+        published: ${RUTORRENT_PORT}
+        protocol: tcp
+        mode: host
+      - target: ${WEBDAV_PORT}
+        published: ${WEBDAV_PORT}
+        protocol: tcp
+        mode: host
+      - target: ${RT_INC_PORT}
+        published: ${RT_INC_PORT}
+        protocol: tcp
+        mode: host
+    env_file:
+      - rtorrent-rutorrent.env
+      - .env
+    volumes:
+      - "/home/{{ rutorrent_user_name }}/data:/data"
+      - "/home/{{ rutorrent_user_name }}/torrents:/downloads"
+      - "/home/{{ rutorrent_user_name }}/passwd:/passwd"
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 32000
+        hard: 40000
     sysctls:
       - net.core.somaxconn=4096
+    restart: unless-stopped
+    stop_grace_period: "120"
