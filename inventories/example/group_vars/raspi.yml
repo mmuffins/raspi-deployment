@@ -37,6 +37,4 @@ smb_credentials: testuser;badPass123
 smb_user_name: ansitest11
 
 # docker
-docker_users: 
-  - ansitest11
-  - ansitest12
+docker_user_name: ansitest11

@@ -1,0 +1,18 @@
+version: "2.1"
+
+services:
+  rutorrent:
+    image: linuxserver/rutorrent
+    container_name: rutorrent
+    volumes:
+      - /home/{{ rutorrent_user_name }}/config:/config
+      - /home/{{ rutorrent_user_name }}/torrents:/downloads
+    ports:
+      - 80:80
+      - 5000:5000
+      - 51413:51413
+      - 6881:6881/udp
+    restart: unless-stopped
+    cpu_shares: 512
+    sysctls:
+      - net.core.somaxconn=4096

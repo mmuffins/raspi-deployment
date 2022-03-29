@@ -56,7 +56,7 @@
     name: "{{ item }}"
     groups: docker
     append: true
-  with_items: "{{ docker_users }}"
+  with_items: "{{ docker_user_name }}"
 
 - name: Enable docker service autostart
   ansible.builtin.service:

@@ -1,0 +1,68 @@
+---
+- import_tasks: facts.yml
+
+- ansible.posix.sysctl:
+    state: present
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    reload: true
+  loop:
+    - { name: "net.ipv4.tcp_max_syn_backlog", value: 4096 }
+    - { name: "net.core.somaxconn", value: 4096 }
+
+- name: Create group
+  ansible.builtin.group:
+    name:  "{{ rutorrent_user_name }}"
+    state: present
+
+- name: Create user
+  ansible.builtin.user: 
+    name: "{{ rutorrent_user_name }}"
+    comment: rutorrent user
+    group: "{{ rutorrent_user_name }}"
+    state: present
+    shell: /bin/bash
+    generate_ssh_key: false
+    createhome: true
+  register: rutorrent_create_user
+
+- name: Create docker folder
+  ansible.builtin.file:
+    state: directory
+    path: "/home/{{ docker_user_name }}/docker/rutorrent"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: 0770
+
+- name: Create docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "/home/{{ docker_user_name }}/docker/rutorrent/docker-compose.yml"
+    mode: 0644
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+
+- name: Create docker-compose env file
+  ansible.builtin.template:
+    src: .env.j2
+    dest: "/home/{{ docker_user_name }}/docker/rutorrent/.env"
+    mode: 0644
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+
+- name: Setup backup
+  lineinfile:
+    dest: "{{ backup_list }}"
+    state: present
+    line: "{{ item.line }}"
+  loop:
+    - { line: "/home/{{ docker_user_name }}/docker/rutorrent/*" }
+    - { line: "/home/{{ docker_user_name }}/config/*" }
+
+- name: Start container
+  community.docker.docker_compose:
+    state: present
+    project_src: "/home/{{ docker_user_name }}/docker/rutorrent"
+  become: yes
+  become_user: "{{ docker_user_name }}"
+  register: rutorrent_docker_output
