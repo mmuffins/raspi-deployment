@@ -22,13 +22,12 @@
     ssh_key_type: ed25519
     createhome: true
 
-- name: Ensure backup directory exists
-  ansible.builtin.file:
-    state: directory
-    path: "{{ backup_dir }}"
-    owner: "{{ backup_user_name }}"
-    group: "{{ backup_user_name }}"
-    mode: 0770
+- name: Assign sudo permission to backup user
+  ansible.builtin.user:
+    name: "{{ backup_user_name }}"
+    groups: usersudo
+    append: yes
+    state: present
 
 - name: Ensure backup directories exists
   ansible.builtin.file:

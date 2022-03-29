@@ -89,10 +89,10 @@ tar -rpf $tarname $backupList >> $logFile 2>&1
 
 for i in "${!backupFiles[@]}"; do 
 	backupentry=${backupFiles[$i]}
-	tar -rpf $tarname $backupList $backupentry >> $logFile 2>&1
+	sudo tar -rpf $tarname $backupList $backupentry >> $logFile 2>&1
 	
 	if [ $? != 0 ]; then
-		echo "$(date +%Y-%m-%d_%H:%M:%S) - Error while executing tar -rpf $tarname $backupList $backupentry - continuing with next entry" >> $logFile
+		echo "$(date +%Y-%m-%d_%H:%M:%S) - Error while executing sudo tar -rpf $tarname $backupList $backupentry - continuing with next entry" >> $logFile
 	fi
 done
 
@@ -147,7 +147,7 @@ if [ $? != 0 ]; then
 fi
 
 echo "$(date +%Y-%m-%d_%H:%M:%S) - Backup complete, removing all files in $backupDir " >> $logFile
-rm -rf $backupDir/* >> $logFile 2>&1
+sudo rm -rf $backupDir/* >> $logFile 2>&1
 
 echo "$(date +%Y-%m-%d_%H:%M:%S) - Cleaning up the log directory" >> $logFile
 find $logDirectory -mindepth 1 -mtime +30 -delete >> $logFile 2>&1
