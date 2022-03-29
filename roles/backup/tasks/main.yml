@@ -30,29 +30,18 @@
     group: "{{ backup_user_name }}"
     mode: 0770
 
-- name: Ensure backup script directory exists
+- name: Ensure backup directories exists
   ansible.builtin.file:
     state: directory
-    path: "{{ backup_script_dir }}"
     owner: "{{ backup_user_name }}"
     group: "{{ backup_user_name }}"
-    mode: 0770
-
-- name: Ensure backup log directory exists
-  ansible.builtin.file:
-    state: directory
-    path: "{{ backup_log_directory }}"
-    owner: "{{ backup_user_name }}"
-    group: "{{ backup_user_name }}"
-    mode: 0770
-
-- name: Ensure backup script mount directory exists
-  ansible.builtin.file:
-    state: directory
-    path: "{{ backup_script_dir }}/mnt"
-    owner: "{{ backup_user_name }}"
-    group: "{{ backup_user_name }}"
-    mode: 0770
+    mode: 0774
+    path: "{{ item.path }}"
+  loop:
+    - { path: "{{ backup_dir }}" }
+    - { path: "{{ backup_script_dir }}" }
+    - { path: "{{ backup_log_directory }}" }
+    - { path: "{{ backup_script_dir }}/mnt" }
 
 - name: Copy backup script
   ansible.builtin.copy:
