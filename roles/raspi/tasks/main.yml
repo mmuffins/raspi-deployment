@@ -24,7 +24,7 @@
     - baseconfig
     - securessh
 
-- name: Run apt upgrade
+- name: Upgrade packages
   include_role:
     name: common
     tasks_from: apt-upgrade

@@ -19,7 +19,7 @@
     repo: "deb https://download.docker.com/linux/raspbian/ {{ ansible_distribution_release }} stable"
     state: present
 
-- name: Run apt upgrade
+- name: Upgrade packages
   include_role:
     name: common
     tasks_from: apt-upgrade

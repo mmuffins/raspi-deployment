@@ -4,12 +4,6 @@ services:
   samba:
     image: dperson/samba:armhf
     container_name: samba
-    environment:
-      - USER={{ smb_credentials }}
-      - PERMISSION=0700
-      - SHARE=home;/home;yes;no;no;all;
-      - USERID={{ smb_user_id }}
-      - GROUPID={{ smb_group_id }}
     volumes:
       - /home:/home
     ports:
