@@ -4,8 +4,9 @@ services:
   rutorrent:
     image: linuxserver/rutorrent
     container_name: rutorrent
-    env_file:
-      - rutorrent.env
+    environment:
+      - PUID={{ rutorrent_create_user.uid }}
+      - PGID={{ rutorrent_create_user.group }}
     volumes:
       - /home/{{ rutorrent_user_name }}/config:/config
       - /home/{{ rutorrent_user_name }}/torrents:/downloads

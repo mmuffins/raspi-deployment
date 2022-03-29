@@ -17,13 +17,23 @@
     owner: "{{ smb_user_id }}"
     group: "{{ smb_group_id }}"
 
-- name: Create docker-compose env file
-  ansible.builtin.template:
-    src: samba.env.j2
-    dest: "/home/{{ smb_user_name }}/docker/samba/samba.env"
+- name: Create shares env file
+  ansible.builtin.file:
+    state: touch
+    path: "/home/{{ smb_user_name }}/docker/samba/samba.env"
+    owner: "{{ smb_user_name }}"
+    group: "{{ smb_group_name }}"
     mode: 0644
-    owner: "{{ smb_user_id }}"
-    group: "{{ smb_group_id }}"
+    modification_time: preserve
+    access_time: preserve
+
+- name: Setup default share
+  ansible.builtin.lineinfile:
+    dest: "/home/{{ smb_user_name }}/docker/samba/samba.env"
+    state: present
+    line: "{{ item.line }}"
+  loop:
+    - { line: "SHARE=home;/home;yes;no;no;all;" }
 
 - name: Setup backup
   ansible.builtin.lineinfile:
@@ -34,6 +44,7 @@
 - name: Start container
   community.docker.docker_compose:
     state: present
+    pull: true
     project_src: "/home/{{ smb_user_name }}/docker/samba"
   become: yes
   become_user: "{{ smb_user_name }}"

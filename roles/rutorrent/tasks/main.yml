@@ -42,26 +42,42 @@
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
 
-- name: Create docker-compose env file
-  ansible.builtin.template:
-    src: rutorrent.env.j2
-    dest: "/home/{{ docker_user_name }}/docker/rutorrent/rutorrent.env"
-    mode: 0644
-    owner: "{{ docker_user_id }}"
-    group: "{{ docker_group_id }}"
-
 - name: Setup backup
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ backup_list }}"
     state: present
     line: "{{ item.line }}"
   loop:
     - { line: "/home/{{ docker_user_name }}/docker/rutorrent/*" }
     - { line: "/home/{{ docker_user_name }}/config/*" }
+  when: backup_list is defined
+
+- name: Set smb file permissions
+  ansible.builtin.file:
+    path: "/home/{{ rutorrent_user_name }}/torrents"
+    recurse: true
+    owner: "{{ rutorrent_user_name }}"
+    group: "{{ rutorrent_user_name }}"
+    mode: 0777
+
+- name: Get smb share count
+  ansible.builtin.shell: "wc -l < /home/{{ smb_user_name }}/docker/samba/samba.env"
+  register: smb_share_count
+  changed_when: False
+  check_mode: no
+
+- name: Setup smb share
+  ansible.builtin.lineinfile:
+    dest: "/home/{{ smb_user_name }}/docker/samba/samba.env"
+    state: present
+    regexp: '^SHARE\d+=torrents;/home/{{ rutorrent_user_name }}/torrents.*'
+    line: "SHARE{{ smb_share_count.stdout|int }}=torrents;/home/{{ rutorrent_user_name }}/torrents;yes;no;no;all;"
+  when: smb_user_name is defined
 
 - name: Start container
   community.docker.docker_compose:
     state: present
+    pull: true
     project_src: "/home/{{ docker_user_name }}/docker/rutorrent"
   become: yes
   become_user: "{{ docker_user_name }}"
