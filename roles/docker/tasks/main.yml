@@ -20,9 +20,12 @@
     state: present
 
 - name: Upgrade packages
-  include_role:
-    name: common
-    tasks_from: apt-upgrade
+  apt:
+    update_cache: yes
+    autoclean: yes
+    autoremove: yes
+    upgrade: dist
+    cache_valid_time: 86400
 
 - name: Check if Docker is already present
   ansible.builtin.command: which docker
@@ -43,6 +46,7 @@
   environment:
     CHANNEL: stable
   when: docker_command_result.rc == 1
+  failed_when: diff_cmd.rc != 0 or diff_cmd.rc != 100
   notify:
     - reboot
 

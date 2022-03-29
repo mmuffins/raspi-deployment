@@ -25,9 +25,12 @@
     - securessh
 
 - name: Upgrade packages
-  include_role:
-    name: common
-    tasks_from: apt-upgrade
+  apt:
+    update_cache: yes
+    autoclean: yes
+    autoremove: yes
+    upgrade: dist
+    cache_valid_time: 86400
   tags: 
     - baseconfig
-    - software
+    - upgrade
