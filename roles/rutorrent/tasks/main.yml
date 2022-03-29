@@ -74,6 +74,14 @@
     line: "SHARE{{ smb_share_count.stdout|int }}=torrents;/home/{{ rutorrent_user_name }}/torrents;yes;no;no;all;"
   when: smb_user_name is defined
 
+- name: Create cleanup cron job
+  ansible.builtin.cron:
+    user: "{{ rutorrent_user_name }}"
+    name: "Cleanup old torrents"
+    minute: 0
+    hour: 3
+    job: "bash find /home/{{ rutorrent_user_name }}/config/{{ rutorrent_user_name }}/profiles/torrents/ -type f -mtime +60 -name '*).torrent' -execdir rm -- '{}' \\;"
+
 - name: Start container
   community.docker.docker_compose:
     state: present
