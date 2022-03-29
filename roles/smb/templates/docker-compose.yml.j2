@@ -4,6 +4,8 @@ services:
   samba:
     image: dperson/samba:armhf
     container_name: samba
+    env_file:
+      - samba.env
     volumes:
       - /home:/home
     ports:

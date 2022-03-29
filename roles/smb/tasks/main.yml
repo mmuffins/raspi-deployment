@@ -19,8 +19,8 @@
 
 - name: Create docker-compose env file
   ansible.builtin.template:
-    src: .env.j2
-    dest: "/home/{{ smb_user_name }}/docker/samba/.env"
+    src: samba.env.j2
+    dest: "/home/{{ smb_user_name }}/docker/samba/samba.env"
     mode: 0644
     owner: "{{ smb_user_id }}"
     group: "{{ smb_group_id }}"
