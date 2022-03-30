@@ -19,3 +19,8 @@
   become: yes
   become_user: "{{ smb_user_name }}"
   register: smb_docker_output
+
+- name: restart docker
+  service:
+    name: docker
+    state: restarted

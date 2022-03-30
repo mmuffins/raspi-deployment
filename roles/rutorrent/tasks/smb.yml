@@ -1,12 +1,4 @@
 ---
-- name: Set smb file permissions
-  ansible.builtin.file:
-    path: "/home/{{ rutorrent_user_name }}/torrents"
-    recurse: true
-    owner: "{{ rutorrent_user_name }}"
-    group: "{{ rutorrent_user_name }}"
-    mode: 0777
-
 - name: Get smb share count
   ansible.builtin.shell: "wc -l < /home/{{ smb_user_name }}/docker/samba/samba.env"
   register: smb_share_count

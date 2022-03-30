@@ -70,6 +70,18 @@
     append: true
   with_items: "{{ docker_user_name }}"
 
+- name: Enable Docker IPv6
+  copy:
+    dest: /etc/docker/daemon.json
+    mode: 0600
+    content: |
+      {
+        "ipv6": true,
+        "fixed-cidr-v6": "2001:db8:1::/64"
+      }
+  notify: restart docker
+
+
 - name: Enable docker service autostart
   ansible.builtin.service:
     name: docker
