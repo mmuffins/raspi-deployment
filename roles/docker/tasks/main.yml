@@ -19,6 +19,13 @@
     repo: "deb https://download.docker.com/linux/raspbian/ {{ ansible_distribution_release }} stable"
     state: present
 
+- name: Check if Docker is already present
+  ansible.builtin.command: which docker
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  register: docker_command_result
+
 - name: Reboot
   ansible.builtin.reboot :
     connect_timeout: 5
@@ -26,13 +33,7 @@
     pre_reboot_delay: 0
     post_reboot_delay: 30
     test_command: whoami
-
-- name: Check if Docker is already present
-  ansible.builtin.command: which docker
-  failed_when: false
-  changed_when: false
-  check_mode: false
-  register: docker_command_result
+  when: docker_command_result.rc == 1
 
 - name: Download docker install convenience script
   ansible.builtin.get_url:
