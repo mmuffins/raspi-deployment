@@ -10,22 +10,6 @@
     - { name: "net.ipv4.tcp_max_syn_backlog", value: 4096 }
     - { name: "net.core.somaxconn", value: 4096 }
 
-- name: Create group
-  ansible.builtin.group:
-    name:  "{{ rutorrent_user_name }}"
-    state: present
-
-- name: Create user
-  ansible.builtin.user: 
-    name: "{{ rutorrent_user_name }}"
-    comment: rutorrent user
-    group: "{{ rutorrent_user_name }}"
-    state: present
-    shell: /bin/bash
-    generate_ssh_key: false
-    createhome: true
-  register: rutorrent_create_user
-
 - name: Create docker folder
   ansible.builtin.file:
     state: directory
@@ -61,14 +45,14 @@
 - name: Create app file structure
   ansible.builtin.file:
     state: directory
-    owner: "{{ rutorrent_user_name }}"
-    group: "{{ rutorrent_user_name }}"
+    owner: "{{ docker_user_name }}"
+    group: "{{ docker_group_name }}"
     mode: 0774
     path: "{{ item.path }}"
   loop:
-    - { path: "/home/{{ rutorrent_user_name }}/data" }
-    - { path: "/home/{{ rutorrent_user_name }}/torrents" }
-    - { path: "/home/{{ rutorrent_user_name }}/passwd" }
+    - { path: "/home/{{ docker_user_name }}/data" }
+    - { path: "/home/{{ docker_user_name }}/torrents" }
+    - { path: "/home/{{ docker_user_name }}/passwd" }
 
 - import_tasks: backup.yml
   when: backup_list is defined
@@ -82,11 +66,11 @@
 
 - name: Create cleanup cron job
   ansible.builtin.cron:
-    user: "{{ rutorrent_user_name }}"
+    user: "{{ docker_user_name }}"
     name: "Cleanup old torrents"
     minute: 0
     hour: 3
-    job: "bash find /home/{{ rutorrent_user_name }}/config/{{ rutorrent_user_name }}/profiles/torrents/ -type f -mtime +60 -name '*).torrent' -execdir rm -- '{}' \\;"
+    job: "bash find /home/{{ docker_user_name }}/config/{{ docker_user_name }}/profiles/torrents/ -type f -mtime +60 -name '*).torrent' -execdir rm -- '{}' \\;"
 
 - name: Start container
   community.docker.docker_compose:

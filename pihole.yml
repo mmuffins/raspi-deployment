@@ -1,5 +1,5 @@
 - name: Raspberry Pi Setup
-  hosts: raspi
+  hosts: piholeGroup
   become: yes
   become_user: root
   roles:
@@ -14,9 +14,6 @@
     - role: smb
       tags:
         - smb
-    - role: rutorrent
-      tags:
-        - rutorrent
     - role: pihole
       tags:
         - pihole

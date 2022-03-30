@@ -9,6 +9,6 @@
   ansible.builtin.lineinfile:
     dest: "/home/{{ smb_user_name }}/docker/samba/samba.env"
     state: present
-    regexp: '^SHARE\d+=torrents;/home/{{ rutorrent_user_name }}/torrents.*'
-    line: "SHARE{{ smb_share_count.stdout|int }}=torrents;/home/{{ rutorrent_user_name }}/torrents;yes;no;no;all;"
+    regexp: '^SHARE\d+=torrents;/home/{{ docker_user_name }}/torrents.*'
+    line: "SHARE{{ smb_share_count.stdout|int }}=torrents;/home/{{ docker_user_name }}/torrents;yes;no;no;all;"
   notify: restart-docker-samba

@@ -6,5 +6,5 @@
     line: "{{ item.line }}"
   loop:
     - { line: "/home/{{ docker_user_name }}/docker/rutorrent/*" }
-    - { line: "/home/{{ rutorrent_user_name }}/data/*" }
-    - { line: "/home/{{ rutorrent_user_name }}/passwd/*" }
+    - { line: "/home/{{ docker_user_name }}/data/*" }
+    - { line: "/home/{{ docker_user_name }}/passwd/*" }

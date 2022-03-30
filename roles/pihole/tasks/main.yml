@@ -1,0 +1,50 @@
+---
+# https://github.com/shaderecker/ansible-pihole
+
+- import_tasks: facts.yml
+
+- name: Create pihole folder
+  ansible.builtin.file:
+    state: directory
+    path: "/home/{{ docker_user_name }}/pihole"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: 0755
+
+# - import_tasks: backup.yml
+#   when: backup_list is defined
+#   tags:
+#     - backup
+
+- name: Create docker folder
+  ansible.builtin.file:
+    state: directory
+    path: "/home/{{ docker_user_name }}/docker/pihole"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: 0770
+
+- name: Get IPv6 link local address
+  set_fact:
+    ipv6: "{{ item.address }}"
+  loop: "{{ vars['ansible_' + ansible_default_ipv6.interface | default(ansible_default_ipv4.interface)].ipv6 }}"
+  loop_control:
+    label: "{{ item.address }}"
+  when: "'link' in item.scope"
+
+- name: Create docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "/home/{{ docker_user_name }}/docker/pihole/docker-compose.yml"
+    mode: 0644
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+
+- name: Start container
+  community.docker.docker_compose:
+    state: present
+    pull: true
+    project_src: "/home/{{ docker_user_name }}/docker/pihole"
+  become: yes
+  become_user: "{{ docker_user_name }}"
+  register: pihole_docker_output
