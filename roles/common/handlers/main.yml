@@ -10,8 +10,12 @@
 
 - name: update-locale
   command: "update-locale LANG={{ system_locale }}"
-  
-- name: restart-docker
-  service: 
-    name: docker 
-    state: restarted
+
+- name: restart-docker-samba
+  community.docker.docker_compose:
+    state: present
+    pull: true
+    project_src: "/home/{{ smb_user_name }}/docker/samba"
+  become: yes
+  become_user: "{{ smb_user_name }}"
+  register: smb_docker_output
