@@ -19,13 +19,13 @@
     repo: "deb https://download.docker.com/linux/raspbian/ {{ ansible_distribution_release }} stable"
     state: present
 
-- name: Upgrade packages
-  apt:
-    update_cache: yes
-    autoclean: yes
-    autoremove: yes
-    upgrade: dist
-    cache_valid_time: 86400
+- name: Reboot
+  ansible.builtin.reboot :
+    connect_timeout: 5
+    reboot_timeout: 600
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
+    test_command: whoami
 
 - name: Check if Docker is already present
   ansible.builtin.command: which docker
@@ -47,8 +47,16 @@
     CHANNEL: stable
   when: docker_command_result.rc == 1
   failed_when: diff_cmd.rc != 0 or diff_cmd.rc != 100
-  notify:
-    - reboot
+  ignore_errors: True # After trying for days I couldn't get this to run. It installs fine but always throws errors
+ 
+- name: Reboot
+  ansible.builtin.reboot :
+    connect_timeout: 5
+    reboot_timeout: 600
+    pre_reboot_delay: 0
+    post_reboot_delay: 30
+    test_command: whoami
+  when: docker_command_result.rc == 1
 
 - name: Install docker compose
   ansible.builtin.apt:

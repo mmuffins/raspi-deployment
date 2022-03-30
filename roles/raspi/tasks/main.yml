@@ -35,5 +35,3 @@
     - baseconfig
     - upgrade
   notify: reboot
-
-
