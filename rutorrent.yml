@@ -14,3 +14,6 @@
     - role: smb
       tags:
         - smb
+    - role: rutorrent
+      tags:
+        - rutorrent

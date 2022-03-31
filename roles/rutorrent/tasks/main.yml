@@ -67,7 +67,7 @@
 - name: Create cleanup cron job
   ansible.builtin.cron:
     user: "{{ docker_user_name }}"
-    name: "Cleanup old torrents"
+    name: "Clean up old torrents"
     minute: 0
     hour: 3
     job: "bash find /home/{{ docker_user_name }}/config/{{ docker_user_name }}/profiles/torrents/ -type f -mtime +60 -name '*).torrent' -execdir rm -- '{}' \\;"
@@ -80,3 +80,12 @@
   become: yes
   become_user: "{{ docker_user_name }}"
   register: rutorrent_docker_output
+
+- name: Prune docker images
+  community.docker.docker_prune:
+    containers: yes
+    networks: yes
+    volumes: yes
+    images: yes
+    images_filters:
+      dangling: false

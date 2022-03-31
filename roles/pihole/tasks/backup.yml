@@ -1,8 +1,24 @@
 ---
+- name: Create pihole backup folder
+  ansible.builtin.file:
+    state: directory
+    path: "/home/{{ docker_user_name }}/pihole/backup"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: 0755
+
 - name: Set up backup
   ansible.builtin.lineinfile:
     dest: "{{ backup_list }}"
     state: present
     line: "{{ item.line }}"
   loop:
-    - { line: "/home/{{ docker_user_name }}/pihole/*" }
+    - { line: "/home/{{ docker_user_name }}/pihole/backup/*" }
+
+- name: Schedule pihole teleporter export
+  ansible.builtin.cron:
+    user: "{{ docker_user_name }}"
+    name: "Run pihole teleporter backup"
+    minute: 30
+    hour: 2
+    job: 'sudo rm /home/mmuffins/pihole/backup/*;docker exec -ti pihole bash -c "cd /mnt/backup/;pihole -a teleporter;"'

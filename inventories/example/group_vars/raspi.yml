@@ -11,7 +11,7 @@ system_disable_wifi: true
 create_users:
   - name: ansitest11
     comment: Ansible test11
-    group: users
+    group: ansitest11
     groups: users,dialout
     create_home: true
     generate_ssh_key: true
@@ -20,7 +20,7 @@ create_users:
 
   - name: ansitest12
     comment: Ansible test12
-    group: users
+    group: ansitest12
     groups: users,plugdev
     create_home: false
     generate_ssh_key: false

@@ -11,10 +11,10 @@
     group: "{{ docker_group_id }}"
     mode: 0755
 
-# - import_tasks: backup.yml
-#   when: backup_list is defined
-#   tags:
-#     - backup
+- import_tasks: backup.yml
+  when: backup_list is defined
+  tags:
+    - backup
 
 - name: Create docker folder
   ansible.builtin.file:
@@ -48,3 +48,12 @@
   become: yes
   become_user: "{{ docker_user_name }}"
   register: pihole_docker_output
+
+- name: Prune docker images
+  community.docker.docker_prune:
+    containers: yes
+    networks: yes
+    volumes: yes
+    images: yes
+    images_filters:
+      dangling: false

@@ -30,9 +30,9 @@ services:
       - rtorrent-rutorrent.env
       - .env
     volumes:
-      - "/home/{{ rutorrent_user_name }}/data:/data"
-      - "/home/{{ rutorrent_user_name }}/torrents:/downloads"
-      - "/home/{{ rutorrent_user_name }}/passwd:/passwd"
+      - "/home/{{ docker_user_name }}/data:/data"
+      - "/home/{{ docker_user_name }}/torrents:/downloads"
+      - "/home/{{ docker_user_name }}/passwd:/passwd"
     ulimits:
       nproc: 65535
       nofile:

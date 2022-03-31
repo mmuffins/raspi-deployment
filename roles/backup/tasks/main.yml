@@ -88,6 +88,6 @@
   ansible.builtin.cron:
     user: "{{ backup_user_name }}"
     name: "Run backup"
-    minute: "0"
-    hour: "4"
+    minute: 0
+    hour: 4
     job: "bash {{ backup_script_dir }}/raspi-backup-syncfiles.sh >/dev/null 2>&1"

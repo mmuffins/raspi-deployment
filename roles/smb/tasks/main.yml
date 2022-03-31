@@ -49,3 +49,12 @@
   become: yes
   become_user: "{{ smb_user_name }}"
   register: smb_docker_output
+
+- name: Prune docker images
+  community.docker.docker_prune:
+    containers: yes
+    networks: yes
+    volumes: yes
+    images: yes
+    images_filters:
+      dangling: false
