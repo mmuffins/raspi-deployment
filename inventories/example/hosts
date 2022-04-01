@@ -1,5 +1,7 @@
-[raspi]
+[piholeGroup]
 raspberrypi1 ansible_host=192.168.0.10
+
+[rutorrent]
 raspberrypi2 ansible_host=192.168.0.11
 raspberrypi3 ansible_host=192.168.0.12
 raspberrypi4 ansible_host=192.168.0.13

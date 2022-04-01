@@ -1,9 +1,4 @@
 ---
-- import_tasks: set-hostname.yml
-  tags:
-    - baseconfig
-    - hostname
-
 - import_tasks: set-locale.yml
   tags:
     - baseconfig

@@ -21,4 +21,11 @@
         state: absent
         remove: true
 
+    - name: Update loopback hosts entry
+      ansible.builtin.lineinfile:
+        dest: /etc/hosts
+        state: present
+        regexp: '^127\.0\.1\.1.*'
+        line: "127.0.1.1 {{ inventory_hostname }}"
+
   notify: reboot

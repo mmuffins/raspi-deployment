@@ -1,20 +1,18 @@
 version: "3.7"
 
-
 services:
   pihole:
     image: pihole/pihole:latest
     container_name: pihole
+    cap_add:
+      - NET_ADMIN
     environment:
       TZ: "{{ system_timezone }}"
       FTLCONF_REPLY_ADDR4: {{ ansible_host }}
       FTLCONF_REPLY_ADDR6: {{ ipv6 }}
       WEBPASSWORD: {{ pihole_webpassword }}
-      PIHOLE_DNS_: {{ pihole_dns }}
-      DNSMASQ_LISTENING: "local"
       FTLCONF_MAXDBDAYS: {{ pihole_ftl_max_db_days }}
       FTLCONF_MAXDBDAYS: {{ pihole_ftl_max_db_days }}
-      REV_SERVER: "false"
     volumes:
       - "/home/{{ docker_user_name }}/pihole/pihole/:/etc/pihole/"
       - "/home/{{ docker_user_name }}/pihole/dnsmasq.d/:/etc/dnsmasq.d/"

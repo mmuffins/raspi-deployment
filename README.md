@@ -20,16 +20,19 @@ sudo mount -t drvfs [Deployment scripts folder] /mnt/ansible -o metadata
 - Run the raspi-bootstrap runbook to create a user for ansible.
 ```
 cd /mnt/ansible
-ansible-playbook raspi-bootstrap.yml --inventory ./inventories/production --ask-pass --extra-vars 'ansible_user=pi target=[ansible host name] ansible_host=[current IP] target_ip=[target IP]'
+ansible-playbook raspi-bootstrap.yml --inventory ./inventories/production --ask-pass --extra-vars 'ansible_user=pi target=<ansible host> ansible_host=<current raspberry IP>'
 ```
-- Verify that the setup succeeded by running `ansible [ansible host name] -m setup`
+- Verify that the setup succeeded by running `ansible <ansible hostname> -m setup`
 
-## Setup
+## Run playbook
 - Check the variables and list of users to create in  `group_vars/raspi.yml`
 - Run the playbook
 ```
 sudo mkdir /mnt/ansible
-sudo mount -t drvfs [Deployment scripts folder] /mnt/ansible -o metadata
+sudo mount -t drvfs <Deployment scripts folder> /mnt/ansible -o metadata
 cd /mnt/ansible
-ansible-playbook --inventory ./inventories/production raspi.yml
+ansible-playbook --inventory ./inventories/production <Playbook>.yml
+
+# the initial setup for a pihole should be limited to a specific target and may need their current IP provided. Afterwards the playbook can be executed normally
+ansible-playbook --inventory ./inventories/production pihole.yml --limit <target host> --extra-vars 'ansible_host=<current raspberry IP> target_ip=<target IP>'
 ```

@@ -13,7 +13,7 @@
     state: present
     line: "{{ item.line }}"
   loop:
-    - { line: "/home/{{ docker_user_name }}/pihole/backup/*" }
+    - { line: "/home/{{ docker_user_name }}/pihole/backup/" }
 
 - name: Schedule pihole teleporter export
   ansible.builtin.cron:

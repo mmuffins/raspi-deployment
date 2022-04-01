@@ -3,6 +3,16 @@
 
 - import_tasks: facts.yml
 
+- name: Set up static IP
+  template:
+    src: "templates/dhcpcd.conf.j2"
+    dest: "/etc/dhcpcd.conf"
+    mode: 0644
+    owner: root
+    group: root
+  notify: reboot
+
+
 - name: Create pihole folder
   ansible.builtin.file:
     state: directory
