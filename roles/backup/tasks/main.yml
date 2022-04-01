@@ -43,12 +43,12 @@
     - { path: "{{ backup_script_dir }}/mnt" }
 
 - name: Copy backup script
-  ansible.builtin.copy:
-    src: files/raspi-backup-syncfiles.sh
+  ansible.builtin.template:
+    src: files/raspi-backup-syncfiles.sh.j2
     dest: "{{ backup_script_dir }}/raspi-backup-syncfiles.sh"
+    mode: 0777
     owner: "{{ backup_user_name }}"
     group: "{{ backup_user_name }}"
-    mode: 0777
 
 - name: Ensure backup credential file exists
   ansible.builtin.template:
