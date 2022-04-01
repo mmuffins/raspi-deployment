@@ -21,4 +21,4 @@
     name: "Run pihole teleporter backup"
     minute: 30
     hour: 2
-    job: 'sudo rm /home/mmuffins/pihole/backup/*;docker exec -ti pihole bash -c "cd /mnt/backup/;pihole -a teleporter;"'
+    job: 'sudo rm -f /home/mmuffins/pihole/backup/*;docker exec -ti pihole bash -c "cd /mnt/backup/;pihole -a teleporter;"'
