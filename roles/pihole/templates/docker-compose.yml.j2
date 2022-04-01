@@ -17,9 +17,5 @@ services:
       - "/home/{{ docker_user_name }}/pihole/pihole/:/etc/pihole/"
       - "/home/{{ docker_user_name }}/pihole/dnsmasq.d/:/etc/dnsmasq.d/"
       - "/home/{{ docker_user_name }}/pihole/backup/:/mnt/backup/"
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "67:67/udp"
-      - "80:80/tcp"
+    network_mode: host
     restart: unless-stopped
