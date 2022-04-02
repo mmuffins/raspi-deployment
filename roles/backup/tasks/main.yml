@@ -54,7 +54,9 @@
   ansible.builtin.replace:
     path: "{{ backup_script_dir }}/raspi-backup-syncfiles.sh"
     regexp: "\r"
-
+  changed_when: false
+  check_mode: false
+    
 - name: Ensure backup credential file exists
   ansible.builtin.template:
     src: "templates/backupCredFile.j2"
