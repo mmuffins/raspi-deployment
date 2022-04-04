@@ -50,6 +50,16 @@
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
 
+# Pre-pull the latest image, otherwise there's a chance that docker_compose
+# closes the running container, breaking dns and preventing docker pull to complete
+# leaving ansible in an unrecoverable state
+- name: Pull latest pihole image
+  community.docker.docker_image:
+    name: pihole/pihole
+    source: pull
+    pull:
+      platform: arm64
+
 - name: Start container
   community.docker.docker_compose:
     state: present
