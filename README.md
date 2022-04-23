@@ -21,6 +21,9 @@ sudo mount -t drvfs [Deployment scripts folder] /mnt/ansible -o metadata
 ```
 cd /mnt/ansible
 ansible-playbook raspi-bootstrap.yml --inventory ./inventories/production --ask-pass --extra-vars 'ansible_user=pi target=<ansible host>'
+
+# When setting up a new pihole or if dns is not working the ansible_host parameter needs to be provided as well
+ansible-playbook raspi-bootstrap.yml --inventory ./inventories/production --ask-pass --extra-vars 'ansible_user=pi target=<ansible host> ansible_host=<current ip>'
 ```
 - Verify that the setup succeeded by running `ansible <ansible hostname> -m setup --inventory ./inventories/production`
 
