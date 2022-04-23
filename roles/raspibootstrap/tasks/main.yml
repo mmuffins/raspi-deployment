@@ -31,6 +31,14 @@
   ansible.builtin.hostname:
     name: "{{ inventory_hostname }}"
 
+- name: Check if autologin file exists
+  stat: path=/etc/systemd/system/getty@tty1.service.d/autologin.conf
+  register: autologin_conf_stat
+
+- name: Disable pi autologin
+  command: sudo mv /etc/systemd/system/getty@tty1.service.d/autologin.conf /etc/systemd/system/getty@tty1.service.d/autologin.conf.bak
+  when: autologin_conf_stat.stat.exists
+
 # In some cases the new ip address for the hostname is not immediately updated. Restart to force the update.
 # This step could fail, which is ugly but not critical.
 - name: Reboot
