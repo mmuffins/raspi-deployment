@@ -12,7 +12,6 @@
     group: root
   notify: reboot
 
-
 - name: Create pihole folder
   ansible.builtin.file:
     state: directory
@@ -77,3 +76,10 @@
     images: yes
     images_filters:
       dangling: false
+
+- name: Use local pihole instance for dns resolution
+  ansible.builtin.lineinfile:
+    dest: '/etc/resolv.conf.head'
+    create: true
+    state: present
+    line: 'nameserver 127.0.1.1'

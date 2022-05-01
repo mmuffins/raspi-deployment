@@ -3,6 +3,5 @@ pihole_webpassword: badpass123
 
 ip_gateway: "192.168.0.1"
 dns_nameservers:
-  - "127.0.1.1"
   - "8.8.8.8"
   - "1.1.1.1"

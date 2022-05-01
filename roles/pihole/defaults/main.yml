@@ -2,7 +2,6 @@ pihole_webpassword: weakpass
 pihole_ftl_max_db_days: 180
 
 dns_nameservers:
-  - "127.0.1.1"
   - "8.8.8.8"
   - "1.1.1.1"
 
