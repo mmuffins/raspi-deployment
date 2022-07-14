@@ -15,6 +15,8 @@ ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N ""
 ```
 sudo mkdir /mnt/ansible
 sudo mount -t drvfs [Deployment scripts folder] /mnt/ansible -o metadata
+# e.g.
+sudo mount -t drvfs C:/Users/email_000/source/DeploymentScripts/ /mnt/ansible -o metadata
 ```
 
 - Run the raspi-bootstrap runbook to create a user for ansible.
