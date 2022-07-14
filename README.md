@@ -7,7 +7,7 @@
 - Open hosts and add a new host entry for the raspberry. Set ansible_hosts for the entry to the target IP address, not the current one.
 - Open wsl and generate an ssh key pair for ansible and (if it doesn't exist yet) a key pair for interactive ssh logons
 ```
-ssh-keygen -t ed25519 -f ~/.ssh/ansible_rsa -N ""
+ssh-keygen -t ed25519 -f ~/.ssh/ansible_ed25519 -N ""
 ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N ""
 ```
 
