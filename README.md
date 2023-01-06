@@ -31,6 +31,10 @@ ansible-playbook raspi-bootstrap.yml --inventory ./inventories/production --ask-
 
 ## Run playbook
 - Check the variables and list of users to create in  `group_vars/raspi.yml`
+- Upgrade your local installation to have the latest tool and plugin versions
+```
+sudo apt-get update && time sudo apt-get dist-upgrade
+```
 - Run the playbook
 ```
 sudo mkdir /mnt/ansible
