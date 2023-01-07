@@ -8,8 +8,8 @@ services:
       - NET_ADMIN
     environment:
       TZ: "{{ system_timezone }}"
-      FTLCONF_REPLY_ADDR4: {{ ansible_host }}
-      FTLCONF_REPLY_ADDR6: {{ ipv6 }}
+      FTLCONF_LOCAL_IPV4: {{ ansible_host }}
+      FTLCONF_LOCAL_IPV6: {{ ipv6 }}
       WEBPASSWORD: {{ pihole_webpassword }}
       FTLCONF_MAXDBDAYS: {{ pihole_ftl_max_db_days }}
       FTLCONF_MAXDBDAYS: {{ pihole_ftl_max_db_days }}
