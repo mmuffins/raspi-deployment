@@ -6,7 +6,6 @@ networks:
     external: true
 
 services:
-
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
@@ -16,7 +15,7 @@ services:
       - PGID=1000
       - TZ=Europe/Vienna
     volumes:
-      - /home/mmuffins/docker/data/prowlarr:/config
+      - ~/docker/data/prowlarr:/config
     networks:
       - ${TRAEFIC_NETWORK}
     # ports:
@@ -38,9 +37,9 @@ services:
       - PGID=1000
       - TZ=Europe/Vienna
     volumes:
-      - /home/mmuffins/docker/data/sonarr:/config
-      - /home/mmuffins/media/tv:/tv #optional
-      - /home/mmuffins/media/dl:/downloads #optional
+      - ~/docker/data/sonarr:/config
+      - ~/media/tv:/tv #optional
+      - ~/media/dl:/downloads #optional
     networks:
       - ${TRAEFIC_NETWORK}
     # ports:
@@ -61,9 +60,9 @@ services:
       - PGID=1000
       - TZ=Europe/Vienna
     volumes:
-      - /home/mmuffins/docker/data/radarr:/config
-      - /home/mmuffins/media/movies:/movies #optional
-      - /home/mmuffins/media/dl:/downloads #optional
+      - ~/docker/data/radarr:/config
+      - ~/media/movies:/movies #optional
+      - ~/media/dl:/downloads #optional
     networks:
       - ${TRAEFIC_NETWORK}
     # ports:
@@ -84,10 +83,10 @@ services:
       - PGID=1000
       - TZ=Europe/Vienna
     volumes:
-      - /home/mmuffins/docker/data/bazarr:/config
-      - /home/mmuffins/media/tv:/tv #optional
-      - /home/mmuffins/media/movies:/movies #optional
-      - /home/mmuffins/media/dl:/downloads #optional,
+      - ~/docker/data/bazarr:/config
+      - ~/media/tv:/tv #optional
+      - ~/media/movies:/movies #optional
+      - ~/media/dl:/downloads #optional,
     networks:
       - ${TRAEFIC_NETWORK}
     # ports:

@@ -1,6 +1,10 @@
 ---
   version: '3.8'
   
+  networks:
+    default:
+      internal: false
+      name: reverse-proxy
   services:
     reverse-proxy:
       image: traefik:latest
@@ -25,9 +29,3 @@
         - traefik.http.routers.api.service=api@internal
         - traefik.http.routers.api.rule=Host(`traefik.docker.localhost`)
         - traefik.http.routers.api.entrypoints=web
-        
-  
-  networks:
-    default:
-      internal: false
-      name: reverse-proxy
