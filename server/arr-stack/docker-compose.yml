@@ -1,0 +1,100 @@
+---
+version: "3.8"
+
+networks:
+  reverse-proxy:
+    external: true
+
+services:
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vienna
+    volumes:
+      - /home/mmuffins/docker/data/prowlarr:/config
+    networks:
+      - ${TRAEFIC_NETWORK}
+    # ports:
+    #   - 9696:9696
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIC_NETWORK}
+      - traefik.http.routers.prowlarr.rule=Host(`prowlarr.${TRAEFIC_DOMAIN}`)
+      - traefik.http.routers.prowlarr.entrypoints=${TRAEFIC_ENDPOINT}
+      - traefik.http.services.prowlarr.loadbalancer.server.port=9696
+
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:develop
+    container_name: sonarr
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vienna
+    volumes:
+      - /home/mmuffins/docker/data/sonarr:/config
+      - /home/mmuffins/media/tv:/tv #optional
+      - /home/mmuffins/media/dl:/downloads #optional
+    networks:
+      - ${TRAEFIC_NETWORK}
+    # ports:
+    #   - 8989:8989
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIC_NETWORK}
+      - traefik.http.routers.sonarr.rule=Host(`sonarr.${TRAEFIC_DOMAIN}`)
+      - traefik.http.routers.sonarr.entrypoints=${TRAEFIC_ENDPOINT}
+      - traefik.http.services.sonarr.loadbalancer.server.port=8989
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vienna
+    volumes:
+      - /home/mmuffins/docker/data/radarr:/config
+      - /home/mmuffins/media/movies:/movies #optional
+      - /home/mmuffins/media/dl:/downloads #optional
+    networks:
+      - ${TRAEFIC_NETWORK}
+    # ports:
+    #   - 7878:7878
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIC_NETWORK}
+      - traefik.http.routers.radarr.rule=Host(`radarr.${TRAEFIC_DOMAIN}`)
+      - traefik.http.routers.radarr.entrypoints=${TRAEFIC_ENDPOINT}
+      - traefik.http.services.radarr.loadbalancer.server.port=7878
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Vienna
+    volumes:
+      - /home/mmuffins/docker/data/bazarr:/config
+      - /home/mmuffins/media/tv:/tv #optional
+      - /home/mmuffins/media/movies:/movies #optional
+      - /home/mmuffins/media/dl:/downloads #optional,
+    networks:
+      - ${TRAEFIC_NETWORK}
+    # ports:
+    #   - 6767:6767
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIC_NETWORK}
+      - traefik.http.routers.bazarr.rule=Host(`bazarr.${TRAEFIC_DOMAIN}`)
+      - traefik.http.routers.bazarr.entrypoints=${TRAEFIC_ENDPOINT}
+      - traefik.http.services.bazarr.loadbalancer.server.port=6767
