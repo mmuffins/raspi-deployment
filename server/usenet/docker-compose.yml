@@ -1,0 +1,28 @@
+---
+version: "3.8"
+
+networks:
+  reverse-proxy:
+    external: true
+
+services:
+  sabnzb:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzb
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=Europe/Vienna
+    volumes:
+      - ${SETTINGS_DIRECTORY}/sabnzb:/config
+    networks:
+      - ${TRAEFIC_NETWORK}
+    # ports:
+    #   - 8080:8080
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIC_NETWORK}
+      - traefik.http.routers.sabnzb.rule=Host(`prowlarr.${TRAEFIC_DOMAIN}`)
+      - traefik.http.routers.sabnzb.entrypoints=${TRAEFIC_ENDPOINT}
+      - traefik.http.services.sabnzb.loadbalancer.server.port=9696

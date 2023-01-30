@@ -11,11 +11,12 @@ services:
     container_name: prowlarr
     restart: unless-stopped
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${PUID}
+      - PGID=${PGID}
       - TZ=Europe/Vienna
     volumes:
-      - ~/docker/data/prowlarr:/config
+      - ${SETTINGS_DIRECTORY}/prowlarr:/config
+      - ${DATA_DIRECTORY}:/data
     networks:
       - ${TRAEFIC_NETWORK}
     # ports:
@@ -27,19 +28,19 @@ services:
       - traefik.http.routers.prowlarr.entrypoints=${TRAEFIC_ENDPOINT}
       - traefik.http.services.prowlarr.loadbalancer.server.port=9696
 
-
   sonarr:
     image: lscr.io/linuxserver/sonarr:develop
     container_name: sonarr
     restart: unless-stopped
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${PUID}
+      - PGID=${PGID}
       - TZ=Europe/Vienna
     volumes:
-      - ~/docker/data/sonarr:/config
-      - ~/media/tv:/tv #optional
-      - ~/media/dl:/downloads #optional
+      - ${SETTINGS_DIRECTORY}/sonarr:/config
+      - ${DATA_DIRECTORY}:/data
+      # - ~/media/tv:/tv #optional
+      # - ~/media/dl:/downloads #optional
     networks:
       - ${TRAEFIC_NETWORK}
     # ports:
@@ -56,13 +57,14 @@ services:
     container_name: radarr
     restart: unless-stopped
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${PUID}
+      - PGID=${PGID}
       - TZ=Europe/Vienna
     volumes:
-      - ~/docker/data/radarr:/config
-      - ~/media/movies:/movies #optional
-      - ~/media/dl:/downloads #optional
+      - ${SETTINGS_DIRECTORY}/radarr:/config
+      - ${DATA_DIRECTORY}:/data
+      # - ~/media/movies:/movies #optional
+      # - ~/media/dl:/downloads #optional
     networks:
       - ${TRAEFIC_NETWORK}
     # ports:
@@ -79,14 +81,15 @@ services:
     container_name: bazarr
     restart: unless-stopped
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${PUID}
+      - PGID=${PGID}
       - TZ=Europe/Vienna
     volumes:
-      - ~/docker/data/bazarr:/config
-      - ~/media/tv:/tv #optional
-      - ~/media/movies:/movies #optional
-      - ~/media/dl:/downloads #optional,
+      - ${SETTINGS_DIRECTORY}/bazarr:/config
+      - ${DATA_DIRECTORY}:/data
+      # - ~/media/tv:/tv #optional
+      # - ~/media/movies:/movies #optional
+      # - ~/media/dl:/downloads #optional
     networks:
       - ${TRAEFIC_NETWORK}
     # ports:
