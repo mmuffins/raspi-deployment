@@ -8,14 +8,15 @@ networks:
 services:
   sabnzb:
     image: lscr.io/linuxserver/sabnzbd:latest
-    container_name: sabnzb
+    container_name: sabnzbd
     restart: unless-stopped
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=Europe/Vienna
     volumes:
-      - ${SETTINGS_DIRECTORY}/sabnzb:/config
+      - ${SETTINGS_DIRECTORY}/sabnzbd:/config
+      - ${DATA_DIRECTORY}/usenet:/data/usenet:rw
     networks:
       - ${TRAEFIC_NETWORK}
     # ports:
@@ -23,6 +24,28 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=${TRAEFIC_NETWORK}
-      - traefik.http.routers.sabnzb.rule=Host(`prowlarr.${TRAEFIC_DOMAIN}`)
-      - traefik.http.routers.sabnzb.entrypoints=${TRAEFIC_ENDPOINT}
-      - traefik.http.services.sabnzb.loadbalancer.server.port=9696
+      - traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.${TRAEFIC_DOMAIN}`)
+      - traefik.http.routers.sabnzbd.entrypoints=${TRAEFIC_ENDPOINT}
+      - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
+
+  nzbhydra:
+    image: lscr.io/linuxserver/nzbhydra2:latest
+    container_name: nzbhydra
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=Europe/Vienna
+    volumes:
+      - ${SETTINGS_DIRECTORY}/nzbhydra:/config
+      - ${DATA_DIRECTORY}/usenet:/data/usenet:rw
+    networks:
+      - ${TRAEFIC_NETWORK}
+    # ports:
+    #   - 5076:5076
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIC_NETWORK}
+      - traefik.http.routers.nzbhydra.rule=Host(`nzbhydra.${TRAEFIC_DOMAIN}`)
+      - traefik.http.routers.nzbhydra.entrypoints=${TRAEFIC_ENDPOINT}
+      - traefik.http.services.nzbhydra.loadbalancer.server.port=5076
