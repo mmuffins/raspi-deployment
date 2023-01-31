@@ -10,7 +10,7 @@ services:
     image: jboss/keycloak
     env_file: ~/dockercompose/keycloak/keycloak.env
     volumes:
-      - /etc/localtime:/etc/localtime:ro
+      - /etc/localtime:/etc/localtime:ro 
     networks:
       - reverse-proxy
     # ports:
@@ -26,6 +26,7 @@ services:
     env_file: ~/dockercompose/keycloak/keycloak.env
     image: postgres:10.1
     volumes:
+      - /etc/localtime:/etc/localtime:ro 
       - ~/keycloak/db:/var/lib/postgresql/data
       - /etc/localtime:/etc/localtime:ro
     networks:
@@ -35,8 +36,8 @@ services:
     image: postgres:10.1
     env_file: ~/dockercompose/keycloak/keycloak-backup.env
     volumes:
+      - /etc/localtime:/etc/localtime:ro 
       - ~/docker/data/keycloak/db-dump:/dump
-      - /etc/localtime:/etc/localtime:ro
     entrypoint: |
       bash -c 'bash -s <<EOF
       trap "break;exit" SIGHUP SIGINT SIGTERM

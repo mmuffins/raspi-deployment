@@ -15,6 +15,7 @@ services:
       - PGID=${PGID}
       - TZ=Europe/Vienna
     volumes:
+      - /etc/localtime:/etc/localtime:ro 
       - ${SETTINGS_DIRECTORY}/prowlarr:/config
       - ${DATA_DIRECTORY}:/data
     networks:
@@ -37,6 +38,7 @@ services:
       - PGID=${PGID}
       - TZ=Europe/Vienna
     volumes:
+      - /etc/localtime:/etc/localtime:ro 
       - ${SETTINGS_DIRECTORY}/sonarr:/config
       - ${DATA_DIRECTORY}:/data
       # - ~/media/tv:/tv #optional
@@ -61,6 +63,7 @@ services:
       - PGID=${PGID}
       - TZ=Europe/Vienna
     volumes:
+      - /etc/localtime:/etc/localtime:ro 
       - ${SETTINGS_DIRECTORY}/radarr:/config
       - ${DATA_DIRECTORY}:/data
       # - ~/media/movies:/movies #optional
@@ -85,6 +88,7 @@ services:
       - PGID=${PGID}
       - TZ=Europe/Vienna
     volumes:
+      - /etc/localtime:/etc/localtime:ro 
       - ${SETTINGS_DIRECTORY}/bazarr:/config
       - ${DATA_DIRECTORY}:/data
       # - ~/media/tv:/tv #optional

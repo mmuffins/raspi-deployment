@@ -1,0 +1,35 @@
+---
+version: "3.8"
+
+networks:
+  reverse-proxy:
+    external: true
+
+services:
+  qbittorrent:
+    image: binhex/arch-qbittorrentvpn:latest
+    container_name: qbittorrent
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Vienna
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - VPN_ENABLED=no
+      - WEBUI_PORT=8080
+    volumes:
+      - /etc/localtime:/etc/localtime:ro 
+      - ${SETTINGS_DIRECTORY}/qbittorrent:/config
+      - ${DATA_DIRECTORY}/torrents:/data/torrents
+    networks:
+      - ${TRAEFIC_NETWORK}
+    ports:
+      - 8080:8080
+      - 8118:8118
+      - 6881:6881
+      - 6881:6881/udp
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${TRAEFIC_NETWORK}
+      - traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.${TRAEFIC_DOMAIN}`)
+      - traefik.http.routers.qbittorrent.entrypoints=${TRAEFIC_ENDPOINT}
+      - traefik.http.services.qbittorrent.loadbalancer.server.port=8080
