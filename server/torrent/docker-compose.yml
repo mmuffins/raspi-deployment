@@ -14,8 +14,18 @@ services:
       - TZ=Europe/Vienna
       - PUID=${PUID}
       - PGID=${PGID}
-      - VPN_ENABLED=no
       - WEBUI_PORT=8080
+      - VPN_ENABLED=${VPN_ENABLED}
+      - VPN_USER=${VPN_USERNAME}
+      - VPN_PASS=${VPN_PASSWORD}
+      - VPN_PROV=pia
+      - VPN_CLIENT=wireguard
+      - STRICT_PORT_FORWARD=yes
+      - ENABLE_PRIVOXY=yes
+      - LAN_NETWORK=${SUBNET}
+      - NAME_SERVER=${DNS_SERVERS}
+      - VPN_INPUT_PORTS=${VPN_INPUT_PORTS}
+      - VPN_OUTPUT_PORTS=${VPN_OUTPUT_PORTS}
     volumes:
       - /etc/localtime:/etc/localtime:ro 
       - ${SETTINGS_DIRECTORY}/qbittorrent:/config
@@ -27,6 +37,12 @@ services:
       - 8118:8118
       - 6881:6881
       - 6881:6881/udp
+    privileged: true
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    # cap_add:
+    #   - NET_ADMIN
+    #   - SYS_MODULE
     labels:
       - traefik.enable=true
       - traefik.docker.network=${TRAEFIC_NETWORK}
