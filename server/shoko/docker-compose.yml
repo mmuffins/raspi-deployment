@@ -1,0 +1,38 @@
+---
+version: "3.8"
+
+networks:
+  reverse-proxy:
+    external: true
+
+services:
+  nzbhydra-schedule:
+    image: nzbhydra-scheduler:latest
+    container_name: nzbhydra-scheduler
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=Europe/Vienna
+      - CRON=${NZBSCHEDULE_CRON}
+      - LOGLEVEL=${NZBSCHEDULE_LOGLEVEL}
+      - SEARCHTERMSFILE=${NZBSCHEDULE_SEARCHTERMSFILE}
+      - NZBOUTPUTDIRECTORY=${NZBSCHEDULE_NZBOUTPUTDIRECTORY}
+      - NZBHYDRAURI=${NZBSCHEDULE_NZBHYDRAURI}
+      - NZBHYDRAAPIKEY=${NZBSCHEDULE_NZBHYDRAAPIKEY}
+      - MINSIZE=${NZBSCHEDULE_MINSIZE}
+      - MAXSIZE=${NZBSCHEDULE_MAXSIZE}
+      - MAXAGE=${NZBSCHEDULE_MAXAGE}
+      - CATEGORY=${NZBSCHEDULE_CATEGORY}
+      - INDEXERS=${NZBSCHEDULE_INDEXERS}
+      - APPENDRESOLUTION=${NZBSCHEDULE_APPEND_RESOLUTION}
+      - REQUESTCOOLDOWN=${NZBSCHEDULE_REQUEST_COOLDOWN}
+    volumes:
+      - ${SETTINGS_DIRECTORY}/nzbhydra-scheduler:/config
+      - ${DATA_DIRECTORY}/usenet/watchdir:/output:rw
+    networks:
+      - ${TRAEFIC_NETWORK}
+    labels:
+      - traefik.enable=false
+      - traefik.docker.network=${TRAEFIC_NETWORK}
+

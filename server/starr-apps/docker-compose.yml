@@ -11,9 +11,9 @@ services:
     container_name: prowlarr
     restart: unless-stopped
     environment:
+      - TZ=Europe/Vienna
       - PUID=${PUID}
       - PGID=${PGID}
-      - TZ=Europe/Vienna
     volumes:
       - /etc/localtime:/etc/localtime:ro 
       - ${SETTINGS_DIRECTORY}/prowlarr:/config
@@ -34,9 +34,9 @@ services:
     container_name: sonarr
     restart: unless-stopped
     environment:
+      - TZ=Europe/Vienna
       - PUID=${PUID}
       - PGID=${PGID}
-      - TZ=Europe/Vienna
     volumes:
       - /etc/localtime:/etc/localtime:ro 
       - ${SETTINGS_DIRECTORY}/sonarr:/config
@@ -59,9 +59,9 @@ services:
     container_name: radarr
     restart: unless-stopped
     environment:
+      - TZ=Europe/Vienna
       - PUID=${PUID}
       - PGID=${PGID}
-      - TZ=Europe/Vienna
     volumes:
       - /etc/localtime:/etc/localtime:ro 
       - ${SETTINGS_DIRECTORY}/radarr:/config
@@ -84,9 +84,9 @@ services:
     container_name: bazarr
     restart: unless-stopped
     environment:
+      - TZ=Europe/Vienna
       - PUID=${PUID}
       - PGID=${PGID}
-      - TZ=Europe/Vienna
     volumes:
       - /etc/localtime:/etc/localtime:ro 
       - ${SETTINGS_DIRECTORY}/bazarr:/config
@@ -104,3 +104,28 @@ services:
       - traefik.http.routers.bazarr.rule=Host(`bazarr.${TRAEFIC_DOMAIN}`)
       - traefik.http.routers.bazarr.entrypoints=${TRAEFIC_ENDPOINT}
       - traefik.http.services.bazarr.loadbalancer.server.port=6767
+
+
+  recyclarr:
+    image: recyclarr/recyclarr:latest 
+    container_name: recyclarr
+    restart: unless-stopped
+    environment:
+      - TZ=Europe/Vienna
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - CRON_SCHEDULE=${RECYCLARR_SCHEDULE}
+      - RECYCLARR_CREATE_CONFIG=true 
+    volumes:
+      - /etc/localtime:/etc/localtime:ro 
+      - ${SETTINGS_DIRECTORY}/recyclarr:/config
+    networks:
+      - ${TRAEFIC_NETWORK}
+    # ports:
+    #   - 8989:8989
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=,${TRAEFIC_NETWORK}
+      - traefik.http.routers.recyclarr.rule=Host(`recyclarr.${TRAEFIC_DOMAIN}`)
+      - traefik.http.routers.recyclarr.entrypoints=${TRAEFIC_ENDPOINT}
+      - traefik.http.services.recyclarr.loadbalancer.server.port=8989
