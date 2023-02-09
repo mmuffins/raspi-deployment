@@ -8,8 +8,8 @@ networks:
 services:
   nzbhydra-schedule:
     image: nzbhydra-scheduler:latest
-    container_name: nzbhydra-scheduler
-    restart: unless-stopped
+    container_name: nzbhydra-scheduler-generate-searchterms
+    restart: no
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -33,7 +33,7 @@ services:
       - ${DATA_DIRECTORY}/usenet/watchdir:/output:rw
     networks:
       - ${TRAEFIC_NETWORK}
-    # command: ["./start-getsearchterms.sh"]
+    command: ["./start-getsearchterms.sh"]
     labels:
       - traefik.enable=false
       - traefik.docker.network=${TRAEFIC_NETWORK}
