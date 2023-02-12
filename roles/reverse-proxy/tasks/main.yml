@@ -1,0 +1,67 @@
+---
+- import_tasks: facts.yml
+
+
+- name: Create settings folder
+  ansible.builtin.file:
+    state: directory
+    path: "{{ docker_settings_directory }}/reverse-proxy"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: 0755
+
+- name: Create docker compose folder
+  ansible.builtin.file:
+    state: directory
+    path: "{{ docker_compose_directory }}/reverse-proxy"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: 0755
+
+- name: Create docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_compose_directory }}/reverse-proxy/docker-compose.yml"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: 0644
+
+- name: Create docker compose app folder
+  ansible.builtin.file:
+    state: directory
+    path: "{{ docker_compose_app_directory }}/reverse-proxy"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: 0755
+
+- name: Set docker compose app name
+  ansible.builtin.lineinfile:
+    dest: "{{ docker_compose_app_directory }}/reverse-proxy/name"
+    create: true
+    state: present
+    regexp: '.*'
+    line: "{{ display_name }}"
+
+- name: Set docker compose app description
+  ansible.builtin.lineinfile:
+    dest: "{{ docker_compose_app_directory }}/reverse-proxy/description"
+    create: true
+    state: present
+    regexp: '.*'
+    line: "{{ description }}"
+
+- name: Set docker compose app redirection
+  ansible.builtin.lineinfile:
+    dest: "{{ docker_compose_app_directory }}/reverse-proxy/indirect"
+    create: true
+    state: present
+    regexp: '.*'
+    line: "{{ docker_compose_directory }}/reverse-proxy"
+
+- name: Remove docker compose redirection file line ending
+  ansible.builtin.replace:
+    path: "{{ docker_compose_app_directory }}/reverse-proxy/indirect"
+    regexp: "\n"
+    replace: ""
+  changed_when: false
+  check_mode: false

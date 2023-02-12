@@ -1,0 +1,6 @@
+- name: Unraid Setup
+  hosts: unraid
+  become: yes
+  become_user: root
+  roles:
+    - role: reverse-proxy

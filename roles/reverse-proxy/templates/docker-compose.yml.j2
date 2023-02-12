@@ -1,0 +1,29 @@
+---
+  version: '3.8'
+  
+  networks:
+    default:
+      internal: false
+      name: reverse-proxy
+  services:
+    reverse-proxy:
+      image: traefik:v3.0
+      restart: unless-stopped
+      command:
+        #- --log.level=DEBUG
+        - -api.insecure=true
+        - -providers.docker=true
+        - -providers.docker.exposedbydefault=false
+        - -entrypoints.web.address=:{{ web_port }}
+        - --ping=true
+      ports:
+        - {{ webui_port }}:{{ webui_port }}
+      volumes:
+        - /etc/localtime:/etc/localtime:ro 
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=reverse-proxy
+        - traefik.http.routers.api.service=api@internal
+        - traefik.http.routers.api.rule=Host(`traefik.{{ server_url }}`)
+        - traefik.http.routers.api.entrypoints=web
