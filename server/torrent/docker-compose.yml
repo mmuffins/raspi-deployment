@@ -18,10 +18,10 @@ services:
       - VPN_ENABLED=${VPN_ENABLED}
       - VPN_USER=${VPN_USERNAME}
       - VPN_PASS=${VPN_PASSWORD}
-      - VPN_PROV=pia
-      - VPN_CLIENT=wireguard
-      - STRICT_PORT_FORWARD=yes
-      - ENABLE_PRIVOXY=yes
+      - VPN_PROV=${VPN_PROVIDER}
+      - VPN_CLIENT=${VPN_CLIENT}
+      - STRICT_PORT_FORWARD=${VPN_STRICT_PORT_FORWARD}
+      - ENABLE_PRIVOXY=${VPN_ENABLE_PRIVOXY}
       - LAN_NETWORK=${SUBNET}
       - NAME_SERVER=${DNS_SERVERS}
       - VPN_INPUT_PORTS=${VPN_INPUT_PORTS}
@@ -40,9 +40,6 @@ services:
     privileged: true
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
-    # cap_add:
-    #   - NET_ADMIN
-    #   - SYS_MODULE
     labels:
       - traefik.enable=true
       - traefik.docker.network=${TRAEFIC_NETWORK}
