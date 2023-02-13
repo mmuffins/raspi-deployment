@@ -2,7 +2,7 @@
 version: "3.8"
 
 networks:
-  ${TRAEFIC_NETWORK}:
+  ${TRAEFIK_NETWORK}:
     external: true
 
 services:
@@ -18,14 +18,14 @@ services:
       - ${SETTINGS_DIRECTORY}/{{ app_name }}:/config
       - ${DATA_DIRECTORY}/usenet:/data/usenet:rw
     networks:
-      - ${TRAEFIC_NETWORK}
+      - ${TRAEFIK_NETWORK}
     ports:
       - 8089:8080
     labels:
       - traefik.enable=true
-      - traefik.docker.network=${TRAEFIC_NETWORK}
-      - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.${TRAEFIC_DOMAIN}`)
-      - traefik.http.routers.{{ app_name }}.entrypoints=${TRAEFIC_ENDPOINT}
+      - traefik.docker.network=${TRAEFIK_NETWORK}
+      - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.${TRAEFIK_DOMAIN}`)
+      - traefik.http.routers.{{ app_name }}.entrypoints=${TRAEFIK_ENDPOINT}
       - traefik.http.services.{{ app_name }}.loadbalancer.server.port=8080
       - net.unraid.docker.icon=${SABNZBD_ICON_URL}
       - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}
