@@ -27,5 +27,5 @@ services:
       - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.${TRAEFIK_DOMAIN}`)
       - traefik.http.routers.{{ app_name }}.entrypoints=${TRAEFIK_ENDPOINT}
       - traefik.http.services.{{ app_name }}.loadbalancer.server.port=8080
-      - net.unraid.docker.icon=${SABNZBD_ICON_URL}
+      - net.unraid.docker.icon=https://sabnzbd.org/images/icons/apple-touch-icon-120x120-precomposed.png
       - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}
