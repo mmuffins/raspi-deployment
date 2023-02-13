@@ -30,7 +30,6 @@
     dest: "{{ docker_compose_app_directory }}/reverse-proxy/indirect"
     create: true
     state: present
-    regexp: '.*'
     line: "{{ docker_compose_directory }}/reverse-proxy"
   register: app_redirection
 
@@ -58,6 +57,8 @@
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
     mode: 0644
+  register: created_docker_compose
+
 
 - name: Create settings folder
   ansible.builtin.file:
@@ -74,6 +75,8 @@
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
     mode: 0644
+  register: created_traefik_config
+
 
 - name: Create traefik dynamic conf
   ansible.builtin.template:
@@ -82,11 +85,4 @@
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
     mode: 0644
-
-- name: Restart service
-  shell:
-    chdir: "{{ docker_compose_directory }}/reverse-proxy"
-    cmd: "docker-compose pull && docker-compose down --remove-orphans && docker-compose rm && docker-compose up -d"
-  ignore_errors: yes
-
-
+  register: created_traefik_dynamic_config

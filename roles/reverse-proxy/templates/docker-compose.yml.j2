@@ -21,3 +21,5 @@
         - traefik.http.routers.api.service=api@internal
         - traefik.http.routers.api.rule=Host(`traefik.{{ server_url }}`)
         - traefik.http.routers.api.entrypoints=http
+        - net.unraid.docker.icon=https://github.com/traefik/traefik/raw/master/docs/content/assets/img/traefik.logo.png
+        - net.unraid.docker.webui=http://traefik.{{ server_url }}

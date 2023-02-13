@@ -4,9 +4,9 @@ http:
       entryPoints:
       - http
       service: unraid
-      rule: "Host(`{{ inventory_hostname }}.{{ server_url }}`)"
+      rule: "Host(`unraid.{{ server_url }}`) || Host(`{{ inventory_hostname }}`)" 
   services:
     unraid:
       loadBalancer:
         servers:
-        - url: "http://{{ inventory_hostname }}.{{ server_url }}:8085/"
+        - url: "http://{{ inventory_hostname }}:8085/"
