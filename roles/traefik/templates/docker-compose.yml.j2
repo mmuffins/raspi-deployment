@@ -8,6 +8,7 @@
   services:
     {{ app_name }}:
       image: traefik:v3.0
+      container_name: {{ app_name }}
       restart: unless-stopped
       ports:
         - {{ webui_port }}:{{ webui_port }}
