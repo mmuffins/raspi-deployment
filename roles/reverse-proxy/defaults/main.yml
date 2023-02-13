@@ -1,4 +1,7 @@
 description: "Reverse proxy for other docker containers."
 display_name: "Reverse Proxy"
+icon_url: "https://github.com/traefik/traefik/raw/master/docs/content/assets/img/traefik.logo.png"
 http_port: 80
 webui_port: 80
+network_name: reverse-proxy
+domain: lan

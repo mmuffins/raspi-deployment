@@ -4,9 +4,9 @@
   networks:
     default:
       internal: false
-      name: reverse-proxy
+      name: {{ network_name }}
   services:
-    reverse-proxy:
+    treafik:
       image: traefik:v3.0
       restart: unless-stopped
       ports:
@@ -17,9 +17,9 @@
         - {{ docker_settings_directory }}/traefik:/etc/traefik
       labels:
         - traefik.enable=true
-        - traefik.docker.network=reverse-proxy
+        - traefik.docker.network={{ network_name }}
         - traefik.http.routers.api.service=api@internal
-        - traefik.http.routers.api.rule=Host(`traefik.{{ server_url }}`)
+        - traefik.http.routers.api.rule=Host(`traefik.{{ domain }}`)
         - traefik.http.routers.api.entrypoints=http
-        - net.unraid.docker.icon=https://github.com/traefik/traefik/raw/master/docs/content/assets/img/traefik.logo.png
-        - net.unraid.docker.webui=http://traefik.{{ server_url }}
+        - net.unraid.docker.icon={{ icon_url }}
+        - net.unraid.docker.webui=http://traefik.{{ domain }}

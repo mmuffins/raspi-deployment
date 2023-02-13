@@ -4,3 +4,4 @@
   become_user: root
   roles:
     - role: reverse-proxy
+    - role: sabnzbd
