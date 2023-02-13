@@ -1,5 +1,6 @@
-description: "Reverse proxy for other docker containers."
-display_name: "Reverse Proxy"
+description: "The Cloud-Native application proxy"
+display_name: "Traefik"
+app_name: traefik
 icon_url: "https://github.com/traefik/traefik/raw/master/docs/content/assets/img/traefik.logo.png"
 http_port: 80
 webui_port: 80

@@ -6,7 +6,7 @@
       internal: false
       name: {{ network_name }}
   services:
-    treafik:
+    {{ app_name }}:
       image: traefik:v3.0
       restart: unless-stopped
       ports:
