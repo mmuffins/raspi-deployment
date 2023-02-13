@@ -1,4 +1,4 @@
 description: "Reverse proxy for other docker containers."
 display_name: "Reverse Proxy"
-web_port: 80
-webui_port: 8080
+http_port: 80
+webui_port: 80

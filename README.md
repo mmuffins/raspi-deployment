@@ -50,6 +50,7 @@ ansible-playbook --inventory ./inventories/production pihole.yml --limit <target
 ## Unraid deployment guide
 ### Bootstrapping
 - Install the unraid server
+- Go to Settings > Management Access and change the http port to something other than 80 if you want to use traefik as reverse proxy
 - Set up and start the array
 - Enable ssh in the unraid settings
 - Log in to unraid, go to Users > root

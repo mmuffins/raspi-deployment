@@ -1,31 +1,6 @@
 ---
 - import_tasks: facts.yml
 
-
-- name: Create settings folder
-  ansible.builtin.file:
-    state: directory
-    path: "{{ docker_settings_directory }}/reverse-proxy"
-    owner: "{{ docker_user_id }}"
-    group: "{{ docker_group_id }}"
-    mode: 0755
-
-- name: Create docker compose folder
-  ansible.builtin.file:
-    state: directory
-    path: "{{ docker_compose_directory }}/reverse-proxy"
-    owner: "{{ docker_user_id }}"
-    group: "{{ docker_group_id }}"
-    mode: 0755
-
-- name: Create docker-compose file
-  ansible.builtin.template:
-    src: docker-compose.yml.j2
-    dest: "{{ docker_compose_directory }}/reverse-proxy/docker-compose.yml"
-    owner: "{{ docker_user_id }}"
-    group: "{{ docker_group_id }}"
-    mode: 0644
-
 - name: Create docker compose app folder
   ansible.builtin.file:
     state: directory
@@ -57,11 +32,61 @@
     state: present
     regexp: '.*'
     line: "{{ docker_compose_directory }}/reverse-proxy"
+  register: app_redirection
 
 - name: Remove docker compose redirection file line ending
   ansible.builtin.replace:
     path: "{{ docker_compose_app_directory }}/reverse-proxy/indirect"
     regexp: "\n"
     replace: ""
+  when: app_redirection.changed == 1
   changed_when: false
   check_mode: false
+
+- name: Create docker compose folder
+  ansible.builtin.file:
+    state: directory
+    path: "{{ docker_compose_directory }}/reverse-proxy"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: 0755
+
+- name: Create docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_compose_directory }}/reverse-proxy/docker-compose.yml"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: 0644
+
+- name: Create settings folder
+  ansible.builtin.file:
+    state: directory
+    path: "{{ docker_settings_directory }}/traefik"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: 0755
+
+- name: Create traefik config
+  ansible.builtin.template:
+    src: traefik.yml.j2
+    dest: "{{ docker_settings_directory }}/traefik/traefik.yml"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: 0644
+
+- name: Create traefik dynamic conf
+  ansible.builtin.template:
+    src: dynamic_conf.yml.j2
+    dest: "{{ docker_settings_directory }}/traefik/dynamic_conf.yml"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: 0644
+
+- name: Restart service
+  shell:
+    chdir: "{{ docker_compose_directory }}/reverse-proxy"
+    cmd: "docker-compose pull && docker-compose down --remove-orphans && docker-compose rm && docker-compose up -d"
+  ignore_errors: yes
+
+
