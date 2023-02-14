@@ -1,0 +1,130 @@
+---
+version: "3.8"
+
+networks:
+  {{ network_name }}:
+    external: true
+
+services:
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:amd64-1.1.3
+    container_name: prowlarr
+    restart: unless-stopped
+    environment:
+      - PUID={{ docker_puid }}
+      - PGID={{ docker_pgid }}
+      - TZ={{ docker_timezone }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ docker_settings_directory }}/prowlarr:/config
+      - {{ docker_media_data_share }}:/data
+    networks:
+      - {{ network_name }}
+    # ports:
+    #   - 9696:9696
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network={{ network_name }}
+      - traefik.http.routers.prowlarr.rule=Host(`prowlarr.{{ domain }}`)
+      - traefik.http.routers.prowlarr.entrypoints={{ traefik_endpoint }}
+      - traefik.http.services.prowlarr.loadbalancer.server.port=9696
+      - net.unraid.docker.icon=https://github.com/Prowlarr/Prowlarr/blob/develop/Logo/128.png?raw=true
+      - net.unraid.docker.webui=http://prowlarr.{{ domain }}
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:develop-version-4.0.0.382
+    container_name: sonarr
+    restart: unless-stopped
+    environment:
+      - PUID={{ docker_puid }}
+      - PGID={{ docker_pgid }}
+      - TZ={{ docker_timezone }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ docker_settings_directory }}/sonarr:/config
+      - {{ docker_media_data_share }}:/data
+    networks:
+      - {{ network_name }}
+    # ports:
+    #   - 8989:8989
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network={{ network_name }}
+      - traefik.http.routers.sonarr.rule=Host(`sonarr.{{ domain }}`)
+      - traefik.http.routers.sonarr.entrypoints={{ traefik_endpoint }}
+      - traefik.http.services.sonarr.loadbalancer.server.port=8989
+      - net.unraid.docker.icon=https://github.com/Sonarr/Sonarr/blob/develop/Logo/128.png?raw=true
+      - net.unraid.docker.webui=http://sonarr.{{ domain }}
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:4.3.2
+    container_name: radarr
+    restart: unless-stopped
+    environment:
+      - PUID={{ docker_puid }}
+      - PGID={{ docker_pgid }}
+      - TZ={{ docker_timezone }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ docker_settings_directory }}/radarr:/config
+      - {{ docker_media_data_share }}:/data
+    networks:
+      - {{ network_name }}
+    # ports:
+    #   - 7878:7878
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network={{ network_name }}
+      - traefik.http.routers.radarr.rule=Host(`radarr.{{ domain }}`)
+      - traefik.http.routers.radarr.entrypoints={{ traefik_endpoint }}
+      - traefik.http.services.radarr.loadbalancer.server.port=7878
+      - net.unraid.docker.icon=https://github.com/Radarr/Radarr/blob/develop/Logo/128.png
+      - net.unraid.docker.webui=http://radarr.{{ domain }}
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:1.1.4
+    container_name: bazarr
+    restart: unless-stopped
+    environment:
+      - PUID={{ docker_puid }}
+      - PGID={{ docker_pgid }}
+      - TZ={{ docker_timezone }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ docker_settings_directory }}/bazarr:/config
+      - {{ docker_media_data_share }}:/data
+    networks:
+      - {{ network_name }}
+    # ports:
+    #   - 6767:6767
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network={{ network_name }}
+      - traefik.http.routers.bazarr.rule=Host(`bazarr.{{ domain }}`)
+      - traefik.http.routers.bazarr.entrypoints={{ traefik_endpoint }}
+      - traefik.http.services.bazarr.loadbalancer.server.port=6767
+      - net.unraid.docker.icon=https://www.bazarr.media/assets/img/logo.png
+      - net.unraid.docker.webui=http://bazarr.{{ domain }}
+
+  recyclarr:
+    image: recyclarr/recyclarr:4 
+    container_name: recyclarr
+    restart: unless-stopped
+    environment:
+      - PUID={{ docker_puid }}
+      - PGID={{ docker_pgid }}
+      - TZ={{ docker_timezone }}
+      - CRON_SCHEDULE={{ recyclarr_schedule }}
+      - RECYCLARR_CREATE_CONFIG=true 
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ docker_settings_directory }}/recyclarr:/config
+    networks:
+      - {{ network_name }}
+    # ports:
+    #   - 8989:8989
+    labels:
+      - traefik.enable=false
+      - traefik.docker.network={{ network_name }}
+      - net.unraid.docker.icon=https://github.com/TRaSH-/Guides/blob/master/docs/img/favicon.png?raw=true
+

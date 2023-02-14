@@ -6,3 +6,7 @@
     - role: traefik
     - role: sabnzbd
     - role: nzbhydra
+    - role: shoko
+    - role: nzbhydra-scheduler
+    - role: starr-apps
+    - role: qbittorrent

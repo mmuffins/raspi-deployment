@@ -1,0 +1,27 @@
+description: "A download schdeduler for NzbHydra"
+display_name: "NzbHydra Scheduler"
+app_name: nzbhydrascheduler
+traefik_endpoint: http
+network_name: reverse-proxy
+docker_settings_directory: /mnt/user/appdata
+docker_media_data_share: /mnt/user/data
+docker_compose_directory: /mnt/user/appdata/docker-compose
+docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
+docker_puid: 1000
+docker_pgid: 1000
+docker_timezone: Europe/Vienna
+
+nzbschedule_cron: 0 2 */3 * *
+loglevel: debug
+searchtermsfile: /config/searchterms
+groupsfile: /config/groups
+showsfile: /config/shows
+output_directory: /output
+nzbhydra_uri: nzbhydra:5076
+nzbhydra_api_key: 
+minsize: 1
+maxsize: 900000
+maxage: 3
+category: Anime
+indexers: Animetosho
+request_cooldown: 10

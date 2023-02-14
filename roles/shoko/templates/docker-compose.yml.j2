@@ -7,26 +7,27 @@ networks:
 
 services:
   {{ app_name }}:
-    image: lscr.io/linuxserver/nzbhydra2:5.1.5
+    image: shokoanime/server:v4.1.2
     container_name: {{ app_name }}
     restart: unless-stopped
     environment:
-      - PUID= {{ docker_puid }}
+      - PUID={{ docker_puid }}
       - PGID={{ docker_pgid }}
       - TZ={{ docker_timezone }}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - {{ docker_settings_directory }}/{{ app_name }}:/config
-      - {{ docker_media_data_share }} /usenet:/data/usenet:rw
+      - {{ docker_settings_directory }}/{{ app_name }}:/home/shoko/.shoko
+      - {{ docker_media_data_share }}/media/anime:/mnt/anime
+      - {{ docker_media_data_share }}/usenet/anime:/mnt/import
     networks:
       - {{ network_name }}
     # ports:
-    #   - 5076:5076
+    #   - 8111:8111
     labels:
       - traefik.enable=true
       - traefik.docker.network={{ network_name }}
       - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
       - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
-      - traefik.http.services.{{ app_name }}.loadbalancer.server.port=5076
-      - net.unraid.docker.icon=https://github.com/theotherp/nzbhydra2/blob/master/core/ui-src/img/favicon96.png?raw=true
+      - traefik.http.services.{{ app_name }}.loadbalancer.server.port=8111
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/ShokoAnime/ShokoDocs/master/static/icon.png
       - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}
