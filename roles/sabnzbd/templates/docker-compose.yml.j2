@@ -11,21 +11,21 @@ services:
     container_name: {{ app_name }}
     restart: unless-stopped
     environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=Europe/Vienna
+      - PUID={{ docker_puid }}
+      - PGID={{ docker_pgid }}
+      - TZ={{ docker_timezone }}
     volumes:
-      - ${SETTINGS_DIRECTORY}/{{ app_name }}:/config
-      - ${DATA_DIRECTORY}/usenet:/data/usenet:rw
+      - {{ docker_settings_directory }}/{{ app_name }}:/config
+      - {{ docker_media_data_share }}/usenet:/data/usenet:rw
     networks:
-      - ${TRAEFIK_NETWORK}
+      - {{ network_name }}
     ports:
       - 8089:8080
     labels:
       - traefik.enable=true
-      - traefik.docker.network=${TRAEFIK_NETWORK}
-      - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.${TRAEFIK_DOMAIN}`)
-      - traefik.http.routers.{{ app_name }}.entrypoints=${TRAEFIK_ENDPOINT}
+      - traefik.docker.network={{ network_name }}
+      - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
+      - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
       - traefik.http.services.{{ app_name }}.loadbalancer.server.port=8080
       - net.unraid.docker.icon=https://sabnzbd.org/images/icons/apple-touch-icon-120x120-precomposed.png
       - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}

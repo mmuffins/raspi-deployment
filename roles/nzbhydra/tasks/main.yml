@@ -66,3 +66,4 @@
     group: "{{ docker_group_id }}"
     mode: 0644
   register: created_docker_compose
+

@@ -1,0 +1,31 @@
+---
+version: "3.8"
+
+networks:
+  {{ network_name }}:
+    external: true
+
+services:
+  nzbhydra:
+    image: lscr.io/linuxserver/nzbhydra2:5.1.5
+    container_name: nzbhydra
+    restart: unless-stopped
+    environment:
+      - PUID= {{ docker_puid }}
+      - PGID={{ docker_pgid }}
+      - TZ={{ docker_timezone }}
+    volumes:
+      - {{ docker_settings_directory }}/nzbhydra:/config
+      - {{ docker_media_data_share }} /usenet:/data/usenet:rw
+    networks:
+      - {{ network_name }}
+    # ports:
+    #   - 5076:5076
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network={{ network_name }}
+      - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
+      - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
+      - traefik.http.services.{{ app_name }}.loadbalancer.server.port=5076
+      - net.unraid.docker.icon=https://github.com/theotherp/nzbhydra2/blob/master/core/ui-src/img/favicon96.png?raw=true
+      - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}
