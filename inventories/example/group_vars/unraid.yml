@@ -1,0 +1,44 @@
+---
+ansible_connection: ssh
+ansible_user: root
+remote_user: root
+ansible_ssh_private_key_file: ~/.ssh/ansible_ed25519
+ansible_python_interpreter: /usr/bin/python3
+
+# docker
+docker_user_name: root
+docker_settings_directory: /mnt/user/appdata
+docker_media_data_share: /mnt/user/data
+docker_compose_directory: /mnt/user/appdata/docker-compose
+docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
+domain: lan
+network_name: reverse-proxy
+
+# torrent vpn
+torrent_vpn_enabled: yes
+torrent_vpn_client: wireguard
+torrent_vpn_enable_privoxy: yes
+torrent_vpn_strict_port_forward: yes
+torrent_vpn_subnet: 192.168.0.0/24
+torrent_vpn_dns_servers: 84.200.69.80,37.235.1.174,1.1.1.1,37.235.1.177,84.200.70.40,1.0.0.1
+torrent_vpn_input_ports: 8080,8118,6881
+torrent_vpn_output_ports: 8080,8118,6881
+torrent_vpn_provider: pia
+torrent_vpn_username: my_pia_username
+torrent_vpn_password: my_pia_password
+
+# nzbhydra scheduler
+nzbschedule_cron: 0 2 */3 * *
+loglevel: debug
+searchtermsfile: /config/searchterms
+groupsfile: /config/groups
+showsfile: /config/shows
+output_directory: /output
+nzbhydra_uri: nzbhydra:5076
+nzbhydra_api_key: nzbhydra_api_key
+minsize: 1
+maxsize: 900000
+maxage: 3
+category: Anime
+indexers: Animetosho
+request_cooldown: 10
