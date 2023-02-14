@@ -78,7 +78,7 @@ services:
       - traefik.http.routers.radarr.rule=Host(`radarr.{{ domain }}`)
       - traefik.http.routers.radarr.entrypoints={{ traefik_endpoint }}
       - traefik.http.services.radarr.loadbalancer.server.port=7878
-      - net.unraid.docker.icon=https://github.com/Radarr/Radarr/blob/develop/Logo/128.png
+      - net.unraid.docker.icon=https://github.com/Radarr/Radarr/blob/develop/Logo/128.png?raw=true
       - net.unraid.docker.webui=http://radarr.{{ domain }}
 
   bazarr:
