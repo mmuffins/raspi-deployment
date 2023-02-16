@@ -46,5 +46,5 @@ services:
       - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
       - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
       - traefik.http.services.{{ app_name }}.loadbalancer.server.port=8080
-      - net.unraid.docker.icon=https://a.fsdn.com/allura/p/qbittorrent/icon?1518743661?&w=180
+      - net.unraid.docker.icon={{ icon_url }}
       - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}

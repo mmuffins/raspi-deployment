@@ -11,3 +11,4 @@ docker_puid: 1000
 docker_pgid: 1000
 docker_timezone: Europe/Vienna
 backup_directory: /mnt/user/backup/
+icon_url: "https://forums.urbackup.org/uploads/default/original/2X/1/1051fd74d1dcbc3ad4220b43007fcab5287272b0.png"

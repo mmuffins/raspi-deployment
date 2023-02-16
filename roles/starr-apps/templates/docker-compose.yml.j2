@@ -28,7 +28,7 @@ services:
       - traefik.http.routers.prowlarr.rule=Host(`prowlarr.{{ domain }}`)
       - traefik.http.routers.prowlarr.entrypoints={{ traefik_endpoint }}
       - traefik.http.services.prowlarr.loadbalancer.server.port=9696
-      - net.unraid.docker.icon=https://github.com/Prowlarr/Prowlarr/blob/develop/Logo/128.png?raw=true
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/Prowlarr/Prowlarr/develop/Logo/128.png
       - net.unraid.docker.webui=http://prowlarr.{{ domain }}
 
   sonarr:
@@ -53,7 +53,7 @@ services:
       - traefik.http.routers.sonarr.rule=Host(`sonarr.{{ domain }}`)
       - traefik.http.routers.sonarr.entrypoints={{ traefik_endpoint }}
       - traefik.http.services.sonarr.loadbalancer.server.port=8989
-      - net.unraid.docker.icon=https://github.com/Sonarr/Sonarr/blob/develop/Logo/128.png?raw=true
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/Sonarr/Sonarr/develop/Logo/128.png
       - net.unraid.docker.webui=http://sonarr.{{ domain }}
 
   radarr:
@@ -78,7 +78,7 @@ services:
       - traefik.http.routers.radarr.rule=Host(`radarr.{{ domain }}`)
       - traefik.http.routers.radarr.entrypoints={{ traefik_endpoint }}
       - traefik.http.services.radarr.loadbalancer.server.port=7878
-      - net.unraid.docker.icon=https://github.com/Radarr/Radarr/blob/develop/Logo/128.png?raw=true
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/Radarr/Radarr/develop/Logo/128.png
       - net.unraid.docker.webui=http://radarr.{{ domain }}
 
   bazarr:
@@ -126,5 +126,5 @@ services:
     labels:
       - traefik.enable=false
       - traefik.docker.network={{ network_name }}
-      - net.unraid.docker.icon=https://github.com/TRaSH-/Guides/blob/master/docs/img/favicon.png?raw=true
+      - net.unraid.docker.icon=https://raw.githubusercontent.com/TRaSH-/Guides/master/docs/img/favicon.png
 

@@ -21,3 +21,4 @@ torrent_vpn_output_ports: 8080,8118,6881
 torrent_vpn_provider: pia
 torrent_vpn_username: 
 torrent_vpn_password:
+icon_url: "https://a.fsdn.com/allura/p/qbittorrent/icon?1518743661?&w=180"

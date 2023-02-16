@@ -10,3 +10,4 @@ docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
 docker_puid: 1000
 docker_pgid: 1000
 docker_timezone: Europe/Vienna
+icon_url: "https://raw.githubusercontent.com/theotherp/nzbhydra2/master/core/ui-src/img/favicon96.png"
