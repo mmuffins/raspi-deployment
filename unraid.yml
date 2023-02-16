@@ -6,8 +6,8 @@
     - role: traefik
     - role: sabnzbd
     - role: nzbhydra
-    - role: shoko
     - role: nzbhydra-scheduler
+    - role: shoko
     - role: starr-apps
     - role: qbittorrent
     - role: urbackup
