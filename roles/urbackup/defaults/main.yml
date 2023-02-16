@@ -1,0 +1,13 @@
+description: "Open source network backup for Windows and Linux"
+display_name: "UrBackup"
+app_name: urbackup
+traefik_endpoint: http
+network_name: reverse-proxy
+docker_settings_directory: /mnt/user/appdata
+docker_media_data_share: /mnt/user/data
+docker_compose_directory: /mnt/user/appdata/docker-compose
+docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
+docker_puid: 1000
+docker_pgid: 1000
+docker_timezone: Europe/Vienna
+backup_directory: /mnt/user/backup/

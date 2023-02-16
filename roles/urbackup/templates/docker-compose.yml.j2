@@ -7,7 +7,7 @@ networks:
 
 services:
   {{ app_name }}:
-    image: lscr.io/linuxserver/sabnzbd:amd64-3.7.2
+    image: binhex/arch-urbackup:2.5.28-1-02
     container_name: {{ app_name }}
     restart: unless-stopped
     environment:
@@ -17,7 +17,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - {{ docker_settings_directory }}/{{ app_name }}:/config
-      - {{ docker_media_data_share }}/usenet:/data/usenet:rw
+      - {{ backup_directory }}/usenet:/media
     networks:
       - {{ network_name }}
     # ports:
@@ -27,6 +27,6 @@ services:
       - traefik.docker.network={{ network_name }}
       - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
       - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
-      - traefik.http.services.{{ app_name }}.loadbalancer.server.port=8080
-      - net.unraid.docker.icon=https://sabnzbd.org/images/icons/apple-touch-icon-120x120-precomposed.png
+      - traefik.http.services.{{ app_name }}.loadbalancer.server.port=55414
+      - net.unraid.docker.icon=https://forums.urbackup.org/uploads/default/original/2X/1/1051fd74d1dcbc3ad4220b43007fcab5287272b0.png
       - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}

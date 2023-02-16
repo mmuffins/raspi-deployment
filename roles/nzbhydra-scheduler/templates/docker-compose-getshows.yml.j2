@@ -9,7 +9,7 @@ services:
   {{ app_name }}_getshows:
     image: mmuffins/nzbhydra-scheduler
     container_name: {{ app_name }}_getshows
-    restart: no
+    restart: "no"
     environment:
       - PUID= {{ docker_puid }}
       - PGID={{ docker_pgid }}

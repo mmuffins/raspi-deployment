@@ -12,7 +12,6 @@
       restart: unless-stopped
       ports:
         - {{ webui_port }}:{{ webui_port }}
-        - 55415:55415
       volumes:
         - /etc/localtime:/etc/localtime:ro 
         - /var/run/docker.sock:/var/run/docker.sock:ro
