@@ -6,5 +6,7 @@ http_port: 80
 webui_port: 80
 network_name: reverse-proxy
 domain: lan
+file_mask: 0644
+folder_mask: 0775
 
 

@@ -7,7 +7,7 @@
     path: "{{ docker_compose_app_directory }}/{{ app_name }}"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: 0755
+    mode: "{{ folder_mask }}"
 
 - name: Set docker compose app name
   ansible.builtin.lineinfile:
@@ -48,7 +48,7 @@
     path: "{{ docker_compose_directory }}/{{ app_name }}"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: 0755
+    mode: "{{ folder_mask }}"
 
 - name: Create docker-compose file
   ansible.builtin.template:
@@ -56,7 +56,7 @@
     dest: "{{ docker_compose_directory }}/{{ app_name }}/docker-compose.yml"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: 0644
+    mode: "{{ file_mask }}"
   register: created_docker_compose
 
 
@@ -66,7 +66,7 @@
     path: "{{ docker_settings_directory }}/{{ app_name }}"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: 0755
+    mode: "{{ folder_mask }}"
 
 - name: Create traefik config
   ansible.builtin.template:
@@ -74,7 +74,7 @@
     dest: "{{ docker_settings_directory }}/{{ app_name }}/traefik.yml"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: 0644
+    mode: "{{ file_mask }}"
   register: created_traefik_config
 
 
@@ -84,5 +84,5 @@
     dest: "{{ docker_settings_directory }}/{{ app_name }}/dynamic_conf.yml"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: 0644
+    mode: "{{ file_mask }}"
   register: created_traefik_dynamic_config

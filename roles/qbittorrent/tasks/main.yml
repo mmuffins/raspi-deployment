@@ -7,7 +7,7 @@
     path: "{{ docker_compose_app_directory }}/{{ app_name }}"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: 0755
+    mode: "{{ folder_mask }}"
 
 - name: Set docker compose app name
   ansible.builtin.lineinfile:
@@ -48,7 +48,7 @@
     path: "{{ docker_compose_directory }}/{{ app_name }}"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: 0755
+    mode: "{{ folder_mask }}"
 
 - name: Create settings folder
   ansible.builtin.file:
@@ -56,7 +56,7 @@
     path: "{{ docker_settings_directory }}/{{ app_name }}"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: 0755
+    mode: "{{ folder_mask }}"
 
 - name: Create docker-compose file
   ansible.builtin.template:
@@ -64,7 +64,7 @@
     dest: "{{ docker_compose_directory }}/{{ app_name }}/docker-compose.yml"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: 0644
+    mode: "{{ file_mask }}"
   register: created_docker_compose
 
 - name: Create docker-compose .env file
@@ -73,5 +73,5 @@
     dest: "{{ docker_compose_directory }}/{{ app_name }}/.env"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: 0644
+    mode: "{{ file_mask }}"
   register: created_docker_compose_env

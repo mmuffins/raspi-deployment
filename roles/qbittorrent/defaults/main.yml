@@ -10,6 +10,8 @@ docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
 docker_puid: 1000
 docker_pgid: 1000
 docker_timezone: Europe/Vienna
+file_mask: 0644
+folder_mask: 0775
 torrent_vpn_enabled: yes
 torrent_vpn_client: wireguard
 torrent_vpn_enable_privoxy: yes
