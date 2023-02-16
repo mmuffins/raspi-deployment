@@ -10,3 +10,4 @@
     - role: nzbhydra-scheduler
     - role: starr-apps
     - role: qbittorrent
+    - role: urbackup
