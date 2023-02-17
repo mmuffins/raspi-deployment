@@ -31,7 +31,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - {{ docker_settings_directory }}/{{ app_name }}:/config
-      - {{ docker_media_data_share }}/usenet/watchdir:/output:rw
+      - {{ docker_usenet_share }}/watchdir:/output:rw
     networks:
       - {{ network_name }}
     command: ["./start-getsearchterms.sh"]

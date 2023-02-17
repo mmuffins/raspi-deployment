@@ -29,7 +29,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro 
       - {{ docker_settings_directory }}/{{ app_name }}:/config
-      - {{ docker_media_data_share }}/torrents:/data/torrents:rw
+      - {{ docker_torrent_share }}:/data/torrents:rw
     networks:
       - {{ network_name }}
     ports:

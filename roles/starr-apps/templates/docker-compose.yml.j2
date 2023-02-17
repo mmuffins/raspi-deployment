@@ -17,7 +17,9 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - {{ docker_settings_directory }}/prowlarr:/config
-      - {{ docker_media_data_share }}:/data
+      - {{ docker_media_share }}:/data/media
+      - {{ docker_usenet_share }}:/data/usenet
+      - {{ docker_torrent_share }}:/data/torrents
     networks:
       - {{ network_name }}
     # ports:
@@ -42,7 +44,9 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - {{ docker_settings_directory }}/sonarr:/config
-      - {{ docker_media_data_share }}:/data
+      - {{ docker_media_share }}:/data/media
+      - {{ docker_usenet_share }}:/data/usenet
+      - {{ docker_torrent_share }}:/data/torrents
     networks:
       - {{ network_name }}
     # ports:
@@ -67,7 +71,9 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - {{ docker_settings_directory }}/radarr:/config
-      - {{ docker_media_data_share }}:/data
+      - {{ docker_media_share }}:/data/media
+      - {{ docker_usenet_share }}:/data/usenet
+      - {{ docker_torrent_share }}:/data/torrents
     networks:
       - {{ network_name }}
     # ports:
@@ -92,7 +98,9 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - {{ docker_settings_directory }}/bazarr:/config
-      - {{ docker_media_data_share }}:/data
+      - {{ docker_media_share }}:/data/media
+      - {{ docker_usenet_share }}:/data/usenet
+      - {{ docker_torrent_share }}:/data/torrents
     networks:
       - {{ network_name }}
     # ports:

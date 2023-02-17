@@ -17,8 +17,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - {{ docker_settings_directory }}/{{ app_name }}:/home/shoko/.shoko
-      - {{ docker_media_data_share }}/media/anime:/mnt/anime
-      - {{ docker_media_data_share }}/usenet/anime:/mnt/import
+      - {{ docker_media_share }}/anime:/mnt/anime
+      - {{ docker_usenet_share }}/anime:/mnt/import
     networks:
       - {{ network_name }}
     # ports:

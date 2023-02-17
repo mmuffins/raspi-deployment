@@ -17,7 +17,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - {{ docker_settings_directory }}/{{ app_name }}:/config
-      - {{ docker_media_data_share }}/usenet:/data/usenet:rw
+      - {{ docker_usenet_share }}:/data/usenet:rw
     networks:
       - {{ network_name }}
     # ports:
