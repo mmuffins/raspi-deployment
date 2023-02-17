@@ -15,16 +15,16 @@ folder_mask: 0777
 icon_url: "https://raw.githubusercontent.com/theotherp/nzbhydra2/master/core/ui-src/img/favicon96.png"
 
 nzbschedule_cron: 0 2 */3 * *
-loglevel: debug
-searchtermsfile: /config/searchterms
-groupsfile: /config/groups
-showsfile: /config/shows
-output_directory: /output
+nzbschedule_loglevel: debug
+nzbschedule_searchtermsfile: /config/searchterms
+nzbschedule_groupsfile: /config/groups
+nzbschedule_showsfile: /config/shows
+nzbschedule_output_directory: /output
+nzbschedule_minsize: 1
+nzbschedule_maxsize: 900000
+nzbschedule_maxage: 3
+nzbschedule_category: Anime
+nzbschedule_indexers: Animetosho
+nzbschedule_request_cooldown: 10
 nzbhydra_uri: nzbhydra:5076
 nzbhydra_api_key: 
-minsize: 1
-maxsize: 900000
-maxage: 3
-category: Anime
-indexers: Animetosho
-request_cooldown: 10
