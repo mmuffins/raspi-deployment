@@ -67,15 +67,6 @@
     mode: "{{ file_mask }}"
   register: created_docker_compose
 
-- name: Create alternate docker-compose file
-  ansible.builtin.template:
-    src: docker-compose-getshows.yml.j2
-    dest: "{{ docker_compose_directory }}/{{ app_name }}/docker-compose-getshows.yml"
-    owner: "{{ docker_user_id }}"
-    group: "{{ docker_group_id }}"
-    mode: "{{ file_mask }}"
-  register: created_docker_compose
-
 - name: Create docker-compose env file
   ansible.builtin.template:
     src: .env.j2
