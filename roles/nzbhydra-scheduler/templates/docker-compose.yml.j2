@@ -7,7 +7,7 @@ networks:
 
 services:
   {{ app_name }}:
-    image: mmuffins/nzbhydra-scheduler
+    image: mmuffins/nzbhydra-scheduler:latest
     container_name: {{ app_name }}
     restart: unless-stopped
     environment:
