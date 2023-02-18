@@ -17,6 +17,7 @@ folder_mask: 0777
 icon_url: "https://raw.githubusercontent.com/theotherp/nzbhydra2/master/core/ui-src/img/favicon96.png"
 
 nzbschedule_cron: 0 2 */3 * *
+nzbschedule_search_cooldown: "72"
 nzbschedule_loglevel: debug
 nzbschedule_searchtermsfile: /config/searchterms
 nzbschedule_groupsfile: /config/groups

@@ -31,6 +31,7 @@ torrent_vpn_password: my_pia_password
 
 # nzbhydra scheduler
 nzbschedule_cron: "*/2 * * * *"
+nzbschedule_search_cooldown: "72"
 nzbschedule_loglevel: debug
 nzbschedule_searchtermsfile: /config/searchterms
 nzbschedule_groupsfile: /config/groups
@@ -38,7 +39,7 @@ nzbschedule_showsfile: /config/shows
 nzbschedule_output_directory: /output
 nzbschedule_minsize: 1
 nzbschedule_maxsize: 900000
-nzbschedule_maxage: 3
+nzbschedule_maxage: 90
 nzbschedule_category: Anime
 nzbschedule_indexers: Animetosho
 nzbschedule_request_cooldown: 10
