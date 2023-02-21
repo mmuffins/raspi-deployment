@@ -17,7 +17,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - {{ docker_settings_directory }}/{{ app_name }}:/config
-      - {{ backup_directory }}:/media
+      - {{ backup_directory }}:/backups
     networks:
       - {{ network_name }}
     # ports:
