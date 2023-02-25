@@ -11,3 +11,4 @@
     - role: starr-apps
     - role: qbittorrent
     - role: urbackup
+    - role: mediasync

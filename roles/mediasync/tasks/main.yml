@@ -1,0 +1,22 @@
+---
+- name: Create script directory
+  ansible.builtin.file:
+    state: directory
+    path: "{{ script_dir }}"
+    mode: 0777
+
+
+- name: Copy backup scripts
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ script_dir }}/"
+    mode: 0777
+  with_fileglob:
+    - "files/*"
+
+- name: Create variables file
+  ansible.builtin.template:
+    src: variables.j2
+    dest: "{{ script_dir }}//variables"
+    mode: 0666
+
