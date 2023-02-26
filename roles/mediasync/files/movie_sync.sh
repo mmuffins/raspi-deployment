@@ -11,4 +11,4 @@ else
 fi
 
 echo "syncing ${local_movies_dir} to ${remote_movies_dir}"
-rsync -avh $local_movies_dir/ $remote_movies_dir/
+rsync -avh --bwlimit=$rsync_max_speed $local_movies_dir/ $remote_movies_dir/

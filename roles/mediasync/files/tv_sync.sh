@@ -29,5 +29,5 @@ for d in $local_tv_dir/*/ ; do
 	mkdir "$remoteSeasonFolder"
   fi
     
-  rsync -avh "$d/$lowestSeason" "$remoteSeasonFolder/"
+  rsync -avh --bwlimit=$rsync_max_speed "$d/$lowestSeason" "$remoteSeasonFolder/"
 done
