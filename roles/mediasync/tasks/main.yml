@@ -3,8 +3,7 @@
   ansible.builtin.file:
     state: directory
     path: "{{ script_dir }}"
-    mode: 0777
-
+    mode: "{{ folder_mask }}"
 
 - name: Copy backup scripts
   ansible.builtin.copy:
@@ -20,3 +19,31 @@
     dest: "{{ script_dir }}//variables"
     mode: 0666
 
+- name: Create userscripts script folder
+  ansible.builtin.file:
+    state: directory
+    path: "{{ userscripts_app_directory }}/{{ script_name }}"
+    mode: "{{ folder_mask }}"
+
+- name: Set userscripts script description
+  ansible.builtin.lineinfile:
+    dest: "{{ userscripts_app_directory }}/{{ script_name }}/description"
+    create: true
+    state: present
+    line: "{{ script_description }}"
+  register: app_description_created
+
+- name: Remove userscripts script description line ending
+  ansible.builtin.replace:
+    path: "{{ userscripts_app_directory }}/{{ script_name }}/description"
+    regexp: "\n"
+    replace: ""
+  when: app_description_created.changed == 1
+  changed_when: false
+  check_mode: false
+
+- name: Create userscripts script file
+  ansible.builtin.template:
+    src: script.j2
+    dest: "{{ userscripts_app_directory }}/{{ script_name }}/script"
+    mode: 0666
