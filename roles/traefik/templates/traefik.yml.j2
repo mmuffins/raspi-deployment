@@ -1,0 +1,26 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false  # true by default
+
+log:
+  level: ERROR  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: common  # common, json, logfmt
+  filePath: /var/log/traefik/traefik.log
+
+accesslog:
+  format: common  # common, json, logfmt
+  filePath: /var/log/traefik/access.log
+
+api:
+  dashboard: true
+  insecure: true
+
+entryPoints:
+  http:
+    address: :{{ http_port }}
+
+providers:
+  docker: {}
+  file:
+    filename: /etc/traefik/dynamic_conf.yml
+    watch: true

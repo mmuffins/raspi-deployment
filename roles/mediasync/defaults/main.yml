@@ -1,0 +1,13 @@
+script_dir: /mnt/user/appdata/mediasync
+script_description: "Keeps media files in sync"
+script_name: mediasync
+file_mask: 0777
+folder_mask: 0777
+smb_username: SECRETUSER
+smb_password: SECRETPASS
+smb_share: //target.local/mediashare
+local_movies_dir: /mnt/user/media/movies
+local_tv_dir: /mnt/user/media/tv
+local_mountpoint: /mnt/remotes/target
+userscripts_app_directory: /boot/config/plugins/user.scripts/scripts
+rsync_max_speed: 25000 # maximum file copy speed in KBytes

@@ -1,0 +1,26 @@
+---
+  version: '3.8'
+  
+  networks:
+    default:
+      internal: false
+      name: {{ network_name }}
+  services:
+    {{ app_name }}:
+      image: traefik:v3.0
+      container_name: {{ app_name }}
+      restart: unless-stopped
+      ports:
+        - {{ webui_port }}:{{ webui_port }}
+      volumes:
+        - /etc/localtime:/etc/localtime:ro 
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+        - {{ docker_settings_directory }}/traefik:/etc/traefik
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network={{ network_name }}
+        - traefik.http.routers.api.service=api@internal
+        - traefik.http.routers.api.rule=Host(`traefik.{{ domain }}`)
+        - traefik.http.routers.api.entrypoints=http
+        - net.unraid.docker.icon={{ icon_url }}
+        - net.unraid.docker.webui=http://traefik.{{ domain }}

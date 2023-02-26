@@ -1,0 +1,28 @@
+description: "A cross-platform free and open-source BitTorrent client"
+display_name: "qBittorrent"
+app_name: qbittorrent
+traefik_endpoint: http
+network_name: reverse-proxy
+docker_settings_directory: /mnt/user/appdata
+docker_media_share: /mnt/user/media
+docker_usenet_share: /mnt/user/usenet
+docker_torrent_share: /mnt/user/torrent
+docker_compose_directory: /mnt/user/appdata/docker-compose
+docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
+docker_puid: 1000
+docker_pgid: 1000
+docker_timezone: Europe/Vienna
+file_mask: 0644
+folder_mask: 0777
+torrent_vpn_enabled: yes
+torrent_vpn_client: wireguard
+torrent_vpn_enable_privoxy: yes
+torrent_vpn_strict_port_forward: yes
+torrent_vpn_subnet: 192.168.0.0/24
+torrent_vpn_dns_servers: 10.0.0.242,10.0.0.241,84.200.69.80,37.235.1.174,1.1.1.1,37.235.1.177,84.200.70.40,1.0.0.1
+torrent_vpn_input_ports: 8080,8118,6881
+torrent_vpn_output_ports: 8080,8118,6881
+torrent_vpn_provider: pia
+torrent_vpn_username: 
+torrent_vpn_password:
+icon_url: "https://raw.githubusercontent.com/qbittorrent/qBittorrent/master/src/icons/qbittorrent.ico"

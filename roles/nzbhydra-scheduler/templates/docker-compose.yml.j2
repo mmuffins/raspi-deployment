@@ -1,0 +1,42 @@
+---
+version: "3.8"
+
+networks:
+  {{ network_name }}:
+    external: true
+
+services:
+  {{ app_name }}:
+    image: mmuffins/nzbhydra-scheduler:latest
+    container_name: {{ app_name }}
+    restart: unless-stopped
+    environment:
+      - PUID= {{ docker_puid }}
+      - PGID={{ docker_pgid }}
+      - TZ={{ docker_timezone }}
+      - CRON=${NZBSCHEDULE_CRON}
+      - SEARCHFREQUENCY=${NZBSCHEDULE_SEARCHFREQUENCY}
+      - LOGLEVEL=${NZBSCHEDULE_LOGLEVEL}
+      - SEARCHTERMSFILE=${NZBSCHEDULE_SEARCHTERMSFILE}
+      - GROUPSFILE=${NZBSCHEDULE_GROUPSFILE}
+      - SHOWSFILE=${NZBSCHEDULE_IMPORTSHOWSFILE}
+      - NZBOUTPUTDIRECTORY=${NZBSCHEDULE_NZBOUTPUTDIRECTORY}
+      - NZBHYDRAURI=${NZBSCHEDULE_NZBHYDRAURI}
+      - NZBHYDRAAPIKEY=${NZBSCHEDULE_NZBHYDRAAPIKEY}
+      - MINSIZE=${NZBSCHEDULE_MINSIZE}
+      - MAXSIZE=${NZBSCHEDULE_MAXSIZE}
+      - MAXAGE=${NZBSCHEDULE_MAXAGE}
+      - CATEGORY=${NZBSCHEDULE_CATEGORY}
+      - INDEXERS=${NZBSCHEDULE_INDEXERS}
+      - REQUESTCOOLDOWN=${NZBSCHEDULE_REQUEST_COOLDOWN}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ docker_settings_directory }}/{{ app_name }}:/config
+      - {{ docker_usenet_share }}/watchdir:/output:rw
+    networks:
+      - {{ network_name }}
+    # command: ["./start-getsearchterms.sh"]
+    labels:
+      - traefik.enable=false
+      - traefik.docker.network={{ network_name }}
+      - net.unraid.docker.icon={{ icon_url }}

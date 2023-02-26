@@ -1,0 +1,36 @@
+---
+version: "3.8"
+
+networks:
+  {{ network_name }}:
+    external: true
+
+services:
+  {{ app_name }}:
+    image: binhex/arch-urbackup:2.5.28-1-02
+    container_name: {{ app_name }}
+    restart: unless-stopped
+    environment:
+      - PUID={{ docker_puid }}
+      - PGID={{ docker_pgid }}
+      - TZ={{ docker_timezone }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ docker_settings_directory }}/{{ app_name }}:/config
+      - {{ backup_directory }}:/backups
+    networks:
+      - {{ network_name }}
+    # ports:
+    #  - 80:80
+    #  - 55413:55413
+    #  - 55414:55414
+    #  - 55415:55415
+    #  - 35623:35623
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network={{ network_name }}
+      - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
+      - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
+      - traefik.http.services.{{ app_name }}.loadbalancer.server.port=55414
+      - net.unraid.docker.icon={{ icon_url }}
+      - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}

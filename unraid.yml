@@ -1,0 +1,14 @@
+- name: Unraid Setup
+  hosts: unraid
+  become: yes
+  become_user: root
+  roles:
+    - role: traefik
+    - role: sabnzbd
+    - role: nzbhydra
+    - role: nzbhydra-scheduler
+    - role: shoko
+    - role: starr-apps
+    - role: qbittorrent
+    - role: urbackup
+    - role: mediasync

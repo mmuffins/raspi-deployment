@@ -1,0 +1,12 @@
+http:
+  routers:
+    unraid:
+      entryPoints:
+      - http
+      service: unraid
+      rule: "Host(`unraid.{{ domain }}`) || Host(`{{ inventory_hostname }}`)" 
+  services:
+    unraid:
+      loadBalancer:
+        servers:
+        - url: "http://{{ inventory_hostname }}:8085/"
