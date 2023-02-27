@@ -8,4 +8,4 @@ if ! (mount | grep //brownie.lan/Maxtor/NVIDIA_SHIELD > /dev/null); then
 fi
 
 echo "Syncing ${local_movies_dir} to ${remote_movies_dir}"
-rsync -avh --bwlimit=$rsync_max_speed $local_movies_dir/ $remote_movies_dir/
+rsync -ah --info=name --bwlimit=$rsync_max_speed $local_movies_dir/ $remote_movies_dir/
