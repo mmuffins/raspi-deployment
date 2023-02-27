@@ -2,7 +2,7 @@
 source ./variables
 
 if ! (mount | grep //brownie.lan/Maxtor/NVIDIA_SHIELD > /dev/null); then
-  echo "Mounting ${smb_share} to ${local_mountpoint}"
+	echo "Mounting $smb_share to $local_mountpoint"
 	mkdir $local_mountpoint
 	sudo mount -t cifs $smb_share $local_mountpoint -o vers=3.0,iocharset=utf8,username=$smb_username,password=$smb_password
 fi
@@ -44,7 +44,7 @@ find "$bin_tv_dir" -type f | while read file_path; do
 done
 
 echo "Cleaning up empty recycle bin directories in $bin_tv_dir"
-for d in "$bin_tv_dir/*/" ; do 
+for d in "$bin_tv_dir/"*/ ; do 
   if [ -d "$d" ]; then
     if [ -z "$(ls -A "$d")" ]; then
       echo "Removing empty directory $d"
