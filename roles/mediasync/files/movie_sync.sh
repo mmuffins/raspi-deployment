@@ -1,10 +1,8 @@
 #!/bin/bash
 source ./variables
 
-if mount | grep //brownie.lan/Maxtor/NVIDIA_SHIELD > /dev/null; then
-    echo "${smb_share} is already mounted at ${local_mountpoint}"
-else
-    echo "Mounting ${smb_share} to ${local_mountpoint}"
+if ! (mount | grep //brownie.lan/Maxtor/NVIDIA_SHIELD > /dev/null); then
+	echo "Mounting ${smb_share} to ${local_mountpoint}"
 	mkdir $local_mountpoint
 	sudo mount -t cifs $smb_share $local_mountpoint -o vers=3.0,iocharset=utf8,username=$smb_username,password=$smb_password
 fi

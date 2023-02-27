@@ -5,14 +5,14 @@ cd "{{ script_dir }}"
 echo "Starting tv cleanup"
 ./tv_cleanup.sh
 
-echo "Starting tv sync"
+echo -e "\nStarting tv sync"
 ./tv_sync.sh
 
-echo "Starting movie cleanup"
+echo -e "\nStarting movie cleanup"
 ./movie_cleanup.sh
 
-echo "Starting movie sync"
+echo -e "\nStarting movie sync"
 ./movie_sync.sh
 
-echo "Unmounting share"
+echo -e "\nUnmounting share"
 ./unmount_share.sh
