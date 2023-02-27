@@ -10,10 +10,15 @@ fi
 for d in "$remote_movies_dir/"*/ ; do
 	moviefolder=$(basename "$d")
 	if [ -d "$d" ]; then
-		if [ ! -d "$local_movies_dir/$moviefolder" ]; then
-		echo "Moving $d to $bin_movies_dir"
+		local_movie="$local_movies_dir/$moviefolder"
+		if [ ! -d "$local_movie" ]; then
+		echo "$d was not found in $local_movies_dir, moving to $bin_movies_dir"
 			mv "$d" $bin_movies_dir/
 			echo $(date) > "$bin_movies_dir/$moviefolder/deleteddate"
+			continue
 		fi
+
+	# Remove individual files in the remote directory that are not also in the source directory
+	rsync -ah --info=name --delete --bwlimit=$rsync_max_speed "$local_movie/" "$d/"
 	fi
 done
