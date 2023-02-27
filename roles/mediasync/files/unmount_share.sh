@@ -3,6 +3,6 @@
 source ./variables
 
 if mount | grep //brownie.lan/Maxtor/NVIDIA_SHIELD > /dev/null; then
-    echo "unmounting ${local_mountpoint}"
+    echo "Unmounting ${local_mountpoint}"
 	umount /mnt/remotes/brownie
 fi
