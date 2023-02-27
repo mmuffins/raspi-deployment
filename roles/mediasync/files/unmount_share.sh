@@ -1,8 +1,6 @@
 #!/bin/bash
-
 source ./variables
 
-if mount | grep //brownie.lan/Maxtor/NVIDIA_SHIELD > /dev/null; then
-    echo "unmounting ${local_mountpoint}"
+if mount | grep "$smb_share" > /dev/null; then
 	umount /mnt/remotes/brownie
 fi
