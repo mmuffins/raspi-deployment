@@ -1,6 +1,7 @@
 description: "The free and easy binary newsreader"
 display_name: "SABnzbd"
 app_name: sabnzbd
+sabnzbd_image: lscr.io/linuxserver/sabnzbd:latest
 traefik_endpoint: http
 network_name: reverse-proxy
 docker_settings_directory: /mnt/user/appdata

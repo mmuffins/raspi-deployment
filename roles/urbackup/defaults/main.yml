@@ -1,6 +1,7 @@
 description: "Open source network backup for Windows and Linux"
 display_name: "UrBackup"
 app_name: urbackup
+urbackup_image: binhex/arch-urbackup:latest
 traefik_endpoint: http
 network_name: reverse-proxy
 backup_directory: /mnt/user/backup

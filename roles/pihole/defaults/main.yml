@@ -1,5 +1,6 @@
 pihole_webpassword: weakpass
 pihole_ftl_max_db_days: 180
+pihole_image: pihole/pihole:latest
 
 dns_nameservers:
   - "8.8.8.8"

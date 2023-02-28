@@ -1,6 +1,7 @@
 description: "An all-in-one anime manager"
 display_name: "Shoko Server"
 app_name: shokoserver
+shokoserver_image: shokoanime/server:latest
 traefik_endpoint: http
 network_name: reverse-proxy
 docker_settings_directory: /mnt/user/appdata

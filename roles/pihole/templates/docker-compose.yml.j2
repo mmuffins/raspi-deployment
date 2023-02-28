@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   pihole:
-    image: pihole/pihole:latest
+    image: {{ pihole_image }}
     container_name: pihole
     cap_add:
       - NET_ADMIN

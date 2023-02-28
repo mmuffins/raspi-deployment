@@ -38,3 +38,5 @@ smb_user_name: ansitest11
 
 # docker
 docker_user_name: ansitest11
+
+pihole_image: pihole/pihole:latest
