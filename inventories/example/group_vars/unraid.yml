@@ -44,4 +44,13 @@ nzbschedule_category: Anime
 nzbschedule_indexers: Animetosho
 nzbschedule_request_cooldown: 10
 nzbhydra_uri: nzbhydra:5076
-nzbhydra_api_key:
+nzbhydra_api_key: api_key
+
+# mediasync
+smb_username: username
+smb_password: password
+smb_share: //mediaplayer/media
+local_movies_dir: /mnt/user/media/movies
+local_tv_dir: /mnt/user/media/tv
+local_mountpoint: /mnt/remotes/brownie
+rsync_max_speed: 30000

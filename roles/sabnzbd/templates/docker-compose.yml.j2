@@ -7,7 +7,7 @@ networks:
 
 services:
   {{ app_name }}:
-    image: lscr.io/linuxserver/sabnzbd:amd64-3.7.2
+    image: {{ sabnzbd_image }} 
     container_name: {{ app_name }}
     restart: unless-stopped
     environment:

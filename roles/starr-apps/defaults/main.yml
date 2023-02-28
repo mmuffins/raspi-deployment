@@ -1,6 +1,11 @@
 description: "Collection of Starr apps"
 display_name: "Starr Apps"
 app_name: starrapps
+prowlarr_image: lscr.io/linuxserver/prowlarr:latest
+sonarr_image: lscr.io/linuxserver/sonarr:latest
+radarr_image: lscr.io/linuxserver/radarr:latest
+bazarr_image: lscr.io/linuxserver/bazarr:latest
+recyclarr_image: recyclarr/recyclarr:latest 
 traefik_endpoint: http
 network_name: reverse-proxy
 docker_settings_directory: /mnt/user/appdata

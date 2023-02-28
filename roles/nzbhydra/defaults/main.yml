@@ -1,6 +1,7 @@
 description: "A meta search for NZB indexers"
 display_name: "NZBHydra"
 app_name: nzbhydra
+nzbhydra_image: lscr.io/linuxserver/nzbhydra2:latest
 traefik_endpoint: http
 network_name: reverse-proxy
 docker_settings_directory: /mnt/user/appdata

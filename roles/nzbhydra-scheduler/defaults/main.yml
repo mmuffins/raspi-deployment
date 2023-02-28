@@ -1,6 +1,7 @@
 description: "A download schdeduler for NzbHydra"
 display_name: "NzbHydra Scheduler"
 app_name: nzbhydrascheduler
+nzbhydra_scheduler_image: mmuffins/nzbhydra-scheduler:latest
 traefik_endpoint: http
 network_name: reverse-proxy
 docker_settings_directory: /mnt/user/appdata

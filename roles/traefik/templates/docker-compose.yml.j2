@@ -7,7 +7,7 @@
       name: {{ network_name }}
   services:
     {{ app_name }}:
-      image: traefik:v3.0
+      image: {{ traefik_image }}
       container_name: {{ app_name }}
       restart: unless-stopped
       ports:

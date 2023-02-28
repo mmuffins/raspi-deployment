@@ -7,7 +7,7 @@ networks:
 
 services:
   {{ app_name }}:
-    image: shokoanime/server:v4.1.2
+    image: {{ shokoserver_image }}
     container_name: {{ app_name }}
     restart: unless-stopped
     environment:
