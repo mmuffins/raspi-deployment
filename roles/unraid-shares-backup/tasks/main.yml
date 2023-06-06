@@ -1,9 +1,5 @@
 ---
-# - name: Create script directory
-#   ansible.builtin.file:
-#     state: directory
-#     path: "{{ script_dir }}"
-#     mode: "{{ folder_mask }}"
+- import_tasks: facts.yml
 
 - name: Create userscripts script folder
   ansible.builtin.file:

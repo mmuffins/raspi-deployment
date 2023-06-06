@@ -1,0 +1,4 @@
+---
+- name: Concatenate backup folders
+  set_fact:
+    bash_backup_folders: "{{ backup_folders | map('quote') |  join(' ') }}"
