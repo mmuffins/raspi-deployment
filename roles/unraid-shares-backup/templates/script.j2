@@ -24,6 +24,7 @@ for pair in "${DIR_PAIRS[@]}"; do
 
     echo "[$(date)] Starting rsync from ${SOURCE_DIR} to ${TARGET_DIR}"
     rsync -avh --delete "${SOURCE_DIR}/" "${TARGET_DIR}/"
+    echo [$(date)] > ${TARGET_DIR}/lastbackup
 done
 
 # Unmount the drive
