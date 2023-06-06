@@ -1,0 +1,33 @@
+#!/bin/bash
+
+DRIVE_UUID="{{ backup_drive_uuid }}"
+MOUNT_POINT="{{ backup_drive_mount_point }}"
+DIR_PAIRS=({{ bash_backup_folders }})
+
+echo "[$(date)] Starting script"
+
+# Verify the correct drive is mounted at the right place
+DEVICE_PATH=$(blkid -U "${DRIVE_UUID}")
+if mount | grep "${DEVICE_PATH}" | grep "${MOUNT_POINT}" > /dev/null; then
+    echo "[$(date)] Drive with UUID ${DRIVE_UUID} is mounted on ${MOUNT_POINT}"
+else
+    echo "[$(date)] Error: Drive with UUID ${DRIVE_UUID} is not mounted on ${MOUNT_POINT}. Exiting script."
+    exit 1
+fi
+
+# Iterate over directory pairs
+for pair in "${DIR_PAIRS[@]}"; do
+    # Split the pair into source and target directories
+    IFS=';' read -r -a dirs <<< "$pair"
+    SOURCE_DIR="${dirs[0]}"
+    TARGET_DIR="${MOUNT_POINT}/${dirs[1]}"
+
+    echo "[$(date)] Starting rsync from ${SOURCE_DIR} to ${TARGET_DIR}"
+    rsync -avh --delete "${SOURCE_DIR}/" "${TARGET_DIR}/"
+done
+
+# Unmount the drive
+echo "[$(date)] Unmounting drive ${DRIVE_UUID} from ${MOUNT_POINT}"
+umount ${MOUNT_POINT}
+
+echo "[$(date)] Finished script"

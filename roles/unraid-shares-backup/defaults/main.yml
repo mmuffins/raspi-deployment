@@ -1,0 +1,11 @@
+script_dir: /mnt/user/appdata/usersharesbackup
+script_description: "Copies user shares to local usb hdd"
+script_name: usersharesbackup
+file_mask: 0777
+folder_mask: 0777
+userscripts_app_directory: /boot/config/plugins/user.scripts/scripts
+backup_drive_uuid: d76bcbbf-4d5a-4358-a76e-xxxxxxxxxx
+backup_drive_mount_point: /mnt/disks/ABCD
+local_movies_dir: /mnt/user/media/movies
+local_tv_dir: /mnt/user/media/tv
+local_mountpoint: /mnt/remotes/target
