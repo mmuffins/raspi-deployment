@@ -12,3 +12,4 @@
     - role: qbittorrent
     - role: urbackup
     - role: mediasync
+    - role: unraid-shares-backup
