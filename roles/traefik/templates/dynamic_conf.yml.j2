@@ -5,8 +5,17 @@ http:
       - http
       service: unraid
       rule: "Host(`unraid.{{ domain }}`) || Host(`{{ inventory_hostname }}`)" 
+    homeassistant:
+      entryPoints:
+      - http
+      service: homeassistant
+      rule: "Host(`hass.{{ domain }}`)" 
   services:
     unraid:
       loadBalancer:
         servers:
         - url: "http://{{ inventory_hostname }}:8085/"
+    homeassistant:
+      loadBalancer:
+        servers:
+        - url: "http://homeassistant.{{ domain }}:8123/"
