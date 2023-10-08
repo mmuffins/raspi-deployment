@@ -1,0 +1,69 @@
+---
+- import_tasks: facts.yml
+
+- name: Create docker compose app folder
+  ansible.builtin.file:
+    state: directory
+    path: "{{ docker_compose_app_directory }}/{{ app_name }}"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: "{{ folder_mask }}"
+
+- name: Set docker compose app name
+  ansible.builtin.lineinfile:
+    dest: "{{ docker_compose_app_directory }}/{{ app_name }}/name"
+    create: true
+    state: present
+    regexp: '.*'
+    line: "{{ display_name }}"
+
+- name: Set docker compose app description
+  ansible.builtin.lineinfile:
+    dest: "{{ docker_compose_app_directory }}/{{ app_name }}/description"
+    create: true
+    state: present
+    regexp: '.*'
+    line: "{{ description }}"
+
+- name: Set docker compose app redirection
+  ansible.builtin.lineinfile:
+    dest: "{{ docker_compose_app_directory }}/{{ app_name }}/indirect"
+    create: true
+    state: present
+    line: "{{ docker_compose_directory }}/{{ app_name }}"
+  register: app_redirection
+
+- name: Remove docker compose redirection file line ending
+  ansible.builtin.replace:
+    path: "{{ docker_compose_app_directory }}/{{ app_name }}/indirect"
+    regexp: "\n"
+    replace: ""
+  when: app_redirection.changed == 1
+  changed_when: false
+  check_mode: false
+
+- name: Create docker compose folder
+  ansible.builtin.file:
+    state: directory
+    path: "{{ docker_compose_directory }}/{{ app_name }}"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: "{{ folder_mask }}"
+
+- name: Create settings folder
+  ansible.builtin.file:
+    state: directory
+    path: "{{ docker_settings_directory }}/{{ app_name }}"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: "{{ folder_mask }}"
+
+- name: Create docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ docker_compose_directory }}/{{ app_name }}/docker-compose.yml"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: "{{ file_mask }}"
+  register: created_docker_compose
+
