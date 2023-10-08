@@ -19,8 +19,8 @@ services:
       - {{ docker_settings_directory }}/{{ app_name }}:/config
     networks:
       - {{ network_name }}
-    ports:
-      - 8125:80
+    # ports:
+    #   - 8125:80
     labels:
       - traefik.enable=true
       - traefik.docker.network={{ network_name }}
