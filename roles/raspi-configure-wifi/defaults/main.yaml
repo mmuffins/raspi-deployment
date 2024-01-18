@@ -1,0 +1,3 @@
+wifi_ssid: "MyWifiSSID"
+wifi_password: "Wifi_Password_in_Plaintext"
+wifi_country: "US"

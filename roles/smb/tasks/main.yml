@@ -35,12 +35,6 @@
   loop:
     - { line: "SHARE=home;/home;yes;no;no;all;" }
 
-- name: Setup backup
-  ansible.builtin.lineinfile:
-    dest: "{{ backup_list }}"
-    state: present
-    line: "/home/{{ smb_user_name }}/docker/samba/"
-
 - name: Start container
   community.docker.docker_compose:
     state: present

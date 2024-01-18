@@ -1,0 +1,67 @@
+---
+- import_tasks: facts.yml
+
+- name: Enable wifi
+  ansible.builtin.lineinfile:
+    path: /boot/config.txt
+    regexp: "^dtoverlay=disable-wifi$"
+    state: absent
+
+# - name: Print all available facts
+#   ansible.builtin.debug:
+#     var: ansible_facts
+
+# - name: Set wifi country
+#   ansible.builtin.lineinfile:
+#     dest: /etc/wpa_supplicant/wpa_supplicant.conf
+#     regexp: "country=AT"
+#     line: "country=AT"
+#     insertafter: EOF
+#     state: present
+
+- name: Set raspi-config country
+  shell: "raspi-config nonint do_wifi_country {{ wifi_country }}"
+  when: current_wifi_country != "AT"
+
+# - name: Configure wifi
+#   ansible.builtin.blockinfile:
+#     path: /etc/wpa_supplicant/wpa_supplicant.conf
+#     block: |
+#       network={
+#           ssid="{{ wifi_ssid }}"
+#           psk="{{ wifi_password }}"
+#           key_mgmt=WPA-PSK
+#       }
+#     marker: "# {mark} ANSIBLE MANAGED BLOCK"
+#     insertafter: EOF
+#     create: yes
+#     state: present
+
+# - name: Configure wifi
+#   ansible.builtin.command: sudo raspi-config nonint do_wifi_ssid_passphrase {{ wifi_ssid }} {{ wifi_password }} 1
+#   register: wifi_status
+#   changed_when: False
+#   ignore_errors: True
+
+
+- name: Enable NetworkManager service
+  ansible.builtin.service:
+    name: NetworkManager
+    state: started
+    enabled: true
+
+- name: Get wifi radio status
+  ansible.builtin.command: nmcli radio wifi
+  register: wifi_status
+  changed_when: False
+  ignore_errors: True
+
+- name: Enable wifi radio
+  ansible.builtin.command: nmcli radio wifi on
+  when: "'disabled' in wifi_status.stdout"
+
+- name: Configure wifi ssid
+  ansible.builtin.command: raspi-config nonint do_wifi_ssid_passphrase {{ wifi_ssid }} {{ wifi_password }} 1
+  when:
+    - "'wlan0' not in ansible_interfaces"
+    - "ansible_wlan0.ipv4 is not defined or ansible_wlan0.ipv4.address is not defined"

@@ -13,7 +13,7 @@
       ansible.builtin.command: "raspi-config nonint do_vnc 1"
       changed_when: false
 
-    - name: Set wifi
+    - name: Disable wifi
       ansible.builtin.lineinfile:
         dest: /boot/config.txt
         regexp: "dtoverlay=disable-wifi'"
