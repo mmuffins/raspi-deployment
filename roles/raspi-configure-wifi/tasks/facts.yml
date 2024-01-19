@@ -1,0 +1,11 @@
+---
+- name: Get WiFi country
+  shell: "raspi-config nonint get_wifi_country"
+  register: current_wifi_country
+  changed_when: False
+  ignore_errors: True #to avoid error when WiFi is not present
+
+- name: Set wifi facts
+  ansible.builtin.set_fact:
+    current_wifi_country: "{{ current_wifi_country.stdout }}"
+  check_mode: no

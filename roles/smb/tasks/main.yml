@@ -1,6 +1,15 @@
 ---
 - import_tasks: facts.yml
 
+# Not required for docker directly, but to set permissions needed to impersonate the user that
+# will run docker, see https://github.com/georchestra/ansible/issues/55
+- name: Install required packaged
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - acl
+
 - name: Create docker folder
   ansible.builtin.file:
     state: directory
@@ -34,12 +43,6 @@
     line: "{{ item.line }}"
   loop:
     - { line: "SHARE=home;/home;yes;no;no;all;" }
-
-- name: Setup backup
-  ansible.builtin.lineinfile:
-    dest: "{{ backup_list }}"
-    state: present
-    line: "/home/{{ smb_user_name }}/docker/samba/"
 
 - name: Start container
   community.docker.docker_compose:
