@@ -3,13 +3,9 @@
   become: yes
   become_user: root
   roles:
-    # - role: common
-    # - role: raspi
-    # - role: raspi-configure-wifi
-
+    - role: common
+    - role: raspi
+    - role: raspi-configure-wifi
     - role: docker
     - role: smb
-    #   tags:
-    #     - smb
-
     # - role: ha-satellite
