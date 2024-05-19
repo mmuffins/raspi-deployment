@@ -14,7 +14,7 @@ services:
       - TZ={{ docker_timezone }}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - {{ docker_settings_directory }}/{{ app_name }}:/config
+      - {{ docker_settings_directory }}/{{ app_name }}/db:/db
     networks:
       - {{ network_name }}
     # ports:
