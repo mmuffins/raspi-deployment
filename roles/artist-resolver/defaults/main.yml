@@ -12,5 +12,5 @@ docker_pgid: 1000
 docker_timezone: Europe/Vienna
 file_mask: 0644
 folder_mask: 0777
-icon_url: "https://raw.githubusercontent.com/FreshRSS/FreshRSS/edge/p/themes/icons/favicon-256.png"
+icon_url: "https://beta.musicbrainz.org/static/images/favicons/apple-touch-icon-180x180.png"
 
