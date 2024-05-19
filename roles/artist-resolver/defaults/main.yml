@@ -3,7 +3,7 @@ display_name: "Artist Relation Resolver API"
 app_name: artist-resolver
 traefik_endpoint: http
 network_name: reverse-proxy
-artist-resolver_image:  mmuffins/artist-resolver-api
+artist_resolver_image:  mmuffins/artist-resolver-api
 docker_settings_directory: /mnt/user/appdata
 docker_compose_directory: /mnt/user/appdata/docker-compose
 docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
