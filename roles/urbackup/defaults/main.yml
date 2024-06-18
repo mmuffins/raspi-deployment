@@ -8,8 +8,9 @@ backup_directory: /mnt/user/backup
 docker_settings_directory: /mnt/user/appdata
 docker_compose_directory: /mnt/user/appdata/docker-compose
 docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
-docker_puid: 1000
-docker_pgid: 1000
+# best practice in unraid is to run docker containers as nobody(99):users(100)
+docker_puid: 99
+docker_pgid: 100
 docker_timezone: Europe/Vienna
 file_mask: 0644
 folder_mask: 0777
