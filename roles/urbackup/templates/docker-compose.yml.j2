@@ -21,16 +21,33 @@ services:
     networks:
       - {{ network_name }}
     # ports:
-    #  - 80:80
-    #  - 55413:55413
-    #  - 55414:55414
-    #  - 55415:55415
-    #  - 35623:35623
+      # - 55218:80
+      # - 55413:55413
+      # - 55414:55414
+      # - 55415:55415
+      # - "35623:35623/udp"
     labels:
+      - net.unraid.docker.icon={{ icon_url }}
+      - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}
+      
       - traefik.enable=true
       - traefik.docker.network={{ network_name }}
       - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
       - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
       - traefik.http.services.{{ app_name }}.loadbalancer.server.port=55414
-      - net.unraid.docker.icon={{ icon_url }}
-      - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}
+      
+      - traefik.tcp.routers.{{ app_name }}-fastcgi.rule=HostSNI(`*`)
+      - traefik.tcp.routers.{{ app_name }}-fastcgi.tls=false
+      - traefik.tcp.routers.{{ app_name }}-fastcgi.entrypoints=urbackup-fastcgi
+      - traefik.tcp.routers.{{ app_name }}-fastcgi.service={{ app_name }}-svc-tcp-fastcgi
+      - traefik.tcp.services.{{ app_name }}-svc-tcp-fastcgi.loadbalancer.server.port=55413
+      
+      - traefik.tcp.routers.{{ app_name }}-internet-clients.rule=HostSNI(`*`)
+      - traefik.tcp.routers.{{ app_name }}-internet-clients.tls=false
+      - traefik.tcp.routers.{{ app_name }}-internet-clients.entrypoints=urbackup-internet-clients
+      - traefik.tcp.routers.{{ app_name }}-internet-clients.service={{ app_name }}-svc-tcp-internet-clients
+      - traefik.tcp.services.{{ app_name }}-svc-tcp-internet-clients.loadbalancer.server.port=55415
+
+      - traefik.udp.routers.{{ app_name }}-broadcast.entrypoints=urbackup-broadcast
+      - traefik.udp.routers.{{ app_name }}-broadcast.service={{ app_name }}-svc-udp-broadcast
+      - traefik.udp.services.{{ app_name }}-svc-udp-broadcast.loadbalancer.server.port=35623
