@@ -18,6 +18,12 @@ api:
 entryPoints:
   http:
     address: :{{ http_port }}
+  urbackup-fastcgi:
+    address: :55413
+  urbackup-internet-clients:
+    address: :55415
+  urbackup-broadcast:
+    address: :35623/udp
 
 providers:
   docker: {}

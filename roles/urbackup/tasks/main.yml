@@ -1,12 +1,18 @@
 ---
-- import_tasks: facts.yml
-
 - name: Create docker compose app folder
   ansible.builtin.file:
     state: directory
     path: "{{ docker_compose_app_directory }}/{{ app_name }}"
-    owner: "{{ docker_user_id }}"
-    group: "{{ docker_group_id }}"
+    mode: "{{ folder_mask }}"
+
+# running it twice is easier than having to figure out how to work around initial
+# permission errors when creating the folder
+- name: Create docker compose folder
+  ansible.builtin.file:
+    state: directory
+    path: "{{ docker_compose_directory }}/{{ app_name }}"
+    owner: "{{ docker_puid }}"
+    group: "{{ docker_pgid }}"
     mode: "{{ folder_mask }}"
 
 - name: Set docker compose app name
@@ -42,27 +48,20 @@
   changed_when: false
   check_mode: false
 
-- name: Create docker compose folder
-  ansible.builtin.file:
-    state: directory
-    path: "{{ docker_compose_directory }}/{{ app_name }}"
-    owner: "{{ docker_user_id }}"
-    group: "{{ docker_group_id }}"
-    mode: "{{ folder_mask }}"
-
-- name: Create settings folder
-  ansible.builtin.file:
-    state: directory
-    path: "{{ docker_settings_directory }}/{{ app_name }}"
-    owner: "{{ docker_user_id }}"
-    group: "{{ docker_group_id }}"
-    mode: "{{ folder_mask }}"
 
 - name: Create docker-compose file
   ansible.builtin.template:
     src: docker-compose.yml.j2
     dest: "{{ docker_compose_directory }}/{{ app_name }}/docker-compose.yml"
-    owner: "{{ docker_user_id }}"
-    group: "{{ docker_group_id }}"
+    owner: "{{ docker_puid }}"
+    group: "{{ docker_pgid }}"
     mode: "{{ file_mask }}"
   register: created_docker_compose
+
+- name: Create settings folder
+  ansible.builtin.file:
+    state: directory
+    path: "{{ docker_settings_directory }}/{{ app_name }}"
+    owner: "{{ docker_puid }}"
+    group: "{{ docker_pgid }}"
+    mode: "{{ folder_mask }}"
