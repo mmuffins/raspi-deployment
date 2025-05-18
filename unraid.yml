@@ -11,6 +11,7 @@
     - role: starr-apps
     - role: qbittorrent
     - role: urbackup
+    - role: restic-server
     - role: mediasync
     - role: unraid-shares-backup
     - role: freshrss

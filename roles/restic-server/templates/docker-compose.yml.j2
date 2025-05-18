@@ -1,0 +1,84 @@
+---
+networks:
+  {{ network_name }}:
+    external: true
+
+services:
+  resticserver:
+    image: {{ resticserver_image }} 
+    container_name: resticserver
+    restart: unless-stopped
+    environment:
+      PUID: {{ docker_puid }}
+      PGID: {{ docker_pgid }}
+      TZ: {{ docker_timezone }}
+      OPTIONS: |
+        --append-only
+        --prometheus
+        --prometheus-no-auth
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ backup_directory }}:/data
+    networks:
+      - {{ network_name }}
+    # ports:
+    #   - 8000:8000
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network={{ network_name }}
+      - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
+      - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
+      - traefik.http.services.{{ app_name }}.loadbalancer.server.port=8000
+      - net.unraid.docker.icon={{ icon_url }}
+
+  resticprofile:
+    image: {{ resticprofile_image }} 
+    container_name: resticprofile
+    restart: unless-stopped
+    entrypoint: '/bin/sh'
+    command:
+      - '-c'
+      - 'resticprofile schedule --all && crond -f'
+    environment:
+      - PUID={{ docker_puid }}
+      - PGID={{ docker_pgid }}
+      - TZ={{ docker_timezone }}
+    networks:
+      - {{ network_name }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ backup_directory }}:/data
+      - {{ docker_settings_directory }}/resticprofile:/etc/resticprofile:ro'
+    labels:
+      - traefik.enable=false
+      - net.unraid.docker.icon=https://creativeprojects.github.io/resticprofile/images/logo.png
+
+  resticexporter:
+    image: {{ resticexporter_image }} 
+    container_name: resticexporter
+    restart: unless-stopped
+    environment:
+      - PUID={{ docker_puid }}
+      - PGID={{ docker_pgid }}
+      - TZ={{ docker_timezone }}
+      - RESTIC_REPOSITORY=/data
+      - RESTIC_PASSWORD_FILE=/etc/resticprofile/key
+      - REFRESH_INTERVAL={{ resticexporter_refresh_interval }}
+      - NO_CHECK=True
+      - NO_STATS=False
+      - NO_LOCKS=False
+      - INCLUDE_PATHS=False
+    volumes:
+      - {{ backup_directory }}:/data
+      - {{ docker_settings_directory }}/resticprofile:/etc/resticprofile:ro'
+    networks:
+      - {{ network_name }}
+    # ports:
+    #   - 8001:8001
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network={{ network_name }}
+      - net.unraid.docker.icon={{ icon_url }}
+      - traefik.http.routers.{{ app_name }}-metrics.rule=Host(`{{ app_name }}-metrics.{{ domain }}`)
+      - traefik.http.routers.{{ app_name }}-metrics.entrypoints={{ traefik_endpoint }}
+      - traefik.http.services.{{ app_name }}-metrics.loadbalancer.server.port=8001
