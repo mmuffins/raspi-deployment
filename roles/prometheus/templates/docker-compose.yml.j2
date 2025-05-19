@@ -1,0 +1,38 @@
+---
+networks:
+  {{ network_name }}:
+    external: true
+
+services:
+  prometheus:
+    image: {{ prometheus_image }} 
+    container_name: prometheus
+    restart: unless-stopped
+    environment:
+      - PUID={{ docker_puid }}
+      - PGID={{ docker_pgid }}
+      - TZ={{ docker_timezone }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ docker_settings_directory }}/{{ app_name }}:/prometheus
+      - {{ docker_settings_directory }}/{{ app_name }}/config:/etc/prometheus
+    command:
+    - '--config.file=/etc/prometheus/prometheus.yml'
+    - '--storage.tsdb.path=/prometheus'
+    - '--storage.tsdb.retention.time={{ prometheus_retention_time }}'
+    - '--web.external-url=http://{{ app_name }}.{{ domain }}'
+    networks:
+      - {{ network_name }}
+    # ports:
+    #   - 9090:9090
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network={{ network_name }}
+      - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
+      - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
+      - traefik.http.services.{{ app_name }}.loadbalancer.server.port=9090
+      - net.unraid.docker.icon={{ icon_url }}
+      - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}
+
+
+# 

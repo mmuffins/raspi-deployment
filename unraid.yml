@@ -12,6 +12,7 @@
     - role: qbittorrent
     - role: urbackup
     - role: restic-server
+    - role: prometheus
     - role: mediasync
     - role: unraid-shares-backup
     - role: freshrss
