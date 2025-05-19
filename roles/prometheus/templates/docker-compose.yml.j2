@@ -26,13 +26,12 @@ services:
     # ports:
     #   - 9090:9090
     labels:
-      - traefik.enable=true
-      - traefik.docker.network={{ network_name }}
-      - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
-      - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
-      - traefik.http.services.{{ app_name }}.loadbalancer.server.port=9090
       - net.unraid.docker.icon={{ icon_url }}
       - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}
 
-
-# 
+      - traefik.enable=true
+      - traefik.docker.network={{ network_name }}
+      - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
+      - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }},prometheus-prometheus
+      - traefik.http.routers.{{ app_name }}.service={{ app_name }}
+      - traefik.http.services.{{ app_name }}.loadbalancer.server.port=9090
