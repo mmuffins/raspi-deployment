@@ -65,12 +65,12 @@ services:
       - RESTIC_PASSWORD_FILE=/etc/resticprofile/key
       - REFRESH_INTERVAL={{ resticexporter_refresh_interval }}
       - NO_CHECK=True
-      - NO_STATS=False
-      - NO_LOCKS=False
+      - NO_LOCKS=True
       - INCLUDE_PATHS=False
+      # - NO_STATS=True # Don't use NO_STATS as it's broken
     volumes:
       - {{ backup_directory }}:/data
-      - {{ docker_settings_directory }}/resticprofile:/etc/resticprofile:ro'
+      - {{ docker_settings_directory }}/resticprofile:/etc/resticprofile'
     networks:
       - {{ network_name }}
     # ports:
