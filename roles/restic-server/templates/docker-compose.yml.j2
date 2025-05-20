@@ -78,7 +78,8 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network={{ network_name }}
-      - net.unraid.docker.icon={{ icon_url }}
       - traefik.http.routers.{{ app_name }}-metrics.rule=Host(`{{ app_name }}-metrics.{{ domain }}`)
       - traefik.http.routers.{{ app_name }}-metrics.entrypoints={{ traefik_endpoint }}
       - traefik.http.services.{{ app_name }}-metrics.loadbalancer.server.port=8001
+      - net.unraid.docker.icon={{ icon_url }}
+      - net.unraid.docker.webui=http://{{ app_name }}-metrics.{{ domain }}
