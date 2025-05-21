@@ -48,7 +48,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - {{ backup_directory }}:/data
-      - {{ docker_settings_directory }}/resticprofile:/etc/resticprofile:ro'
+      - {{ docker_settings_directory }}/resticprofile:/etc/resticprofile
     labels:
       - traefik.enable=false
       - net.unraid.docker.icon=https://creativeprojects.github.io/resticprofile/images/logo.png
@@ -70,7 +70,7 @@ services:
       # - NO_STATS=True # Don't use NO_STATS as it's broken
     volumes:
       - {{ backup_directory }}:/data
-      - {{ docker_settings_directory }}/resticprofile:/etc/resticprofile'
+      - {{ docker_settings_directory }}/resticprofile:/etc/resticprofile:ro
     networks:
       - {{ network_name }}
     # ports:
