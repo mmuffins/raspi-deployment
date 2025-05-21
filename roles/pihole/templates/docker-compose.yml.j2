@@ -1,3 +1,6 @@
+---
+version: "3.7"
+
 services:
   pihole:
     image: {{ pihole_image }}
@@ -6,11 +9,10 @@ services:
       - NET_ADMIN
     environment:
       TZ: "{{ system_timezone }}"
-      FTLCONF_LOCAL_IPV4: {{ target_ip }}
-      FTLCONF_LOCAL_IPV6: {{ ipv6 }}
-      WEBPASSWORD: {{ pihole_webpassword }}
-      FTLCONF_MAXDBDAYS: {{ pihole_ftl_max_db_days }}
-      FTLCONF_MAXDBDAYS: {{ pihole_ftl_max_db_days }}
+      FTLCONF_reply_host_IPv4: {{ target_ip }}
+      FTLCONF_reply_host_IPv6: {{ ipv6 }}
+      FTLCONF_webserver_api_password: {{ pihole_webpassword }}
+      FTLCONF_database_maxDBdays: {{ pihole_ftl_max_db_days }}
     volumes:
       - "/home/{{ docker_user_name }}/pihole/pihole/:/etc/pihole/"
       - "/home/{{ docker_user_name }}/pihole/dnsmasq.d/:/etc/dnsmasq.d/"
