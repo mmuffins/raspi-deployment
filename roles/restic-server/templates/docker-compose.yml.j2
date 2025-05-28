@@ -64,9 +64,9 @@ services:
       - RESTIC_REPOSITORY=/data
       - RESTIC_PASSWORD_FILE=/etc/resticprofile/key
       - REFRESH_INTERVAL={{ resticexporter_refresh_interval }}
-      - NO_CHECK=True
-      - NO_LOCKS=True
-      - INCLUDE_PATHS=False
+      - NO_CHECK=true
+      - NO_LOCKS=true
+      # - INCLUDE_PATHS=false # Don't use INCLUDE_PATHS as it's broken
       # - NO_STATS=True # Don't use NO_STATS as it's broken
     volumes:
       - {{ backup_directory }}:/data
