@@ -1,11 +1,4 @@
 ---
-- name: Install dependencies
-  ansible.builtin.apt:
-    state: present
-    name: 
-      - acl
-      - cifs-utils
-
 - name: Create backup group
   ansible.builtin.group:
     name:  "{{ backup_user_name }}"
@@ -29,72 +22,96 @@
     append: yes
     state: present
 
-- name: Ensure backup directories exists
+- name: Add backup user to docker group
+  ansible.builtin.user:
+    name: "{{ backup_user_name }}"
+    groups: docker
+    append: yes
+    state: present
+
+# - name: Ensure restic repo key file exists
+#   ansible.builtin.lineinfile:
+#     path: "{{ backup_dir }}/key"
+#     regexp: '.*'
+#     line: "{{ backup_restic_repository_key }}"
+#     create: yes
+#     mode: 0600
+
+# - name: Ensure restic config exists
+#   ansible.builtin.template:
+#     src: "templates/profiles.toml.j2"
+#     dest: "{{ backup_dir }}/profiles.toml"
+#     mode: 0666
+#     owner: "{{ backup_user_name }}"
+#     group: "{{ backup_user_name }}"
+
+- name: Ensure backrest base directory exists
   ansible.builtin.file:
+    path: "/home/{{ backup_user_name }}/backrest"
     state: directory
     owner: "{{ backup_user_name }}"
     group: "{{ backup_user_name }}"
-    mode: 0774
-    path: "{{ item.path }}"
-  loop:
-    - { path: "{{ backup_dir }}" }
-    - { path: "{{ backup_script_dir }}" }
-    - { path: "{{ backup_log_directory }}" }
-    - { path: "{{ backup_script_dir }}/mnt" }
+    mode: '0770'
 
-- name: Ensure backup script exists
-  ansible.builtin.copy:
-    src: files/raspi-backup-syncfiles.sh
-    dest: "{{ backup_script_dir }}/raspi-backup-syncfiles.sh"
-    owner: "{{ backup_user_name }}"
-    group: "{{ backup_user_name }}"
-    mode: 0777
-
-- name: Ensure linux file endings in backup script
-  ansible.builtin.replace:
-    path: "{{ backup_script_dir }}/raspi-backup-syncfiles.sh"
-    regexp: "\r"
-  changed_when: false
-  check_mode: false
-    
-- name: Ensure backup credential file exists
-  ansible.builtin.template:
-    src: "templates/backupCredFile.j2"
-    dest: "{{ backup_script_dir }}/.backupcreds"
-    mode: 0600
-    owner: "{{ backup_user_name }}"
-    group: "{{ backup_user_name }}"
-
-- name: Update backup configs
-  ansible.builtin.template:
-    src: "templates/backupconf.j2"
-    dest: "{{ backup_script_dir }}/backup-config"
-    mode: 0666
-    owner: "{{ backup_user_name }}"
-    group: "{{ backup_user_name }}"
-
-- name: Create backup list
+- name: Create backrest sub-directories
   ansible.builtin.file:
-    path: "{{ backup_list }}"
-    state: touch
-    mode: 0666
+    path: "/home/{{ backup_user_name }}/backrest/{{ item }}"
+    state: directory
     owner: "{{ backup_user_name }}"
     group: "{{ backup_user_name }}"
-    modification_time: preserve
-    access_time: preserve
+    mode: '0770'
+  loop:
+    - data
+    - cache
+    - config
 
-- name: Setup fstab
-  ansible.builtin.lineinfile:
-    dest: /etc/fstab
+# - name: Ensure linux file endings in backup script
+#   ansible.builtin.replace:
+#     path: "{{ backup_script_dir }}/raspi-backup-syncfiles.sh"
+#     regexp: "\r"
+#   changed_when: false
+#   check_mode: false
+    
+
+# - name: Create cron job
+#   ansible.builtin.cron:
+#     user: "{{ backup_user_name }}"
+#     name: "Run backup"
+#     minute: 0
+#     hour: 4
+#     job: "bash {{ backup_script_dir }}/raspi-backup-syncfiles.sh >/dev/null 2>&1"
+
+
+- name: Create docker folder
+  ansible.builtin.file:
+    state: directory
+    path: "/home/{{ backup_user_name }}/docker/backrest"
+    owner: "{{ backup_user_name }}"
+    group: "{{ backup_user_name }}"
+    mode: 0770
+
+- name: Create docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "/home/{{ backup_user_name }}/docker/backrest/docker-compose.yml"
+    mode: 0644
+    owner: "{{ backup_user_name }}"
+    group: "{{ backup_user_name }}"
+
+- name: Start container
+  community.docker.docker_compose:
     state: present
-    regexp: '^{{ backup_remote_share }}/{{ inventory_hostname }}\s+{{ backup_script_dir }}/mnt.*credentials={{ backup_script_dir }}/.backupcreds'
-    line: "{{ backup_remote_share }}/{{ inventory_hostname }}  {{ backup_script_dir }}/mnt cifs  noauto,users,credentials={{ backup_script_dir }}/.backupcreds,vers=1.0  0  0"
-  notify: reboot
+    pull: true
+    project_src: "/home/{{ backup_user_name }}/docker/backrest"
+  become: yes
+  become_user: "{{ backup_user_name }}"
+  register: backrest_docker_output
 
-- name: Create cron job
-  ansible.builtin.cron:
-    user: "{{ backup_user_name }}"
-    name: "Run backup"
-    minute: 0
-    hour: 4
-    job: "bash {{ backup_script_dir }}/raspi-backup-syncfiles.sh >/dev/null 2>&1"
+- name: Prune docker images
+  community.docker.docker_prune:
+    containers: yes
+    networks: yes
+    volumes: yes
+    images: yes
+    images_filters:
+      dangling: false

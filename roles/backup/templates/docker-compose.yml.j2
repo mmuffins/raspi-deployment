@@ -1,0 +1,22 @@
+---
+version: "3.7"
+
+services:
+  backrest:
+    image: garethgeorge/backrest:latest
+    hostname: {{ inventory_hostname }}
+    container_name: backrest
+    ports:
+      - 9898:9898
+    environment:
+      TZ: "{{ system_timezone }}"
+      BACKREST_DATA: "/data"
+      BACKREST_CONFIG: "/config/config.json"
+      XDG_CACHE_HOME: "/cache" 
+    volumes:
+      - /home/{{ backup_user_name }}/backrest/data:/data
+      - /home/{{ backup_user_name }}/backrest/config:/config
+      - /home/{{ backup_user_name }}/backrest/cache:/cache
+      - /home:/home # currently the only thing being backed up
+    network_mode: host
+    restart: unless-stopped

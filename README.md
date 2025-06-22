@@ -46,6 +46,9 @@ ansible-playbook --inventory ./inventories/production <Playbook>.yml
 ansible-playbook --inventory ./inventories/production pihole.yml --limit <target host> --extra-vars 'ansible_host=<current raspberry IP> target_ip=<target IP>'
 ```
 
+### Backup
+After installing backrest on a raspberry, open `http://<hostname>:9898` to configure it.
+
 
 ## Unraid deployment guide
 ### Bootstrapping
