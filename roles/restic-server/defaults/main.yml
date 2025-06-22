@@ -1,0 +1,19 @@
+description: "Rest Server is a high performance HTTP server that implements restic's REST backend API."
+display_name: "Restic Server"
+app_name: resticserver
+resticserver_image: restic/rest-server:latest
+resticprofile_image: creativeprojects/resticprofile:latest
+resticexporter_image: ngosang/restic-exporter:latest
+traefik_endpoint: http
+network_name: reverse-proxy
+docker_compose_directory: /mnt/user/appdata/docker-compose
+docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
+docker_settings_directory: /mnt/user/appdata
+backup_directory: /mnt/user/backup/restic
+resticexporter_refresh_interval: 43200
+docker_puid: 1000
+docker_pgid: 1000
+docker_timezone: Europe/Vienna
+file_mask: 0644
+folder_mask: 0777
+icon_url: "https://restic.net/apple-touch-icon-144-precomposed.png"

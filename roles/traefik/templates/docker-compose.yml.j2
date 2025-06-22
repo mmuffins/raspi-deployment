@@ -1,6 +1,4 @@
 ---
-  version: '3.8'
-  
   networks:
     default:
       internal: false
@@ -12,6 +10,7 @@
       restart: unless-stopped
       ports:
         - {{ webui_port }}:{{ webui_port }}
+        - 9090:9090
       volumes:
         - /etc/localtime:/etc/localtime:ro 
         - /var/run/docker.sock:/var/run/docker.sock:ro

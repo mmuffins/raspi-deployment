@@ -27,10 +27,9 @@ create_users:
     enable_sudo: false
 
 # backup
-backup_remote_share: "//smbserver/backup"
-backup_remote_share_user: "pibackup"
-backup_remote_share_password: "badPass"
-backup_retention_days: 7
+backup_restic_restserver_user: testuser
+backup_restic_restserver_password: badPass123
+backup_restic_repository_key: secret_repo_key
 
 # samba
 smb_credentials: testuser;badPass123
