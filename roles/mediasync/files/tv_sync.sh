@@ -13,24 +13,25 @@ if ! (mount | grep "$smb_share" > /dev/null); then
   exit 0
 fi
 
-echo "Syncing $local_tv_dir to $remote_tv_dir"
+echo "Syncing ${local_tv_dir} to ${remote_tv_dir}"
+rsync -ah --info=name --delete --bwlimit=$rsync_max_speed $local_tv_dir/ $remote_tv_dir/
 
-# ensure each show in the local folder also exists on the remote share
-for d in $local_tv_dir/*/ ; do
-  tvfolder=$(basename "$d")
-  if [ ! -d "$remote_tv_dir/$tvfolder" ]; then
-	echo "Creating folder $tvfolder in $remote_tv_dir"
-	mkdir "$remote_tv_dir/$tvfolder"
-  fi
+# # ensure each show in the local folder also exists on the remote share
+# for d in $local_tv_dir/*/ ; do
+#   tvfolder=$(basename "$d")
+#   if [ ! -d "$remote_tv_dir/$tvfolder" ]; then
+# 	echo "Creating folder $tvfolder in $remote_tv_dir"
+# 	mkdir "$remote_tv_dir/$tvfolder"
+#   fi
   
-  # copy the current season (which hopefully has the lowest name) for each show to the remote share
-  cd "$d"
-  lowestSeason=$(ls -vdF Season*/ | head -n1)
-  remoteSeasonFolder="$remote_tv_dir/$tvfolder/$lowestSeason"
-  if [ ! -d "$remoteSeasonFolder" ]; then
-	echo "Creating folder ${lowestSeason} in ${remote_tv_dir}/${tvfolder}"
-	mkdir "$remoteSeasonFolder"
-  fi
+#   # copy the current season (which hopefully has the lowest name) for each show to the remote share
+#   cd "$d"
+#   lowestSeason=$(ls -vdF Season*/ | head -n1)
+#   remoteSeasonFolder="$remote_tv_dir/$tvfolder/$lowestSeason"
+#   if [ ! -d "$remoteSeasonFolder" ]; then
+# 	echo "Creating folder ${lowestSeason} in ${remote_tv_dir}/${tvfolder}"
+# 	mkdir "$remoteSeasonFolder"
+#   fi
     
-  rsync -ah --info=name --bwlimit=$rsync_max_speed "$d/$lowestSeason" "$remoteSeasonFolder/"
-done
+#   rsync -ah --info=name --bwlimit=$rsync_max_speed "$d/$lowestSeason" "$remoteSeasonFolder/"
+# done
