@@ -12,6 +12,7 @@ sudo apt-get update && time sudo apt-get dist-upgrade
 - Mount the ansible playbook folder with metadata support (see https://devblogs.microsoft.com/commandline/chmod-chown-wsl-improvements/)
 ```
 sudo mkdir /mnt/ansible
+sudo chmod o-w /mnt/ansible
 sudo mount -t drvfs [Deployment scripts folder] /mnt/ansible -o metadata
 # e.g.
 sudo mount -t drvfs C:/Users/email_000/source/DeploymentScripts/ /mnt/ansible -o metadata

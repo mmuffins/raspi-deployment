@@ -1,8 +1,5 @@
-# Default variables for the obsidian role
-# Configure application metadata and docker settings
-
-description: "Self-hosted Obsidian Sync with CouchDB backend."
-display_name: "Obsidian Sync"
+description: "Obsidian with CouchDB backend."
+display_name: "Obsidian"
 app_name: obsidian
 obsidian_image: linuxserver/obsidian:1.9.14
 couchdb_image: couchdb:3.5
@@ -16,7 +13,7 @@ docker_pgid: 1000
 docker_timezone: Europe/Vienna
 file_mask: 0644
 folder_mask: 0777
-icon_url: "https://obsidian.md/images/obsidian-logo-gradient.svg"
+icon_url: "https://obsidian.md/favicon.ico"
 obsidian_couchdb_user: obsidian
 obsidian_couchdb_password: changeMe
 obsidian_couchdb_port: 5984
