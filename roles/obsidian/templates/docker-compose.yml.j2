@@ -1,0 +1,50 @@
+---
+version: "3.8"
+
+networks:
+  {{ network_name }}:
+    external: true
+
+services:
+  couchdb:
+    image: {{ couchdb_image }}
+    container_name: "{{ app_name }}-couchdb"
+    restart: unless-stopped
+    environment:
+      - COUCHDB_USER={{ obsidian_couchdb_user }}
+      - COUCHDB_PASSWORD={{ obsidian_couchdb_password }}
+    volumes:
+      - {{ docker_settings_directory }}/{{ app_name }}/couchdb/data:/opt/couchdb/data
+      - {{ docker_settings_directory }}/{{ app_name }}/couchdb/etc:/opt/couchdb/etc/local.d
+    networks:
+      - {{ network_name }}
+
+  {{ app_name }}:
+    image: {{ obsidian_image }}
+    container_name: {{ app_name }}
+    restart: unless-stopped
+    depends_on:
+      - couchdb
+    environment:
+      - PUID={{ docker_puid }}
+      - PGID={{ docker_pgid }}
+      - TZ={{ docker_timezone }}
+      - COUCHDB_PROTOCOL=http
+      - COUCHDB_HOST=couchdb
+      - COUCHDB_PORT={{ obsidian_couchdb_port }}
+      - COUCHDB_USER={{ obsidian_couchdb_user }}
+      - COUCHDB_USERNAME={{ obsidian_couchdb_user }}
+      - COUCHDB_PASSWORD={{ obsidian_couchdb_password }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ docker_settings_directory }}/{{ app_name }}/config:/config
+    networks:
+      - {{ network_name }}
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network={{ network_name }}
+      - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
+      - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
+      - traefik.http.services.{{ app_name }}.loadbalancer.server.port={{ obsidian_service_port }}
+      - net.unraid.docker.icon={{ icon_url }}
+      - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}

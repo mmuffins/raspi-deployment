@@ -1,0 +1,23 @@
+# Default variables for the obsidian role
+# Configure application metadata and docker settings
+
+description: "Self-hosted Obsidian Sync with CouchDB backend."
+display_name: "Obsidian Sync"
+app_name: obsidian
+obsidian_image: linuxserver/obsidian:1.9.14
+couchdb_image: couchdb:3.5
+traefik_endpoint: http
+network_name: reverse-proxy
+docker_settings_directory: /mnt/user/appdata
+docker_compose_directory: /mnt/user/appdata/docker-compose
+docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
+docker_puid: 1000
+docker_pgid: 1000
+docker_timezone: Europe/Vienna
+file_mask: 0644
+folder_mask: 0777
+icon_url: "https://obsidian.md/images/obsidian-logo-gradient.svg"
+obsidian_couchdb_user: obsidian
+obsidian_couchdb_password: changeMe
+obsidian_couchdb_port: 5984
+obsidian_service_port: 3000
