@@ -1,0 +1,43 @@
+---
+
+networks:
+  {{ network_name }}:
+    external: true
+
+services:
+  {{ app_name }}:
+    image: {{ syncthing_image }}
+    container_name: {{ app_name }}
+    restart: unless-stopped
+    environment:
+      - PUID={{ docker_puid }}
+      - PGID={{ docker_pgid }}
+      - UMASK={{ syncthing_default_umask }}
+      - TZ={{ docker_timezone }}
+      - STGUIADDRESS=0.0.0.0:{{ syncthing_gui_port }}
+      - STNODEFAULTFOLDER={{ 'yes' if syncthing_disable_default_folder else 'no' }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ docker_settings_directory }}/{{ app_name }}/config:/var/syncthing/config
+      - {{ docker_settings_directory }}/{{ app_name }}/data:/var/syncthing/data
+    networks:
+      - {{ network_name }}
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network={{ network_name }}
+      - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
+      - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
+      - traefik.http.services.{{ app_name }}.loadbalancer.server.port={{ syncthing_gui_port }}
+      - net.unraid.docker.icon={{ icon_url }}
+      - net.unraid.docker.webui=https://{{ app_name }}.{{ domain }}
+      - traefik.tcp.routers.{{ app_name }}-sync.rule=HostSNI(`*`)
+      - traefik.tcp.routers.{{ app_name }}-sync.tls=false
+      - traefik.tcp.routers.{{ app_name }}-sync.entrypoints=syncthing-sync
+      - traefik.tcp.routers.{{ app_name }}-sync.service={{ app_name }}-sync-svc
+      - traefik.tcp.services.{{ app_name }}-sync-svc.loadbalancer.server.port={{ syncthing_sync_port }}
+      - traefik.udp.routers.{{ app_name }}-quic.entrypoints=syncthing-sync-quic
+      - traefik.udp.routers.{{ app_name }}-quic.service={{ app_name }}-quic-svc
+      - traefik.udp.services.{{ app_name }}-quic-svc.loadbalancer.server.port={{ syncthing_quic_port }}
+      - traefik.udp.routers.{{ app_name }}-discovery.entrypoints=syncthing-discovery
+      - traefik.udp.routers.{{ app_name }}-discovery.service={{ app_name }}-discovery-svc
+      - traefik.udp.services.{{ app_name }}-discovery-svc.loadbalancer.server.port={{ syncthing_discovery_port }}

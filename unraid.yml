@@ -16,3 +16,4 @@
     - role: unraid-shares-backup
     - role: freshrss
     - role: artist-resolver
+    - role: syncthing
