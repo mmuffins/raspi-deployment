@@ -22,6 +22,10 @@ services:
       - {{ docker_settings_directory }}/{{ app_name }}/data:/var/syncthing/data
     networks:
       - {{ network_name }}
+    # ports:
+    #   - 8384:8384
+    #   - 22000:22000
+    #   - 21027:21027/udp
     labels:
       - traefik.enable=true
       - traefik.docker.network={{ network_name }}
@@ -29,7 +33,7 @@ services:
       - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
       - traefik.http.services.{{ app_name }}.loadbalancer.server.port={{ syncthing_gui_port }}
       - net.unraid.docker.icon={{ icon_url }}
-      - net.unraid.docker.webui=https://{{ app_name }}.{{ domain }}
+      - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}
       - traefik.tcp.routers.{{ app_name }}-sync.rule=HostSNI(`*`)
       - traefik.tcp.routers.{{ app_name }}-sync.tls=false
       - traefik.tcp.routers.{{ app_name }}-sync.entrypoints=syncthing-sync
