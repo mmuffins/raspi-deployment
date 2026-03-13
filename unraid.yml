@@ -8,6 +8,7 @@
     - role: nzbhydra
     - role: nzbhydra-scheduler
     - role: shoko
+    - role: seanime
     - role: starr-apps
     - role: qbittorrent
     - role: restic-server
