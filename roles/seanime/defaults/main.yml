@@ -1,0 +1,16 @@
+description: "Open-source media server with a web interface and desktop app for anime and manga."
+display_name: "Seanime"
+app_name: seanime
+icon_url: "https://seanime.app/seanime-logo.png"
+seanime_image: umagistr/seanime:latest-rootless
+traefik_endpoint: http
+network_name: reverse-proxy
+docker_compose_directory: /mnt/user/appdata/docker-compose
+docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
+file_mask: 0644
+folder_mask: 0777
+seanime_server_host: 0.0.0.0
+seanime_container_port: 43211
+seanime_host_port: 3211
+seanime_anime_directory: /mnt/user/media/anime
+seanime_downloads_directory: /mnt/user/torrents

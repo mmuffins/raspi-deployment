@@ -1,31 +1,33 @@
 ---
-
 networks:
   {{ network_name }}:
     external: true
 
 services:
   {{ app_name }}:
-    image: {{ sabnzbd_image }} 
+    image: {{ seanime_image }}
     container_name: {{ app_name }}
     restart: unless-stopped
     environment:
       - PUID={{ docker_puid }}
       - PGID={{ docker_pgid }}
       - TZ={{ docker_timezone }}
+      - SEANIME_SERVER_HOST={{ seanime_server_host }}
+      - SEANIME_SERVER_PORT={{ seanime_container_port }}
+    ports:
+      - "{{ seanime_host_port }}:{{ seanime_container_port }}"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - {{ docker_settings_directory }}/{{ app_name }}:/config
-      - {{ docker_usenet_share }}:/data/usenet:rw
+      - {{ docker_settings_directory }}/{{ app_name }}:/home/seanime/.config/Seanime
+      - {{ seanime_anime_directory }}:/anime
+      - {{ seanime_downloads_directory }}:/downloads
     networks:
       - {{ network_name }}
-    # ports:
-    #   - 8089:8080
     labels:
       - traefik.enable=true
       - traefik.docker.network={{ network_name }}
       - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
       - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
-      - traefik.http.services.{{ app_name }}.loadbalancer.server.port=8080
+      - traefik.http.services.{{ app_name }}.loadbalancer.server.port={{ seanime_container_port }}
       - net.unraid.docker.icon={{ icon_url }}
       - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}
