@@ -10,6 +10,8 @@ services:
     container_name: {{ app_name }}
     restart: unless-stopped
     environment:
+      - PUID={{ docker_puid }}
+      - PGID={{ docker_pgid }}
       - TZ={{ docker_timezone }}
     volumes:
       - /etc/localtime:/etc/localtime:ro
