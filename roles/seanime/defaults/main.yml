@@ -7,10 +7,14 @@ traefik_endpoint: http
 network_name: reverse-proxy
 docker_compose_directory: /mnt/user/appdata/docker-compose
 docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
+docker_media_share: /mnt/user/media
+docker_usenet_share: /mnt/user/usenet
 file_mask: 0644
 folder_mask: 0777
+docker_puid: 1000
+docker_pgid: 1000
+docker_timezone: Europe/Vienna
 seanime_server_host: 0.0.0.0
 seanime_container_port: 43211
 seanime_host_port: 3211
 seanime_anime_directory: /mnt/user/media/anime
-seanime_downloads_directory: /mnt/user/torrents
