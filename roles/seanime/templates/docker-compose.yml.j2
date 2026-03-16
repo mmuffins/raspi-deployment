@@ -20,7 +20,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - {{ docker_settings_directory }}/{{ app_name }}:/home/seanime/.config/Seanime
       - {{ seanime_anime_directory }}:/anime
-      - {{ seanime_downloads_directory }}:/downloads
+      - {{ docker_media_share }}/anime:/shokoanime:ro
+      - {{ docker_usenet_share }}/anime:/downloads
     networks:
       - {{ network_name }}
     labels:
