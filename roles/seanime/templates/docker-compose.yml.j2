@@ -32,3 +32,26 @@ services:
       - traefik.http.services.{{ app_name }}.loadbalancer.server.port={{ seanime_container_port }}
       - net.unraid.docker.icon={{ icon_url }}
       - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}
+
+  seanime-mover:
+    image: mmuffins/seanime-mover:latest
+    container_name: seanime-mover
+    restart: unless-stopped
+    environment:
+      - PUID={{ docker_puid }}
+      - PGID={{ docker_pgid }}
+      - TZ={{ docker_timezone }}
+      - SCAN_INTERVAL_SECONDS={{ seanime_mover_scan_interval_seconds }}
+      - READY_AGE_SECONDS={{ seanime_mover_ready_age_seconds }}
+      - CLEAN_QUEUE_INTERVAL_SECONDS={{ seanime_mover_clean_queue_interval_seconds }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ seanime_anime_directory }}:/source
+      - {{ docker_usenet_share }}/anime:/dest
+      - {{ docker_settings_directory }}/seanime-mover:/config
+    networks:
+      - {{ network_name }}
+    labels:
+      - traefik.enable=false
+      - traefik.docker.network={{ network_name }}
+      - net.unraid.docker.icon={{ icon_url }}

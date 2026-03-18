@@ -58,6 +58,14 @@
     group: "{{ docker_group_id }}"
     mode: "{{ folder_mask }}"
 
+- name: Create mover settings folder
+  ansible.builtin.file:
+    state: directory
+    path: "{{ docker_settings_directory }}/seanime-mover"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: "{{ folder_mask }}"
+
 - name: Create docker-compose file
   ansible.builtin.template:
     src: docker-compose.yml.j2
