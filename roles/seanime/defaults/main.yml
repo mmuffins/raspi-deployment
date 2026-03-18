@@ -18,3 +18,6 @@ seanime_server_host: 0.0.0.0
 seanime_container_port: 43211
 seanime_host_port: 3211
 seanime_anime_directory: /mnt/user/media/anime
+seanime_mover_scan_interval_seconds: 60
+seanime_mover_ready_age_seconds: 60
+seanime_mover_clean_queue_interval_seconds: 86400
