@@ -21,3 +21,4 @@ seanime_anime_directory: /mnt/user/media/anime
 seanime_mover_scan_interval_seconds: 60
 seanime_mover_ready_age_seconds: 60
 seanime_mover_clean_queue_interval_seconds: 86400
+seanime_mover_min_file_size_bytes: 0
