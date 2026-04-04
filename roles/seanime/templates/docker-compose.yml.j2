@@ -43,6 +43,7 @@ services:
       - TZ={{ docker_timezone }}
       - SCAN_INTERVAL_SECONDS={{ seanime_mover_scan_interval_seconds }}
       - READY_AGE_SECONDS={{ seanime_mover_ready_age_seconds }}
+      - MIN_FILE_SIZE_BYTES={{ seanime_mover_min_file_size_bytes }}
       - CLEAN_QUEUE_INTERVAL_SECONDS={{ seanime_mover_clean_queue_interval_seconds }}
     volumes:
       - /etc/localtime:/etc/localtime:ro
