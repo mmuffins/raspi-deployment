@@ -22,3 +22,6 @@ seanime_mover_scan_interval_seconds: 60
 seanime_mover_ready_age_seconds: 60
 seanime_mover_clean_queue_interval_seconds: 86400
 seanime_mover_min_file_size_bytes: 0
+seanime_cleaner_api_key: REPLACE_ME
+seanime_cleaner_max_age_days: 60
+seanime_cleaner_interval_seconds: 86400
