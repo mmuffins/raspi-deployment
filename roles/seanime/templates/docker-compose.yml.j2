@@ -45,6 +45,9 @@ services:
       - READY_AGE_SECONDS={{ seanime_mover_ready_age_seconds }}
       - MIN_FILE_SIZE_BYTES={{ seanime_mover_min_file_size_bytes }}
       - CLEAN_QUEUE_INTERVAL_SECONDS={{ seanime_mover_clean_queue_interval_seconds }}
+      - DOWNLOADER_API_KEY={{ seanime_cleaner_api_key }}
+      - DOWNLOADER_QUEUE_MAX_AGE_DAYS={{ seanime_cleaner_max_age_days }}
+      - CLEAN_QUEUE_INTERVAL_SECONDS={{ seanime_cleaner_interval_seconds }}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - {{ seanime_anime_directory }}:/source
