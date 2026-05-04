@@ -1,2 +1,6 @@
 inventories/production/
 old.zip
+
+.direnv
+/result
+output/
