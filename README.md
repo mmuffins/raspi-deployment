@@ -38,6 +38,12 @@ ansible-playbook raspi-bootstrap.yml --inventory ./inventories/production --ask-
 
 ### Run playbook
 - Check the variables and list of users to create in  `group_vars/raspi.yml`
+- Test the playbook
+```
+ansible pihole --inventory ./inventories/production -m ping
+ansible-playbook --inventory ./inventories/production pihole.yml --check --diff
+```
+
 - Run the playbook
 ```
 cd /mnt/ansible
@@ -49,7 +55,6 @@ ansible-playbook --inventory ./inventories/production pihole.yml --limit <target
 
 ### Backup
 After installing backrest on a raspberry, open `http://<hostname>:9898` to configure it.
-
 
 ## Unraid deployment guide
 ### Bootstrapping
@@ -69,6 +74,7 @@ After installing backrest on a raspberry, open `http://<hostname>:9898` to confi
 ```
 cd /mnt/ansible
 ansible unraid --inventory ./inventories/production -m ping
+ansible-playbook --inventory ./inventories/production unraid.yml --check --diff
 ```
 - Run the playbook
 ```
