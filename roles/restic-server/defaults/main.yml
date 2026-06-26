@@ -1,3 +1,4 @@
+---
 description: "Rest Server is a high performance HTTP server that implements restic's REST backend API."
 display_name: "Restic Server"
 app_name: resticserver
@@ -14,6 +15,6 @@ resticexporter_refresh_interval: 43200
 docker_puid: 1000
 docker_pgid: 1000
 docker_timezone: Europe/Vienna
-file_mask: 0644
-folder_mask: 0777
+file_mask: "0644"
+folder_mask: "0777"
 icon_url: "https://restic.net/apple-touch-icon-144-precomposed.png"

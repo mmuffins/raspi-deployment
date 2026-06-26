@@ -1,3 +1,4 @@
+---
 description: "Open-source media server with a web interface and desktop app for anime and manga."
 display_name: "Seanime"
 app_name: seanime
@@ -9,8 +10,8 @@ docker_compose_directory: /mnt/user/appdata/docker-compose
 docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
 docker_media_share: /mnt/user/media
 docker_usenet_share: /mnt/user/usenet
-file_mask: 0644
-folder_mask: 0777
+file_mask: "0644"
+folder_mask: "0777"
 docker_puid: 1000
 docker_pgid: 1000
 docker_timezone: Europe/Vienna

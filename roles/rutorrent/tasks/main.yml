@@ -1,6 +1,5 @@
 ---
-- import_tasks: facts.yml
-
+- ansible.builtin.import_tasks: facts.yml
 - ansible.posix.sysctl:
     state: present
     name: "{{ item.name }}"
@@ -16,13 +15,13 @@
     path: "/home/{{ docker_user_name }}/docker/rutorrent"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: 0770
+    mode: "0770"
 
 - name: Create docker-compose file
   ansible.builtin.template:
     src: docker-compose.yml.j2
     dest: "/home/{{ docker_user_name }}/docker/rutorrent/docker-compose.yml"
-    mode: 0644
+    mode: "0644"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
 
@@ -30,7 +29,7 @@
   ansible.builtin.template:
     src: .env.j2
     dest: "/home/{{ docker_user_name }}/docker/rutorrent/.env"
-    mode: 0644
+    mode: "0644"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
 
@@ -38,7 +37,7 @@
   ansible.builtin.template:
     src: rtorrent-rutorrent.env.j2
     dest: "/home/{{ docker_user_name }}/docker/rutorrent/rtorrent-rutorrent.env"
-    mode: 0644
+    mode: "0644"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
 
@@ -47,19 +46,19 @@
     state: directory
     owner: "{{ docker_user_name }}"
     group: "{{ docker_group_name }}"
-    mode: 0774
+    mode: "0774"
     path: "{{ item.path }}"
   loop:
     - { path: "/home/{{ docker_user_name }}/data" }
     - { path: "/home/{{ docker_user_name }}/torrents" }
     - { path: "/home/{{ docker_user_name }}/passwd" }
 
-- import_tasks: backup.yml
+- ansible.builtin.import_tasks: backup.yml
   when: backup_list is defined
   tags:
     - backup
 
-- import_tasks: smb.yml
+- ansible.builtin.import_tasks: smb.yml
   when: smb_user_name is defined
   tags:
     - smb
@@ -77,15 +76,15 @@
     state: present
     pull: true
     project_src: "/home/{{ docker_user_name }}/docker/rutorrent"
-  become: yes
+  become: true
   become_user: "{{ docker_user_name }}"
   register: rutorrent_docker_output
 
 - name: Prune docker images
   community.docker.docker_prune:
-    containers: yes
-    networks: yes
-    volumes: yes
-    images: yes
+    containers: true
+    networks: true
+    volumes: true
+    images: true
     images_filters:
       dangling: false

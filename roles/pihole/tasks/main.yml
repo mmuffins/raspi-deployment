@@ -1,13 +1,12 @@
 ---
 # https://github.com/shaderecker/ansible-pihole
 
-- import_tasks: facts.yml
-
+- ansible.builtin.import_tasks: facts.yml
 - name: Set up static IP
-  template:
+  ansible.builtin.template:
     src: "templates/dhcpcd.conf.j2"
     dest: "/etc/dhcpcd.conf"
-    mode: 0644
+    mode: "0644"
     owner: root
     group: root
   notify: reboot
@@ -18,9 +17,9 @@
     path: "/home/{{ docker_user_name }}/pihole"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: 0755
+    mode: "0755"
 
-- import_tasks: backup.yml
+- ansible.builtin.import_tasks: backup.yml
   when: backup_list is defined
   tags:
     - backup
@@ -31,10 +30,10 @@
     path: "/home/{{ docker_user_name }}/docker/pihole"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: 0770
+    mode: "0770"
 
 - name: Get IPv6 link local address
-  set_fact:
+  ansible.builtin.set_fact:
     ipv6: "{{ item.address }}"
   loop: "{{ vars['ansible_' + ansible_default_ipv6.interface | default(ansible_default_ipv4.interface)].ipv6 }}"
   loop_control:
@@ -45,7 +44,7 @@
   ansible.builtin.template:
     src: docker-compose.yml.j2
     dest: "/home/{{ docker_user_name }}/docker/pihole/docker-compose.yml"
-    mode: 0644
+    mode: "0644"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
 
@@ -64,22 +63,22 @@
     state: present
     pull: true
     project_src: "/home/{{ docker_user_name }}/docker/pihole"
-  become: yes
+  become: true
   become_user: "{{ docker_user_name }}"
   register: pihole_docker_output
 
 - name: Prune docker images
   community.docker.docker_prune:
-    containers: yes
-    networks: yes
-    volumes: yes
-    images: yes
+    containers: true
+    networks: true
+    volumes: true
+    images: true
     images_filters:
       dangling: false
 
 - name: Use local pihole instance for dns resolution
   ansible.builtin.lineinfile:
-    dest: '/etc/resolv.conf.head'
+    dest: "/etc/resolv.conf.head"
     create: true
     state: present
-    line: 'nameserver 127.0.1.1'
+    line: "nameserver 127.0.1.1"

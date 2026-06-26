@@ -1,48 +1,42 @@
 ---
 - name: Create ansible group
-  group:
+  ansible.builtin.group:
     name: "ansible"
     state: present
 
 - name: Allow ansible group to have passwordless sudo
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/sudoers
     state: present
-    regexp: '^%ansible'
-    line: '%ansible ALL=(ALL) NOPASSWD: ALL'
-    validate: 'visudo -cf %s'
+    regexp: "^%ansible"
+    line: "%ansible ALL=(ALL) NOPASSWD: ALL"
+    validate: "visudo -cf %s"
 
-- name: create users
-  user: name="ansideploy"
-        comment="Ansible user"
-        group="users"
-        groups="adm,ansible,dialout,sudo,audio,video,plugdev,games,input,netdev,spi,i2c,gpio"
-        state=present
-        shell=/bin/bash
-        createhome=yes
-
+- name: Create users
+  ansible.builtin.user: name="ansideploy" comment="Ansible user" group="users"
+    groups="adm,ansible,dialout,sudo,audio,video,plugdev,games,input,netdev,spi,i2c,gpio" state=present shell=/bin/bash createhome=yes
 - name: Install ssh-key
-  authorized_key:
+  ansible.posix.authorized_key:
     user: ansideploy
     state: present
-    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/ansible_ed25519.pub') }}"
+    key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/ansible_ed25519.pub') }}"
 
 - name: "Set hostname to {{ inventory_hostname }}"
   ansible.builtin.hostname:
     name: "{{ inventory_hostname }}"
 
 - name: Check if autologin file exists
-  stat: path=/etc/systemd/system/getty@tty1.service.d/autologin.conf
+  ansible.builtin.stat: path=/etc/systemd/system/getty@tty1.service.d/autologin.conf
   register: autologin_conf_stat
 
 - name: Disable pi autologin
-  command: sudo mv /etc/systemd/system/getty@tty1.service.d/autologin.conf /etc/systemd/system/getty@tty1.service.d/autologin.conf.bak
+  ansible.builtin.command: sudo mv /etc/systemd/system/getty@tty1.service.d/autologin.conf /etc/systemd/system/getty@tty1.service.d/autologin.conf.bak
   when: autologin_conf_stat.stat.exists
 
 # In some cases the new ip address for the hostname is not immediately updated. Restart to force the update.
 # This step could fail, which is ugly but not critical.
 - name: Reboot
-  reboot:
+  ansible.builtin.reboot:
     msg: "Reboot initiated by Ansible"
     connect_timeout: 5
     reboot_timeout: 600

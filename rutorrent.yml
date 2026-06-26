@@ -1,15 +1,16 @@
+---
 - name: Raspberry Pi Setup
   hosts: rutorrent
-  become: yes
+  become: true
   become_user: root
   roles:
     - role: common
     - role: raspi
     - role: backup
-      tags: 
+      tags:
         - backup
     - role: docker
-      tags: 
+      tags:
         - docker
     - role: smb
       tags:

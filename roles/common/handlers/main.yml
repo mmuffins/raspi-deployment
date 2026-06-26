@@ -1,6 +1,6 @@
 ---
-- name: reboot
-  reboot:
+- name: Reboot
+  ansible.builtin.reboot:
     msg: "Reboot initiated by Ansible"
     connect_timeout: 5
     reboot_timeout: 600
@@ -8,19 +8,18 @@
     post_reboot_delay: 30
     test_command: whoami
 
-- name: update-locale
-  command: "update-locale LANG={{ system_locale }}"
-
-- name: restart-docker-samba
+- name: Update-locale
+  ansible.builtin.command: "update-locale LANG={{ system_locale }}"
+- name: Restart-docker-samba
   community.docker.docker_compose_v2:
     state: present
     pull: true
     project_src: "/home/{{ smb_user_name }}/docker/samba"
-  become: yes
+  become: true
   become_user: "{{ smb_user_name }}"
   register: smb_docker_output
 
-- name: restart docker
-  service:
+- name: Restart docker
+  ansible.builtin.service:
     name: docker
     state: restarted

@@ -20,7 +20,7 @@
     dest: "{{ docker_compose_app_directory }}/{{ app_name }}/name"
     create: true
     state: present
-    regexp: '.*'
+    regexp: ".*"
     line: "{{ display_name }}"
 
 - name: Set docker compose app description
@@ -28,7 +28,7 @@
     dest: "{{ docker_compose_app_directory }}/{{ app_name }}/description"
     create: true
     state: present
-    regexp: '.*'
+    regexp: ".*"
     line: "{{ description }}"
 
 - name: Set docker compose app redirection

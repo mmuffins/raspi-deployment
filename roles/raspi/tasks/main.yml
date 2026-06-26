@@ -1,32 +1,32 @@
 ---
-- import_tasks: set-locale.yml
+- ansible.builtin.import_tasks: set-locale.yml
   tags:
     - baseconfig
     - locale
 
-- import_tasks: set-bootconfig.yml
+- ansible.builtin.import_tasks: set-bootconfig.yml
   tags:
     - baseconfig
     - bootconfig
 
-- import_tasks: create-user.yml
+- ansible.builtin.import_tasks: create-user.yml
   tags:
     - baseconfig
     - user
 
-- import_tasks: secure-ssh.yml
+- ansible.builtin.import_tasks: secure-ssh.yml
   tags:
     - baseconfig
     - securessh
 
 - name: Upgrade packages
-  apt:
-    update_cache: yes
-    autoclean: yes
-    autoremove: yes
+  ansible.builtin.apt:
+    update_cache: true
+    autoclean: true
+    autoremove: true
     upgrade: dist
     cache_valid_time: 86400
-  tags: 
+  tags:
     - baseconfig
     - upgrade
   notify: reboot

@@ -1,6 +1,7 @@
+---
 - name: Raspberry Pi Setup
   hosts: hasatellite
-  become: yes
+  become: true
   become_user: root
   roles:
     # - role: common

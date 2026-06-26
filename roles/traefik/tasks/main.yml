@@ -1,6 +1,5 @@
 ---
-- import_tasks: facts.yml
-
+- ansible.builtin.import_tasks: facts.yml
 - name: Create docker compose app folder
   ansible.builtin.file:
     state: directory
@@ -14,7 +13,7 @@
     dest: "{{ docker_compose_app_directory }}/{{ app_name }}/name"
     create: true
     state: present
-    regexp: '.*'
+    regexp: ".*"
     line: "{{ display_name }}"
 
 - name: Set docker compose app description
@@ -22,7 +21,7 @@
     dest: "{{ docker_compose_app_directory }}/{{ app_name }}/description"
     create: true
     state: present
-    regexp: '.*'
+    regexp: ".*"
     line: "{{ description }}"
 
 - name: Set docker compose app redirection
@@ -59,7 +58,6 @@
     mode: "{{ file_mask }}"
   register: created_docker_compose
 
-
 - name: Create settings folder
   ansible.builtin.file:
     state: directory
@@ -76,7 +74,6 @@
     group: "{{ docker_group_id }}"
     mode: "{{ file_mask }}"
   register: created_traefik_config
-
 
 - name: Create traefik dynamic conf
   ansible.builtin.template:

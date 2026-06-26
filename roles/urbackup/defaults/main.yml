@@ -1,3 +1,4 @@
+---
 description: "Open source network backup for Windows and Linux"
 display_name: "UrBackup"
 app_name: urbackup
@@ -12,6 +13,6 @@ docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
 docker_puid: 99
 docker_pgid: 100
 docker_timezone: Europe/Vienna
-file_mask: 0644
-folder_mask: 0777
+file_mask: "0644"
+folder_mask: "0777"
 icon_url: "https://forums.urbackup.org/uploads/default/original/2X/1/1051fd74d1dcbc3ad4220b43007fcab5287272b0.png"

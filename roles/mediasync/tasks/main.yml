@@ -9,7 +9,7 @@
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ script_dir }}/"
-    mode: 0777
+    mode: "0777"
   with_fileglob:
     - "files/*"
 
@@ -17,7 +17,7 @@
   ansible.builtin.template:
     src: variables.j2
     dest: "{{ script_dir }}//variables"
-    mode: 0666
+    mode: "0666"
 
 - name: Create userscripts script folder
   ansible.builtin.file:
@@ -46,4 +46,4 @@
   ansible.builtin.template:
     src: script.j2
     dest: "{{ userscripts_app_directory }}/{{ script_name }}/script"
-    mode: 0666
+    mode: "0666"
