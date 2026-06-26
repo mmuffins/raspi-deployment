@@ -12,7 +12,7 @@
   command: "update-locale LANG={{ system_locale }}"
 
 - name: restart-docker-samba
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     state: present
     pull: true
     project_src: "/home/{{ smb_user_name }}/docker/samba"

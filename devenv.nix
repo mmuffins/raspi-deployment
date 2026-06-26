@@ -19,4 +19,14 @@
     echo "Ansible deployment environment"
     ansible --version
   '';
+
+  enterTest = ''
+    echo 'test pihole'
+    ansible pihole --inventory ./inventories/production -m ping
+    ansible-playbook --inventory ./inventories/production pihole.yml --check --diff
+
+    echo 'test unraid'
+    ansible unraid --inventory ./inventories/production -m ping
+    ansible-playbook --inventory ./inventories/production unraid.yml --check --diff
+  '';
 }

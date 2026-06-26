@@ -60,7 +60,7 @@
       platform: arm64
 
 - name: Start container
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     state: present
     pull: true
     project_src: "/home/{{ docker_user_name }}/docker/pihole"
