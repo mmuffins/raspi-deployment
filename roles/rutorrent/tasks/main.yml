@@ -74,7 +74,7 @@
 - name: Start container
   community.docker.docker_compose_v2:
     state: present
-    pull: true
+    pull: missing
     project_src: "/home/{{ docker_user_name }}/docker/rutorrent"
   become: true
   become_user: "{{ docker_user_name }}"

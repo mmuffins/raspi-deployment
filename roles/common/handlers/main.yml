@@ -13,7 +13,7 @@
 - name: Restart-docker-samba
   community.docker.docker_compose_v2:
     state: present
-    pull: true
+    pull: missing
     project_src: "/home/{{ smb_user_name }}/docker/samba"
   become: true
   become_user: "{{ smb_user_name }}"
