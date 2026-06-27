@@ -13,7 +13,9 @@
     pkgs.hadolint # Dockerfiles linting
   ];
 
-  # allowUnfree = true;
+  scripts.deployunraid.exec = ''
+    ansible-playbook --inventory ./inventories/production unraid.yml
+  '';
 
   enterShell = ''
     echo "Ansible deployment environment"
