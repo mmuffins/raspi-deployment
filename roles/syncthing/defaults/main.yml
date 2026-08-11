@@ -11,8 +11,8 @@ docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
 docker_puid: 1000
 docker_pgid: 1000
 docker_timezone: Europe/Vienna
-file_mask: 0644
-folder_mask: 0777
+file_mask: "0644"
+folder_mask: "0777"
 icon_url: "https://syncthing.net/img/favicon.png"
 syncthing_default_umask: "002"
 syncthing_disable_default_folder: true

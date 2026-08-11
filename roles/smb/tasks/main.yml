@@ -1,10 +1,7 @@
 ---
-- import_tasks: facts.yml
-
-# Not required for docker directly, but to set permissions needed to impersonate the user that
-# will run docker, see https://github.com/georchestra/ansible/issues/55
+- ansible.builtin.import_tasks: facts.yml
 - name: Install required packaged
-  apt:
+  ansible.builtin.apt:
     name: "{{ item }}"
     state: present
   with_items:
@@ -16,13 +13,13 @@
     path: "/home/{{ smb_user_name }}/docker/samba"
     owner: "{{ smb_user_name }}"
     group: "{{ smb_group_name }}"
-    mode: 0770
+    mode: "0770"
 
 - name: Create docker-compose file
   ansible.builtin.template:
     src: docker-compose.yml.j2
     dest: "/home/{{ smb_user_name }}/docker/samba/docker-compose.yml"
-    mode: 0644
+    mode: "0644"
     owner: "{{ smb_user_id }}"
     group: "{{ smb_group_id }}"
 
@@ -32,7 +29,7 @@
     path: "/home/{{ smb_user_name }}/docker/samba/samba.env"
     owner: "{{ smb_user_name }}"
     group: "{{ smb_group_name }}"
-    mode: 0644
+    mode: "0644"
     modification_time: preserve
     access_time: preserve
 
@@ -45,19 +42,19 @@
     - { line: "SHARE=home;/home;yes;no;no;all;" }
 
 - name: Start container
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     state: present
-    pull: true
+    pull: missing
     project_src: "/home/{{ smb_user_name }}/docker/samba"
-  become: yes
+  become: true
   become_user: "{{ smb_user_name }}"
   register: smb_docker_output
 
 - name: Prune docker images
   community.docker.docker_prune:
-    containers: yes
-    networks: yes
-    volumes: yes
-    images: yes
+    containers: true
+    networks: true
+    volumes: true
+    images: true
     images_filters:
       dangling: false

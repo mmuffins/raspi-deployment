@@ -1,8 +1,9 @@
+---
 script_dir: /mnt/user/appdata/mediasync
 script_description: "Keeps media files in sync"
 script_name: mediasync
-file_mask: 0777
-folder_mask: 0777
+file_mask: "0777"
+folder_mask: "0777"
 smb_username: SECRETUSER
 smb_password: SECRETPASS
 smb_share: //target.local/mediashare

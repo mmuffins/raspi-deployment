@@ -20,7 +20,7 @@
     dest: "{{ docker_compose_app_directory }}/{{ app_name }}/name"
     create: true
     state: present
-    regexp: '.*'
+    regexp: ".*"
     line: "{{ display_name }}"
 
 - name: Set docker compose app description
@@ -28,7 +28,7 @@
     dest: "{{ docker_compose_app_directory }}/{{ app_name }}/description"
     create: true
     state: present
-    regexp: '.*'
+    regexp: ".*"
     line: "{{ description }}"
 
 - name: Set docker compose app redirection
@@ -47,7 +47,6 @@
   when: app_redirection.changed == 1
   changed_when: false
   check_mode: false
-
 
 - name: Create docker-compose file
   ansible.builtin.template:

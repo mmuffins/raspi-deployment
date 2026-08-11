@@ -1,6 +1,5 @@
 ---
-- import_tasks: facts.yml
-
+- ansible.builtin.import_tasks: facts.yml
 - name: Create userscripts script folder
   ansible.builtin.file:
     state: directory
@@ -28,4 +27,4 @@
   ansible.builtin.template:
     src: script.j2
     dest: "{{ userscripts_app_directory }}/{{ script_name }}/script"
-    mode: 0666
+    mode: "0666"

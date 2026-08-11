@@ -1,15 +1,16 @@
+---
 - name: Raspberry Pi Setup
   hosts: piholeGroup
-  become: yes
+  become: true
   become_user: root
   roles:
     - role: common
     - role: raspi
     - role: docker
-      tags: 
+      tags:
         - docker
     - role: backup
-      tags: 
+      tags:
         - backup
     - role: smb
       tags:

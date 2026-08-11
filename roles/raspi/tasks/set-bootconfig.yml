@@ -1,5 +1,6 @@
 ---
 - name: Set boot config
+  notify: reboot
   block:
     - name: Configure options gpu memory
       ansible.builtin.lineinfile:
@@ -21,5 +22,3 @@
         insertafter: EOF
         state: present
       when: system_disable_wifi == true
-
-  notify: reboot

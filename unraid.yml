@@ -1,6 +1,7 @@
+---
 - name: Unraid Setup
   hosts: unraid
-  become: yes
+  become: true
   become_user: root
   roles:
     - role: traefik

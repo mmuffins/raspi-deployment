@@ -14,8 +14,6 @@ services:
       TZ: {{ docker_timezone }}
       OPTIONS: |
         --append-only
-        --prometheus
-        --prometheus-no-auth
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - {{ backup_directory }}:/data
@@ -48,6 +46,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - {{ backup_directory }}:/data
+      - {{ remote_backup_target_directory }}:/mnt/unraid-cloud
+      - {{ docker_settings_directory }}:/mnt/unraid-appdata:ro
       - {{ docker_settings_directory }}/resticprofile:/etc/resticprofile
     labels:
       - traefik.enable=false

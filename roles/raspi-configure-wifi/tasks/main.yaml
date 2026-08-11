@@ -1,6 +1,5 @@
 ---
-- import_tasks: facts.yml
-
+- ansible.builtin.import_tasks: facts.yml
 - name: Enable wifi
   ansible.builtin.lineinfile:
     path: /boot/config.txt
@@ -20,7 +19,7 @@
 #     state: present
 
 - name: Set raspi-config country
-  shell: "raspi-config nonint do_wifi_country {{ wifi_country }}"
+  ansible.builtin.command: "raspi-config nonint do_wifi_country {{ wifi_country }}"
   when: current_wifi_country != "AT"
 
 # - name: Configure wifi
@@ -43,7 +42,6 @@
 #   changed_when: False
 #   ignore_errors: True
 
-
 - name: Enable NetworkManager service
   ansible.builtin.service:
     name: NetworkManager
@@ -53,8 +51,8 @@
 - name: Get wifi radio status
   ansible.builtin.command: nmcli radio wifi
   register: wifi_status
-  changed_when: False
-  ignore_errors: True
+  changed_when: false
+  ignore_errors: true
 
 - name: Enable wifi radio
   ansible.builtin.command: nmcli radio wifi on

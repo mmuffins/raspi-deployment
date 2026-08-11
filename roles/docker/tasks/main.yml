@@ -4,20 +4,34 @@
 - name: Install dependencies
   ansible.builtin.apt:
     state: present
-    name: 
-    - apt-transport-https
-    - ca-certificates
-    - software-properties-common
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - python3-debian
+      - software-properties-common
 
-- name: Add Docker GPG apt key
-  ansible.builtin.apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
+- name: Check python3-debian availability
+  ansible.builtin.command:
+    argv:
+      - "{{ ansible_facts.python.executable | default('/usr/bin/python3') }}"
+      - -c
+      - import debian
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  register: docker_python3_debian
 
 - name: Add docker repository
-  ansible.builtin.apt_repository:
-    repo: "deb https://download.docker.com/linux/raspbian/ {{ ansible_distribution_release }} stable"
+  ansible.builtin.deb822_repository:
+    name: docker
+    types: deb
+    uris: https://download.docker.com/linux/raspbian/
+    suites: "{{ ansible_facts.distribution_release }}"
+    components: stable
+    signed_by: https://download.docker.com/linux/raspbian/gpg
     state: present
+  when: not ansible_check_mode or docker_python3_debian.rc == 0
+  register: docker_apt_repository
 
 - name: Check if Docker is already present
   ansible.builtin.command: which docker
@@ -27,7 +41,7 @@
   register: docker_command_result
 
 - name: Reboot
-  ansible.builtin.reboot :
+  ansible.builtin.reboot:
     connect_timeout: 5
     reboot_timeout: 600
     pre_reboot_delay: 0
@@ -39,7 +53,7 @@
   ansible.builtin.get_url:
     url: https://get.docker.com/
     dest: /tmp/get-docker.sh
-    mode: 0775
+    mode: "0775"
   when: docker_command_result.rc == 1
 
 - name: Install docker
@@ -48,10 +62,10 @@
     CHANNEL: stable
   when: docker_command_result.rc == 1
   failed_when: diff_cmd.rc != 0 or diff_cmd.rc != 100
-  ignore_errors: True # After trying for days I couldn't get this to run. It installs fine but always throws errors
- 
+  ignore_errors: true # After trying for days I couldn't get this to run. It installs fine but always throws errors
+
 - name: Reboot
-  ansible.builtin.reboot :
+  ansible.builtin.reboot:
     connect_timeout: 5
     reboot_timeout: 600
     pre_reboot_delay: 0
@@ -59,10 +73,11 @@
     test_command: whoami
   when: docker_command_result.rc == 1
 
-- name: Install docker compose
+- name: Install Docker Compose plugin
   ansible.builtin.apt:
     state: present
-    name: docker-compose
+    name: docker-compose-plugin
+    update_cache: "{{ docker_apt_repository.changed | default(false) }}"
 
 - name: Ensure docker users are added to the docker group
   ansible.builtin.user:
@@ -72,16 +87,15 @@
   with_items: "{{ docker_user_name }}"
 
 - name: Enable Docker IPv6
-  copy:
+  ansible.builtin.copy:
     dest: /etc/docker/daemon.json
-    mode: 0600
+    mode: "0600"
     content: |
       {
         "ipv6": true,
         "fixed-cidr-v6": "2001:db8:1::/64"
       }
   notify: restart docker
-
 
 - name: Enable docker service autostart
   ansible.builtin.service:

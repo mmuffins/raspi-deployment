@@ -1,11 +1,11 @@
 ---
 - name: Create backup group
   ansible.builtin.group:
-    name:  "{{ backup_user_name }}"
+    name: "{{ backup_user_name }}"
     state: present
 
 - name: Create backup user
-  ansible.builtin.user: 
+  ansible.builtin.user:
     name: "{{ backup_user_name }}"
     comment: Backup user
     group: "{{ backup_user_name }}"
@@ -19,14 +19,14 @@
   ansible.builtin.user:
     name: "{{ backup_user_name }}"
     groups: usersudo
-    append: yes
+    append: true
     state: present
 
 - name: Add backup user to docker group
   ansible.builtin.user:
     name: "{{ backup_user_name }}"
     groups: docker
-    append: yes
+    append: true
     state: present
 
 # - name: Ensure restic repo key file exists
@@ -51,7 +51,7 @@
     state: directory
     owner: "{{ backup_user_name }}"
     group: "{{ backup_user_name }}"
-    mode: '0770'
+    mode: "0770"
 
 - name: Create backrest sub-directories
   ansible.builtin.file:
@@ -59,7 +59,7 @@
     state: directory
     owner: "{{ backup_user_name }}"
     group: "{{ backup_user_name }}"
-    mode: '0770'
+    mode: "0770"
   loop:
     - data
     - cache
@@ -71,7 +71,6 @@
 #     regexp: "\r"
 #   changed_when: false
 #   check_mode: false
-    
 
 # - name: Create cron job
 #   ansible.builtin.cron:
@@ -81,37 +80,36 @@
 #     hour: 4
 #     job: "bash {{ backup_script_dir }}/raspi-backup-syncfiles.sh >/dev/null 2>&1"
 
-
 - name: Create docker folder
   ansible.builtin.file:
     state: directory
     path: "/home/{{ backup_user_name }}/docker/backrest"
     owner: "{{ backup_user_name }}"
     group: "{{ backup_user_name }}"
-    mode: 0770
+    mode: "0770"
 
 - name: Create docker-compose file
   ansible.builtin.template:
     src: docker-compose.yml.j2
     dest: "/home/{{ backup_user_name }}/docker/backrest/docker-compose.yml"
-    mode: 0644
+    mode: "0644"
     owner: "{{ backup_user_name }}"
     group: "{{ backup_user_name }}"
 
 - name: Start container
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     state: present
-    pull: true
+    pull: missing
     project_src: "/home/{{ backup_user_name }}/docker/backrest"
-  become: yes
+  become: true
   become_user: "{{ backup_user_name }}"
   register: backrest_docker_output
 
 - name: Prune docker images
   community.docker.docker_prune:
-    containers: yes
-    networks: yes
-    volumes: yes
-    images: yes
+    containers: true
+    networks: true
+    volumes: true
+    images: true
     images_filters:
       dangling: false
