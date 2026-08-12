@@ -1,0 +1,18 @@
+---
+description: "Synchronize watch data across media servers and trackers."
+display_name: "CrossWatch"
+app_name: crosswatch
+crosswatch_image: ghcr.io/cenodude/crosswatch:latest
+crosswatch_container_port: 8787
+crosswatch_host_port: 8787
+traefik_endpoint: http
+network_name: reverse-proxy
+docker_settings_directory: /mnt/user/appdata
+docker_compose_directory: /mnt/user/appdata/docker-compose
+docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
+docker_puid: 1000
+docker_pgid: 1000
+docker_timezone: Europe/Vienna
+file_mask: "0644"
+folder_mask: "0777"
+icon_url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/crosswatch.png"

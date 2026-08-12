@@ -19,3 +19,4 @@
     - role: freshrss
     - role: artist-resolver
     - role: syncthing
+    - role: crosswatch
