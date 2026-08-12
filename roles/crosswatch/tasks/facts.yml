@@ -1,0 +1,25 @@
+---
+- name: Get docker user id
+  ansible.builtin.command: "id -u {{ docker_user_name }}"
+  register: docker_user_id
+  changed_when: false
+  check_mode: false
+
+- name: Get docker user group id
+  ansible.builtin.command: "id -g {{ docker_user_name }}"
+  register: docker_group_id
+  changed_when: false
+  check_mode: false
+
+- name: Get docker user group name
+  ansible.builtin.shell: "getent group {{ docker_group_id.stdout }} | cut -d: -f1"
+  register: docker_group_name
+  changed_when: false
+  check_mode: false
+
+- name: Set docker facts
+  ansible.builtin.set_fact:
+    docker_user_id: "{{ docker_user_id.stdout }}"
+    docker_group_id: "{{ docker_group_id.stdout }}"
+    docker_group_name: "{{ docker_group_name.stdout }}"
+  check_mode: false
