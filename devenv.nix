@@ -5,6 +5,7 @@
   ...
 }:
 {
+  env.GREET = "Ansible deployment environment";
   languages.ansible.enable = true;
 
   packages = [
@@ -13,13 +14,38 @@
     pkgs.hadolint # Dockerfiles linting
   ];
 
-  scripts.deployunraid.exec = ''
-    ansible-playbook --inventory ./inventories/production unraid.yml
-  '';
+  scripts = {
+    deployunraid = {
+      description = "Deploy the unraid playbook.";
+      exec = ''
+        ansible-playbook --inventory ./inventories/production unraid.yml
+      '';
+    };
+
+    showhelp = {
+      description = "Show help for the development environment";
+      exec = ''
+        bold='\n\e[1m%s\e[0m\n'
+
+        printf "$bold" "Available tasks:"
+        devenv tasks list
+
+        printf "$bold" "Available scripts:"
+        ${lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (
+            name: value:
+            "printf '%-12s %s\\n' ${lib.escapeShellArg name} ${lib.escapeShellArg value.description}"
+          ) config.scripts
+        )}
+      '';
+    };
+  };
 
   enterShell = ''
-    echo "Ansible deployment environment"
+    printf "$bold" "Tool versions:"
     ansible --version
+
+    showhelp
   '';
 
   enterTest = ''
@@ -31,4 +57,5 @@
     ansible unraid --inventory ./inventories/production -m ping
     ansible-playbook --inventory ./inventories/production unraid.yml --check --diff
   '';
+
 }
