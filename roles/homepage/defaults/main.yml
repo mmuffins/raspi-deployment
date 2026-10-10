@@ -1,0 +1,17 @@
+---
+description: "A modern, fully static, fast, secure, fully proxied, highly customizable application dashboard."
+display_name: "Homepage"
+app_name: homepage
+homepage_image: ghcr.io/gethomepage/homepage:v2
+homepage_container_port: 3000
+homepage_allowed_hosts: "{{ app_name }}.{{ domain }}"
+homepage_docker_socket_enabled: true
+traefik_endpoint: http
+network_name: reverse-proxy
+docker_settings_directory: /mnt/user/appdata
+docker_compose_directory: /mnt/user/appdata/docker-compose
+docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
+docker_timezone: Europe/Vienna
+file_mask: "0644"
+folder_mask: "0777"
+icon_url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/homepage.png"

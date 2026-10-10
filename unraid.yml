@@ -20,3 +20,4 @@
     - role: artist-resolver
     - role: syncthing
     - role: crosswatch
+    - role: homepage

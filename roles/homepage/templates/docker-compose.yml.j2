@@ -1,0 +1,30 @@
+---
+
+networks:
+  {{ network_name }}:
+    external: true
+
+services:
+  {{ app_name }}:
+    image: {{ homepage_image }}
+    container_name: {{ app_name }}
+    restart: unless-stopped
+    environment:
+      - HOMEPAGE_ALLOWED_HOSTS={{ homepage_allowed_hosts }}
+      - TZ={{ docker_timezone }}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ docker_settings_directory }}/{{ app_name }}:/app/config
+{% if homepage_docker_socket_enabled | bool %}
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+{% endif %}
+    networks:
+      - {{ network_name }}
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network={{ network_name }}
+      - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
+      - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
+      - traefik.http.services.{{ app_name }}.loadbalancer.server.port={{ homepage_container_port }}
+      - net.unraid.docker.icon={{ icon_url }}
+      - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}
