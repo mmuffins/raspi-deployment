@@ -1,0 +1,82 @@
+---
+- name: Gather Homarr deployment facts
+  ansible.builtin.import_tasks: facts.yml
+
+- name: Validate Homarr encryption key
+  ansible.builtin.assert:
+    that:
+      - homarr_secret_encryption_key is defined
+      - homarr_secret_encryption_key is string
+      - homarr_secret_encryption_key is match('^[0-9a-fA-F]{64}$')
+    fail_msg: >-
+      homarr_secret_encryption_key must be a unique 64-character hexadecimal
+      value. Generate one with `openssl rand -hex 32` and store it securely in
+      the inventory.
+  no_log: true
+
+- name: Create docker compose app folder
+  ansible.builtin.file:
+    state: directory
+    path: "{{ homarr_compose_app_directory }}/{{ homarr_app_name }}"
+    owner: "{{ homarr_docker_user_id }}"
+    group: "{{ homarr_docker_group_id }}"
+    mode: "{{ homarr_folder_mask }}"
+
+- name: Set docker compose app name
+  ansible.builtin.lineinfile:
+    dest: "{{ homarr_compose_app_directory }}/{{ homarr_app_name }}/name"
+    create: true
+    state: present
+    regexp: ".*"
+    line: "{{ homarr_display_name }}"
+    owner: "{{ homarr_docker_user_id }}"
+    group: "{{ homarr_docker_group_id }}"
+    mode: "{{ homarr_file_mask }}"
+
+- name: Set docker compose app description
+  ansible.builtin.lineinfile:
+    dest: "{{ homarr_compose_app_directory }}/{{ homarr_app_name }}/description"
+    create: true
+    state: present
+    regexp: ".*"
+    line: "{{ homarr_description }}"
+    owner: "{{ homarr_docker_user_id }}"
+    group: "{{ homarr_docker_group_id }}"
+    mode: "{{ homarr_file_mask }}"
+
+- name: Set docker compose app redirection
+  ansible.builtin.copy:
+    content: "{{ homarr_compose_directory }}/{{ homarr_app_name }}"
+    dest: "{{ homarr_compose_app_directory }}/{{ homarr_app_name }}/indirect"
+    owner: "{{ homarr_docker_user_id }}"
+    group: "{{ homarr_docker_group_id }}"
+    mode: "{{ homarr_file_mask }}"
+
+- name: Create Homarr directories
+  ansible.builtin.file:
+    state: directory
+    path: "{{ item }}"
+    owner: "{{ homarr_docker_user_id }}"
+    group: "{{ homarr_docker_group_id }}"
+    mode: "{{ homarr_folder_mask }}"
+  loop:
+    - "{{ homarr_compose_directory }}/{{ homarr_app_name }}"
+    - "{{ homarr_settings_directory }}/{{ homarr_app_name }}"
+    - "{{ homarr_settings_directory }}/{{ homarr_app_name }}/secrets"
+
+- name: Create Homarr encryption key file
+  ansible.builtin.copy:
+    content: "{{ homarr_secret_encryption_key }}"
+    dest: "{{ homarr_settings_directory }}/{{ homarr_app_name }}/secrets/encryption_key"
+    owner: "{{ homarr_docker_user_id }}"
+    group: "{{ homarr_docker_group_id }}"
+    mode: "0600"
+  no_log: true
+
+- name: Create docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ homarr_compose_directory }}/{{ homarr_app_name }}/docker-compose.yml"
+    owner: "{{ homarr_docker_user_id }}"
+    group: "{{ homarr_docker_group_id }}"
+    mode: "{{ homarr_file_mask }}"
