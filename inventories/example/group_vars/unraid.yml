@@ -56,4 +56,4 @@ rsync_max_speed: 30000
 
 # homarr
 # `nix shell nixpkgs#openssl_4_0 -c openssl rand -hex 32`
-homarr_secret_encryption_key: ff6fc34dfbd3db45e47750cf72d753efc3db0b0ff9fbc652dc90713a7b765c7a
+homarr_secret_encryption_key: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
