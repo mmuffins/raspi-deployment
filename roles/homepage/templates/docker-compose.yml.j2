@@ -10,14 +10,17 @@ services:
     container_name: {{ app_name }}
     restart: unless-stopped
     environment:
-      - HOMEPAGE_ALLOWED_HOSTS={{ homepage_allowed_hosts }}
       - TZ={{ docker_timezone }}
+      - HOMEPAGE_ALLOWED_HOSTS={{ homepage_allowed_hosts }}
+      - HOMEPAGE_FILE_SEANIME_TOKEN=/run/secrets/seanime_token
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - {{ docker_settings_directory }}/{{ app_name }}:/app/config
 {% if homepage_docker_socket_enabled | bool %}
       - /var/run/docker.sock:/var/run/docker.sock:ro
 {% endif %}
+    secrets:
+      - seanime_token
     networks:
       - {{ network_name }}
     labels:
@@ -28,3 +31,7 @@ services:
       - traefik.http.services.{{ app_name }}.loadbalancer.server.port={{ homepage_container_port }}
       - net.unraid.docker.icon={{ icon_url }}
       - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}
+
+secrets:
+  seanime_token:
+    file: {{ docker_settings_directory }}/{{ app_name }}/secrets/seanime_token
