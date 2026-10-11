@@ -1,0 +1,18 @@
+---
+- name: Get docker user id
+  ansible.builtin.command: "id -u {{ docker_user_name }}"
+  register: homarr_docker_user_id_result
+  changed_when: false
+  check_mode: false
+
+- name: Get docker user group id
+  ansible.builtin.command: "id -g {{ docker_user_name }}"
+  register: homarr_docker_group_id_result
+  changed_when: false
+  check_mode: false
+
+- name: Set docker facts
+  ansible.builtin.set_fact:
+    homarr_docker_user_id: "{{ homarr_docker_user_id_result.stdout }}"
+    homarr_docker_group_id: "{{ homarr_docker_group_id_result.stdout }}"
+  check_mode: false
