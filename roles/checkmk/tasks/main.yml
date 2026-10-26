@@ -1,0 +1,76 @@
+---
+- name: Gather Checkmk deployment facts
+  ansible.builtin.import_tasks: facts.yml
+
+- name: Validate Checkmk configuration
+  ansible.builtin.assert:
+    that:
+      - checkmk_password is defined
+      - checkmk_password is string
+      - checkmk_password | length > 0
+      - checkmk_site_id is match('^[a-z][a-z0-9_]{0,15}$')
+    fail_msg: >-
+      checkmk_password must be a non-empty inventory secret and checkmk_site_id
+      must start with a lowercase letter and contain at most 16 lowercase
+      letters, digits, or underscores.
+  no_log: true
+
+- name: Create Checkmk Compose Manager folder
+  ansible.builtin.file:
+    state: directory
+    path: "{{ checkmk_compose_app_directory }}/{{ checkmk_app_name }}"
+    owner: "{{ checkmk_docker_user_id }}"
+    group: "{{ checkmk_docker_group_id }}"
+    mode: "{{ checkmk_folder_mask }}"
+
+- name: Set Checkmk Compose Manager name
+  ansible.builtin.copy:
+    content: "{{ checkmk_display_name }}\n"
+    dest: "{{ checkmk_compose_app_directory }}/{{ checkmk_app_name }}/name"
+    owner: "{{ checkmk_docker_user_id }}"
+    group: "{{ checkmk_docker_group_id }}"
+    mode: "{{ checkmk_file_mask }}"
+
+- name: Set Checkmk Compose Manager description
+  ansible.builtin.copy:
+    content: "{{ checkmk_description }}\n"
+    dest: "{{ checkmk_compose_app_directory }}/{{ checkmk_app_name }}/description"
+    owner: "{{ checkmk_docker_user_id }}"
+    group: "{{ checkmk_docker_group_id }}"
+    mode: "{{ checkmk_file_mask }}"
+
+- name: Set Checkmk Compose Manager redirection
+  ansible.builtin.copy:
+    content: "{{ checkmk_compose_directory }}/{{ checkmk_app_name }}"
+    dest: "{{ checkmk_compose_app_directory }}/{{ checkmk_app_name }}/indirect"
+    owner: "{{ checkmk_docker_user_id }}"
+    group: "{{ checkmk_docker_group_id }}"
+    mode: "{{ checkmk_file_mask }}"
+
+- name: Create Checkmk directories
+  ansible.builtin.file:
+    state: directory
+    path: "{{ item }}"
+    owner: "{{ checkmk_docker_user_id }}"
+    group: "{{ checkmk_docker_group_id }}"
+    mode: "{{ checkmk_folder_mask }}"
+  loop:
+    - "{{ checkmk_compose_directory }}/{{ checkmk_app_name }}"
+    - "{{ checkmk_settings_directory }}/{{ checkmk_app_name }}"
+
+- name: Create Checkmk Compose environment file
+  ansible.builtin.template:
+    src: .env.j2
+    dest: "{{ checkmk_compose_directory }}/{{ checkmk_app_name }}/.env"
+    owner: "{{ checkmk_docker_user_id }}"
+    group: "{{ checkmk_docker_group_id }}"
+    mode: "{{ checkmk_secret_file_mask }}"
+  no_log: true
+
+- name: Create Checkmk Compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ checkmk_compose_directory }}/{{ checkmk_app_name }}/docker-compose.yml"
+    owner: "{{ checkmk_docker_user_id }}"
+    group: "{{ checkmk_docker_group_id }}"
+    mode: "{{ checkmk_file_mask }}"
