@@ -15,6 +15,11 @@ docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
 domain: lan
 network_name: reverse-proxy
 
+# checkmk
+# this is just the initial password not the actual one to log in
+# Store the real password in Ansible Vault or another external secret store.
+checkmk_password: "replace-with-a-secure-password"
+
 # torrent vpn
 torrent_vpn_enabled: true
 torrent_vpn_client: wireguard
