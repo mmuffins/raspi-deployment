@@ -1,16 +1,18 @@
 ---
-homarr_description: "A customizable dashboard for managing self-hosted services."
-homarr_display_name: "Homarr"
-homarr_app_name: homarr
-homarr_image: ghcr.io/homarr-labs/homarr:latest
+description: "A customizable dashboard for managing self-hosted services."
+display_name: "Homarr"
+app_name: homarr
+homarr_image: ghcr.io/homarr-labs/homarr:v2.4.1
 homarr_container_port: 7575
 homarr_docker_socket_enabled: true
-homarr_traefik_endpoint: "{{ traefik_endpoint | default('http') }}"
-homarr_network_name: "{{ network_name | default('reverse-proxy') }}"
-homarr_settings_directory: "{{ docker_settings_directory | default('/mnt/user/appdata') }}"
-homarr_compose_directory: "{{ docker_compose_directory | default('/mnt/user/appdata/docker-compose') }}"
-homarr_compose_app_directory: "{{ docker_compose_app_directory | default('/boot/config/plugins/compose.manager/projects') }}"
-homarr_timezone: "{{ docker_timezone | default('Europe/Vienna') }}"
-homarr_file_mask: "0644"
-homarr_folder_mask: "0777"
-homarr_icon_url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/homarr.png"
+traefik_endpoint: http
+network_name: reverse-proxy
+docker_settings_directory: /mnt/user/appdata
+docker_compose_directory: /mnt/user/appdata/docker-compose
+docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
+docker_puid: 1000
+docker_pgid: 1000
+docker_timezone: Europe/Vienna
+file_mask: "0644"
+folder_mask: "0777"
+icon_url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/homarr.png"

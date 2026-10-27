@@ -1,38 +1,38 @@
 ---
 networks:
-  {{ homarr_network_name }}:
+  {{ network_name }}:
     external: true
 
 services:
-  {{ homarr_app_name }}:
+  {{ app_name }}:
     image: {{ homarr_image }}
-    container_name: {{ homarr_app_name }}
+    container_name: {{ app_name }}
     restart: unless-stopped
     environment:
-      - TZ={{ homarr_timezone }}
+      - TZ={{ docker_timezone }}
       - SECRET_ENCRYPTION_KEY_FILE=/run/secrets/homarr_encryption_key
 {% if homarr_docker_socket_enabled | bool %}
       - DOCKER_SOCKET_PATHS=/var/run/docker.sock
 {% endif %}
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - {{ homarr_settings_directory }}/{{ homarr_app_name }}:/appdata
+      - {{ docker_settings_directory }}/{{ app_name }}:/appdata
 {% if homarr_docker_socket_enabled | bool %}
       - /var/run/docker.sock:/var/run/docker.sock:ro
 {% endif %}
     secrets:
       - homarr_encryption_key
     networks:
-      - {{ homarr_network_name }}
+      - {{ network_name }}
     labels:
       - traefik.enable=true
-      - traefik.docker.network={{ homarr_network_name }}
-      - traefik.http.routers.{{ homarr_app_name }}.rule=Host(`{{ homarr_app_name }}.{{ domain }}`)
-      - traefik.http.routers.{{ homarr_app_name }}.entrypoints={{ homarr_traefik_endpoint }}
-      - traefik.http.services.{{ homarr_app_name }}.loadbalancer.server.port={{ homarr_container_port }}
-      - net.unraid.docker.icon={{ homarr_icon_url }}
-      - net.unraid.docker.webui=http://{{ homarr_app_name }}.{{ domain }}
+      - traefik.docker.network={{ network_name }}
+      - traefik.http.routers.{{ app_name }}.rule=Host(`{{ app_name }}.{{ domain }}`)
+      - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
+      - traefik.http.services.{{ app_name }}.loadbalancer.server.port={{ homarr_container_port }}
+      - net.unraid.docker.icon={{ icon_url }}
+      - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}
 
 secrets:
   homarr_encryption_key:
-    file: {{ homarr_settings_directory }}/{{ homarr_app_name }}/secrets/encryption_key
+    file: {{ docker_settings_directory }}/{{ app_name }}/secrets/encryption_key
