@@ -1,7 +1,5 @@
 ---
-- name: Gather Checkmk deployment facts
-  ansible.builtin.import_tasks: facts.yml
-
+- ansible.builtin.import_tasks: facts.yml
 - name: Validate Checkmk configuration
   ansible.builtin.assert:
     that:
@@ -15,62 +13,66 @@
       letters, digits, or underscores.
   no_log: true
 
-- name: Create Checkmk Compose Manager folder
+- name: Create docker compose app folder
   ansible.builtin.file:
     state: directory
-    path: "{{ checkmk_compose_app_directory }}/{{ checkmk_app_name }}"
-    owner: "{{ checkmk_docker_user_id }}"
-    group: "{{ checkmk_docker_group_id }}"
-    mode: "{{ checkmk_folder_mask }}"
+    path: "{{ docker_compose_app_directory }}/{{ app_name }}"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: "{{ folder_mask }}"
 
-- name: Set Checkmk Compose Manager name
+- name: Set docker compose app name
+  ansible.builtin.lineinfile:
+    dest: "{{ docker_compose_app_directory }}/{{ app_name }}/name"
+    create: true
+    state: present
+    regexp: ".*"
+    line: "{{ display_name }}"
+
+- name: Set docker compose app description
+  ansible.builtin.lineinfile:
+    dest: "{{ docker_compose_app_directory }}/{{ app_name }}/description"
+    create: true
+    state: present
+    regexp: ".*"
+    line: "{{ description }}"
+
+- name: Set docker compose app redirection
   ansible.builtin.copy:
-    content: "{{ checkmk_display_name }}\n"
-    dest: "{{ checkmk_compose_app_directory }}/{{ checkmk_app_name }}/name"
-    owner: "{{ checkmk_docker_user_id }}"
-    group: "{{ checkmk_docker_group_id }}"
-    mode: "{{ checkmk_file_mask }}"
+    content: "{{ docker_compose_directory }}/{{ app_name }}"
+    dest: "{{ docker_compose_app_directory }}/{{ app_name }}/indirect"
 
-- name: Set Checkmk Compose Manager description
-  ansible.builtin.copy:
-    content: "{{ checkmk_description }}\n"
-    dest: "{{ checkmk_compose_app_directory }}/{{ checkmk_app_name }}/description"
-    owner: "{{ checkmk_docker_user_id }}"
-    group: "{{ checkmk_docker_group_id }}"
-    mode: "{{ checkmk_file_mask }}"
-
-- name: Set Checkmk Compose Manager redirection
-  ansible.builtin.copy:
-    content: "{{ checkmk_compose_directory }}/{{ checkmk_app_name }}"
-    dest: "{{ checkmk_compose_app_directory }}/{{ checkmk_app_name }}/indirect"
-    owner: "{{ checkmk_docker_user_id }}"
-    group: "{{ checkmk_docker_group_id }}"
-    mode: "{{ checkmk_file_mask }}"
-
-- name: Create Checkmk directories
+- name: Create docker compose folder
   ansible.builtin.file:
     state: directory
-    path: "{{ item }}"
-    owner: "{{ checkmk_docker_user_id }}"
-    group: "{{ checkmk_docker_group_id }}"
-    mode: "{{ checkmk_folder_mask }}"
-  loop:
-    - "{{ checkmk_compose_directory }}/{{ checkmk_app_name }}"
-    - "{{ checkmk_settings_directory }}/{{ checkmk_app_name }}"
+    path: "{{ docker_compose_directory }}/{{ app_name }}"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: "{{ folder_mask }}"
 
-- name: Create Checkmk Compose environment file
-  ansible.builtin.template:
-    src: .env.j2
-    dest: "{{ checkmk_compose_directory }}/{{ checkmk_app_name }}/.env"
-    owner: "{{ checkmk_docker_user_id }}"
-    group: "{{ checkmk_docker_group_id }}"
-    mode: "{{ checkmk_secret_file_mask }}"
-  no_log: true
+- name: Create settings folder
+  ansible.builtin.file:
+    state: directory
+    path: "{{ docker_settings_directory }}/{{ app_name }}"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: "{{ folder_mask }}"
 
-- name: Create Checkmk Compose file
+- name: Create docker-compose file
   ansible.builtin.template:
     src: docker-compose.yml.j2
-    dest: "{{ checkmk_compose_directory }}/{{ checkmk_app_name }}/docker-compose.yml"
-    owner: "{{ checkmk_docker_user_id }}"
-    group: "{{ checkmk_docker_group_id }}"
-    mode: "{{ checkmk_file_mask }}"
+    dest: "{{ docker_compose_directory }}/{{ app_name }}/docker-compose.yml"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: "{{ file_mask }}"
+  register: created_docker_compose
+
+- name: Create docker-compose .env file
+  ansible.builtin.template:
+    src: .env.j2
+    dest: "{{ docker_compose_directory }}/{{ app_name }}/.env"
+    owner: "{{ docker_user_id }}"
+    group: "{{ docker_group_id }}"
+    mode: "0600"
+  register: created_docker_compose_env
+  no_log: true

@@ -1,18 +1,19 @@
 ---
-checkmk_description: "Infrastructure and application monitoring."
-checkmk_display_name: "Checkmk"
-checkmk_app_name: checkmk
+description: "Infrastructure and application monitoring."
+display_name: "Checkmk"
+app_name: checkmk
 checkmk_image: checkmk/check-mk-community:latest
 checkmk_site_id: cmk
 checkmk_container_port: 5000
 checkmk_agent_receiver_port: 8000
-checkmk_traefik_endpoint: "{{ traefik_endpoint | default('http') }}"
-checkmk_network_name: "{{ network_name | default('reverse-proxy') }}"
-checkmk_settings_directory: "{{ docker_settings_directory | default('/mnt/user/appdata') }}"
-checkmk_compose_directory: "{{ docker_compose_directory | default('/mnt/user/appdata/docker-compose') }}"
-checkmk_compose_app_directory: "{{ docker_compose_app_directory | default('/boot/config/plugins/compose.manager/projects') }}"
-checkmk_timezone: "{{ docker_timezone | default('Europe/Vienna') }}"
-checkmk_file_mask: "0644"
-checkmk_secret_file_mask: "0600"
-checkmk_folder_mask: "0777"
-checkmk_icon_url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/checkmk.png"
+traefik_endpoint: http
+network_name: reverse-proxy
+docker_settings_directory: /mnt/user/appdata
+docker_compose_directory: /mnt/user/appdata/docker-compose
+docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
+docker_puid: 1000
+docker_pgid: 1000
+docker_timezone: Europe/Vienna
+file_mask: "0644"
+folder_mask: "0777"
+icon_url: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/checkmk.png"
