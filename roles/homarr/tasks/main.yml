@@ -1,6 +1,4 @@
 ---
-- ansible.builtin.import_tasks: facts.yml
-
 - name: Validate Homarr encryption key
   ansible.builtin.assert:
     that:
@@ -13,44 +11,12 @@
       the inventory.
   no_log: true
 
-- name: Create docker compose app folder
-  ansible.builtin.file:
-    state: directory
-    path: "{{ docker_compose_app_directory }}/{{ app_name }}"
-    owner: "{{ docker_user_id }}"
-    group: "{{ docker_group_id }}"
-    mode: "{{ folder_mask }}"
+- name: Gather docker user facts before Homarr setup
+  ansible.builtin.include_role:
+    name: docker-compose-app
+    tasks_from: facts.yml
 
-- name: Set docker compose app name
-  ansible.builtin.lineinfile:
-    dest: "{{ docker_compose_app_directory }}/{{ app_name }}/name"
-    create: true
-    state: present
-    regexp: ".*"
-    line: "{{ display_name }}"
-
-- name: Set docker compose app description
-  ansible.builtin.lineinfile:
-    dest: "{{ docker_compose_app_directory }}/{{ app_name }}/description"
-    create: true
-    state: present
-    regexp: ".*"
-    line: "{{ description }}"
-
-- name: Set docker compose app redirection
-  ansible.builtin.copy:
-    content: "{{ docker_compose_directory }}/{{ app_name }}"
-    dest: "{{ docker_compose_app_directory }}/{{ app_name }}/indirect"
-
-- name: Create docker compose folder
-  ansible.builtin.file:
-    state: directory
-    path: "{{ docker_compose_directory }}/{{ app_name }}"
-    owner: "{{ docker_user_id }}"
-    group: "{{ docker_group_id }}"
-    mode: "{{ folder_mask }}"
-
-- name: Create settings folder
+- name: Create Homarr settings folder
   ansible.builtin.file:
     state: directory
     path: "{{ docker_settings_directory }}/{{ app_name }}"
@@ -75,11 +41,13 @@
     mode: "0600"
   no_log: true
 
-- name: Create docker-compose file
-  ansible.builtin.template:
-    src: docker-compose.yml.j2
-    dest: "{{ docker_compose_directory }}/{{ app_name }}/docker-compose.yml"
-    owner: "{{ docker_user_id }}"
-    group: "{{ docker_group_id }}"
-    mode: "{{ file_mask }}"
-  register: created_docker_compose
+- name: Install Homarr docker compose app
+  ansible.builtin.include_role:
+    name: docker-compose-app
+    tasks_from: deploy.yml
+  vars:
+    docker_app_name: "{{ app_name }}"
+    docker_app_display_name: "{{ display_name }}"
+    docker_app_description: "{{ description }}"
+    docker_app_compose_template: >-
+      {{ playbook_dir }}/roles/homarr/templates/docker-compose.yml.j2

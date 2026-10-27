@@ -1,0 +1,6 @@
+---
+- name: Gather docker user facts
+  ansible.builtin.import_tasks: facts.yml
+
+- name: Install docker compose app
+  ansible.builtin.import_tasks: deploy.yml
