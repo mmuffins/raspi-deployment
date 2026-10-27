@@ -29,5 +29,5 @@
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
     mode: "0600"
-  register: created_docker_compose_env
+  register: checkmk_created_docker_compose_env
   no_log: true
