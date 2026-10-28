@@ -4,6 +4,7 @@ display_name: "Seanime"
 app_name: seanime
 icon_url: "https://seanime.app/seanime-logo.png"
 seanime_image: umagistr/seanime:latest-rootless
+seanime_mover_image: mmuffins/seanime-mover:latest
 traefik_endpoint: http
 network_name: reverse-proxy
 docker_compose_directory: /mnt/user/appdata/docker-compose

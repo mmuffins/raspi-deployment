@@ -1,0 +1,26 @@
+---
+# Docker images deployed to Unraid.
+artist_resolver_image: mmuffins/artist-resolver-api:latest
+bazarr_image: linuxserver/bazarr:1.6.0
+crosswatch_image: ghcr.io/cenodude/crosswatch-dev:dev-db
+freshrss_image: linuxserver/freshrss:1.30.4
+homarr_image: ghcr.io/homarr-labs/homarr:v2.9.1
+nzbhydra_image: linuxserver/nzbhydra2:8.9.0
+nzbhydra_scheduler_image: mmuffins/nzbhydra-scheduler:latest
+prometheus_image: prom/prometheus:v3.9.0
+prowlarr_image: linuxserver/prowlarr:2.5.2
+qbittorrent_image: binhex/arch-qbittorrentvpn:5.2
+radarr_image: linuxserver/radarr:6.3.0
+recyclarr_image: recyclarr/recyclarr:7
+resticexporter_image: ngosang/restic-exporter:2.1.2
+resticprofile_image: creativeprojects/resticprofile:0.33.1
+resticserver_image: restic/rest-server:0.14.0
+sabnzbd_image: linuxserver/sabnzbd:5.1.0
+seanime_image: umagistr/seanime:latest-rootless
+seanime_mover_image: mmuffins/seanime-mover:latest
+shokoserver_image: shokoanime/server:v5
+sonarr_image: linuxserver/sonarr:4.0.17
+syncthing_image: syncthing/syncthing:2
+traefik_image: traefik:v3.7
+urbackup_image: binhex/arch-urbackup:2.5.31-2-01
+wireguard_image: qmcgaw/gluetun:v3.40.2
