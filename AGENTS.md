@@ -45,6 +45,16 @@ command as routine validation: they connect to the production inventory.
 
 ## Change conventions
 
+- Before adding a role, inspect one or two existing roles with the same
+  deployment shape and mirror their defaults, facts, task ordering, and
+  template structure. For a standard containerized Unraid service, use
+  `roles/freshrss/` and `roles/sabnzbd/` as the baseline unless a closer
+  service-specific example exists.
+- Repository conventions take precedence over generic lint preferences. Do not
+  rename shared variables or facts, introduce aliases, collapse established
+  task structure, or otherwise redesign a new role solely to eliminate lint
+  findings that also exist in the representative roles. Report those findings
+  as pre-existing convention-related lint issues instead.
 - Use fully qualified Ansible module names, for example
   `ansible.builtin.template` and `community.docker.docker_compose_v2`.
 - Give tasks descriptive `name` values. Imported task files may begin with an
