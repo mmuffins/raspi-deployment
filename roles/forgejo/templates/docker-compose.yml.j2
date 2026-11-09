@@ -1,0 +1,40 @@
+---
+
+networks:
+  {{ network_name }}:
+    external: true
+
+services:
+  {{ app_name }}:
+    image: {{ forgejo_image }}
+    container_name: {{ app_name }}
+    restart: unless-stopped
+    environment:
+      - USER_UID={{ docker_puid }}
+      - USER_GID={{ docker_pgid }}
+      - TZ={{ docker_timezone }}
+      - FORGEJO__database__DB_TYPE=sqlite3
+      - FORGEJO__server__DOMAIN={{ forgejo_hostname }}.{{ domain }}
+      - FORGEJO__server__ROOT_URL=http://{{ forgejo_hostname }}.{{ domain }}/
+      - FORGEJO__server__SSH_DOMAIN={{ forgejo_hostname }}.{{ domain }}
+      - FORGEJO__server__SSH_PORT={{ forgejo_ssh_port }}
+      - FORGEJO__server__LFS_START_SERVER=true
+      - FORGEJO__service__DISABLE_REGISTRATION=true
+      - FORGEJO__actions__ENABLED=false
+      - FORGEJO__repository__DEFAULT_PRIVATE=private
+      - FORGEJO__repository__MAX_CREATION_LIMIT=-1
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - {{ docker_settings_directory }}/{{ app_name }}:/data
+    networks:
+      - {{ network_name }}
+    ports:
+      - "{{ forgejo_ssh_port }}:22"
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network={{ network_name }}
+      - traefik.http.routers.{{ app_name }}.rule=Host(`{{ forgejo_hostname }}.{{ domain }}`)
+      - traefik.http.routers.{{ app_name }}.entrypoints={{ traefik_endpoint }}
+      - traefik.http.services.{{ app_name }}.loadbalancer.server.port=3000
+      - net.unraid.docker.icon={{ icon_url }}
+      - net.unraid.docker.webui=http://{{ forgejo_hostname }}.{{ domain }}
