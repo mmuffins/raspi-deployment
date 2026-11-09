@@ -46,10 +46,15 @@ command as routine validation: they connect to the production inventory.
 ## Change conventions
 
 - Before adding a role, inspect one or two existing roles with the same
-  deployment shape and mirror their defaults, facts, task ordering, and
-  template structure. For a standard containerized Unraid service, use
-  `roles/freshrss/` and `roles/sabnzbd/` as the baseline unless a closer
-  service-specific example exists.
+  deployment shape and mirror their defaults, task ordering, and template
+  structure. New Docker Compose roles must use `roles/docker-compose-app/` for
+  the standard Docker facts, Compose Manager metadata, directories, and
+  Compose template deployment. Use `roles/freshrss/` or `roles/sabnzbd/` as the
+  example for a standard service. For service-specific work, place validation
+  or extra tasks before or after the shared role; when setup needs the Docker
+  user facts first, and include the shared `facts.yml`
+  and `deploy.yml` phases separately. Keep a custom deployment path only when
+  the shared role is incompatible with the service, and document the reason.
 - Repository conventions take precedence over generic lint preferences. Do not
   rename shared variables or facts, introduce aliases, collapse established
   task structure, or otherwise redesign a new role solely to eliminate lint
