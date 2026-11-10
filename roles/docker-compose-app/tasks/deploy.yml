@@ -5,7 +5,7 @@
     path: "{{ docker_compose_app_directory }}/{{ docker_app_name }}"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: "{{ folder_mask }}"
+    mode: "{{ docker_app_metadata_folder_mode }}"
 
 - name: Set docker compose app name
   ansible.builtin.lineinfile:
@@ -16,7 +16,7 @@
     line: "{{ docker_app_display_name }}"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: "{{ file_mask }}"
+    mode: "{{ docker_app_metadata_file_mode }}"
 
 - name: Set docker compose app description
   ansible.builtin.lineinfile:
@@ -27,7 +27,7 @@
     line: "{{ docker_app_description }}"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: "{{ file_mask }}"
+    mode: "{{ docker_app_metadata_file_mode }}"
 
 - name: Set docker compose app redirection
   ansible.builtin.copy:
@@ -35,7 +35,7 @@
     dest: "{{ docker_compose_app_directory }}/{{ docker_app_name }}/indirect"
     owner: "{{ docker_user_id }}"
     group: "{{ docker_group_id }}"
-    mode: "{{ file_mask }}"
+    mode: "{{ docker_app_metadata_file_mode }}"
 
 - name: Create docker compose folder
   ansible.builtin.file:
@@ -49,8 +49,8 @@
   ansible.builtin.file:
     state: directory
     path: "{{ docker_settings_directory }}/{{ docker_app_name }}"
-    owner: "{{ docker_user_id }}"
-    group: "{{ docker_group_id }}"
+    owner: "{{ docker_puid | default(docker_user_id) }}"
+    group: "{{ docker_pgid | default(docker_group_id) }}"
     mode: "{{ folder_mask }}"
 
 - name: Create docker-compose file
