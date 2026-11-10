@@ -45,13 +45,16 @@
     group: "{{ docker_group_id }}"
     mode: "{{ folder_mask }}"
 
-- name: Create settings folder
+- name: Create settings folders
   ansible.builtin.file:
     state: directory
-    path: "{{ docker_settings_directory }}/{{ docker_app_name }}"
+    path: "{{ docker_app_settings_directory }}"
     owner: "{{ docker_puid | default(docker_user_id) }}"
     group: "{{ docker_pgid | default(docker_group_id) }}"
     mode: "{{ folder_mask }}"
+  loop: "{{ docker_app_settings_directories }}"
+  loop_control:
+    loop_var: docker_app_settings_directory
 
 - name: Create docker-compose file
   ansible.builtin.template:
