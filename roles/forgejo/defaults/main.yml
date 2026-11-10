@@ -1,0 +1,18 @@
+---
+description: "A self-hosted lightweight software forge"
+display_name: "Forgejo"
+app_name: forgejo
+forgejo_hostname: gitserver
+forgejo_image: codeberg.org/forgejo/forgejo:17
+forgejo_ssh_port: "2222"
+traefik_endpoint: http
+network_name: reverse-proxy
+docker_settings_directory: /mnt/user/appdata
+docker_compose_directory: /mnt/user/appdata/docker-compose
+docker_compose_app_directory: /boot/config/plugins/compose.manager/projects
+docker_puid: 1000
+docker_pgid: 1000
+docker_timezone: Europe/Vienna
+file_mask: "0644"
+folder_mask: "0777"
+icon_url: "https://codeberg.org/forgejo/forgejo/raw/branch/forgejo/public/assets/img/logo.png"

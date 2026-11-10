@@ -34,7 +34,7 @@ services:
       - net.unraid.docker.webui=http://{{ app_name }}.{{ domain }}
 
   seanime-mover:
-    image: mmuffins/seanime-mover:latest
+    image: {{ seanime_mover_image }}
     container_name: seanime-mover
     restart: unless-stopped
     environment:

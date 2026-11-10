@@ -1,0 +1,5 @@
+---
+# Callers can override these when platform-managed metadata uses different
+# permissions from the rendered Compose deployment.
+docker_app_metadata_folder_mode: "0700"
+docker_app_metadata_file_mode: "0600"

@@ -1,0 +1,10 @@
+---
+- name: Install Forgejo docker compose app
+  ansible.builtin.include_role:
+    name: docker-compose-app
+  vars:
+    docker_app_name: "{{ app_name }}"
+    docker_app_display_name: "{{ display_name }}"
+    docker_app_description: "{{ description }}"
+    docker_app_compose_template: >-
+      {{ playbook_dir }}/roles/forgejo/templates/docker-compose.yml.j2

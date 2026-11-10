@@ -45,6 +45,21 @@ command as routine validation: they connect to the production inventory.
 
 ## Change conventions
 
+- Before adding a role, inspect one or two existing roles with the same
+  deployment shape and mirror their defaults, task ordering, and template
+  structure. New Docker Compose roles must use `roles/docker-compose-app/` for
+  the standard Docker facts, Compose Manager metadata, directories, and
+  Compose template deployment. Use `roles/freshrss/` or `roles/sabnzbd/` as the
+  example for a standard service. For service-specific work, place validation
+  or extra tasks before or after the shared role; when setup needs the Docker
+  user facts first, and include the shared `facts.yml`
+  and `deploy.yml` phases separately. Keep a custom deployment path only when
+  the shared role is incompatible with the service, and document the reason.
+- Repository conventions take precedence over generic lint preferences. Do not
+  rename shared variables or facts, introduce aliases, collapse established
+  task structure, or otherwise redesign a new role solely to eliminate lint
+  findings that also exist in the representative roles. Report those findings
+  as pre-existing convention-related lint issues instead.
 - Use fully qualified Ansible module names, for example
   `ansible.builtin.template` and `community.docker.docker_compose_v2`.
 - Give tasks descriptive `name` values. Imported task files may begin with an
