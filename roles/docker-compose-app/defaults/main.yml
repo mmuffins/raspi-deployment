@@ -3,3 +3,5 @@
 # permissions from the rendered Compose deployment.
 docker_app_metadata_folder_mode: "0700"
 docker_app_metadata_file_mode: "0600"
+docker_app_settings_directories:
+  - "{{ docker_settings_directory }}/{{ docker_app_name }}"
