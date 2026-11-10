@@ -8,8 +8,8 @@
   ansible.builtin.file:
     state: directory
     path: "{{ docker_settings_directory }}/seanime-mover"
-    owner: "{{ docker_user_id }}"
-    group: "{{ docker_group_id }}"
+    owner: "{{ docker_puid }}"
+    group: "{{ docker_pgid }}"
     mode: "{{ folder_mask }}"
 
 - name: Install Seanime docker compose app
