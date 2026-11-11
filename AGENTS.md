@@ -19,7 +19,9 @@ running anything against a real machine.
 - `roles/<role>/files/` contains static files copied to managed hosts.
 - `roles/common/handlers/main.yml` contains shared handlers.
 - `inventories/example/` documents the expected inventory layout and variable
-  names. The real `inventories/production/` directory is intentionally ignored.
+  names. `inventories/production/` is an ignored, nested checkout of the
+  separate private production-inventory repository; run Git commands for it
+  with `git -C inventories/production ...` so repository scope is explicit.
 - `devenv.nix` is the primary development environment definition; `flake.nix`
   provides a smaller Ansible-only Nix shell.
 
@@ -92,6 +94,9 @@ command as routine validation: they connect to the production inventory.
 
 - Never commit `inventories/production/`, private keys, API keys, VPN
   credentials, passwords, repository keys, or rendered environment files.
+- Keep production image pins and their Renovate configuration in the private
+  inventory repository. Renovate pull requests change desired state only;
+  merging them does not authorize or trigger a deployment.
 - Values in `inventories/example/` must be obviously fake placeholders. When a
   change introduces a required variable, document it there with a safe dummy
   value.
@@ -159,7 +164,10 @@ When adding or extending a role:
 The playbooks administer real network services and can affect DNS, SSH access,
 storage, backups, containers, and host availability. Inspect the selected
 playbook, its role order, the effective inventory, and any `--limit` before a
-deployment. Do not assume a host name, IP address, production path, credential,
-or desired destructive action. In particular, do not prune Docker resources,
-restore backups, alter shares, or reboot hosts outside an explicitly requested
-deployment scope.
+deployment. Before an explicitly approved production deployment, run
+`git -C inventories/production pull --ff-only` and verify the nested repository's
+branch and status so the deployment uses the reviewed inventory state. Do not
+assume a host name, IP address, production path, credential, or desired
+destructive action. In particular, do not prune Docker resources, restore
+backups, alter shares, or reboot hosts outside an explicitly requested deployment
+scope.

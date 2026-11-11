@@ -81,3 +81,16 @@ ansible-playbook --inventory ./inventories/production unraid.yml --check --diff
 cd /mnt/ansible
 ansible-playbook --inventory ./inventories/production unraid.yml
 ```
+
+## Production inventory
+
+The production inventory is maintained in a separate private Git repository and
+is checked out locally at `inventories/production/`. The public playbook
+repository ignores this directory so production hosts, credentials, image pins,
+and other private variables remain outside the public repository.
+
+Before checking or applying a deployment, update the inventory checkout:
+
+```sh
+git -C ./inventories/production pull --prune --ff-only origin main
+```

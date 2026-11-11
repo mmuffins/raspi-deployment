@@ -11,13 +11,15 @@
   packages = [
     pkgs.ansible-lint
     pkgs.docker-compose-language-service
+    pkgs.git
     pkgs.hadolint # Dockerfiles linting
   ];
 
   scripts = {
     deployunraid = {
-      description = "Deploy the unraid playbook.";
+      description = "Update the production inventory and deploy the Unraid playbook.";
       exec = ''
+        git -C ./inventories/production pull --prune --ff-only origin main || exit 1
         ansible-playbook --inventory ./inventories/production unraid.yml
       '';
     };
